@@ -14,7 +14,7 @@ int main(int argCount, char *argVariables[]) {
     }
     int coreSwitch = 0;
     int deviceID = 0;
-    int coreQuerySize 1024;
+    int coreQuerySize = 1024;
     char cudaCoreQueryPath[coreQuerySize];
     graphicCardInformation cardInformation = getDeviceProperties(cudaCoreQueryPath, coreSwitch, deviceID);
     createOutputFile(cardInformation);
@@ -30,12 +30,12 @@ void createOutputFile(graphicCardInformation cardInformation) {
     }
     fprintf(csv, "GPU_vendor; \"%s\"; ", "Nvidia");
     fprintf(csv, "GPU_name; \"%s\"; ", cardInformation.GPUname);
-    fprintf(csv, "CUDA_compute_capability; \"%.2f\"; ", cudaInfo.cudaVersion);
-    fprintf(csv, "Number_of_streaming_multiprocessors; %d; ", cudaInfo.numberOfSMs);
-    fprintf(csv, "Number_of_cores_in_GPU; %d; ", cudaInfo.numberOfCores);
-    fprintf(csv, "Number_of_cores_per_SM; %d; ", cudaInfo.numberOfCores / cudaInfo.numberOfSMs);
-    fprintf(csv, "Registers_per_thread_block; %d; \"32-bit registers\"; ", cudaInfo.registersPerThreadBlock);
-    fprintf(csv, "Registers_per_SM; %d; \"32-bit registers\"; ", cudaInfo.registersPerSM);
+    fprintf(csv, "CUDA_compute_capability; \"%.2f\"; ", cardInformation.cudaVersion);
+    fprintf(csv, "Number_of_streaming_multiprocessors; %d; ", cardInformation.numberOfSMs);
+    fprintf(csv, "Number_of_cores_in_GPU; %d; ", cardInformation.numberOfCores);
+    fprintf(csv, "Number_of_cores_per_SM; %d; ", cardInformation.numberOfCores / cardInformation.numberOfSMs);
+    fprintf(csv, "Registers_per_thread_block; %d; \"32-bit registers\"; ", cardInformation.registersPerThreadBlock);
+    fprintf(csv, "Registers_per_SM; %d; \"32-bit registers\"; ", cardInformation.registersPerSM);
     fclose(csv);
 }
 
