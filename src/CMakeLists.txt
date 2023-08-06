@@ -2,22 +2,6 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(cuda-samples/Common)
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 add_executable(c15 starter_other/ConstMemory.cu)
 add_executable(mt4g capture.cu)
 
