@@ -1,5 +1,8 @@
 #include <cstdio>
 #include <cuda.h>
+#include "cuda-samples/Common/helper_cuda.h"
+
+#define MAX_LINE_LENGTH 1024
 
 typedef struct CudaDeviceInfo {
     char GPUname[256];
@@ -18,6 +21,54 @@ typedef struct CudaDeviceInfo {
     int GPUClockRate;
     int maxThreadsPerBlock;
 } CudaDeviceInfo;
+
+int parseCoreLine(char* line) {
+    char *ptr = strstr(line, "MP");
+    if (ptr == nullptr) {
+#ifdef IsDebug
+        fprintf(out, "Output has unknown format!\n");
+#endif
+        return 0;
+    }
+    ptr = ptr + strlen("MP");
+    if (strlen(ptr) < 10 || ptr[0] != ':' || ptr[1] != ' ' ||  ptr[2] != ' ' ||  ptr[3] != ' ' ||
+        ptr[4] != ' ' || ptr[5] != ' ') {
+#ifdef IsDebug
+        fprintf(out, "Output has unknown format!\n");
+#endif
+        return 0;
+    }
+    ptr = ptr + 6;
+    char* start = ptr;
+    while(isdigit(ptr[0])) {
+        ++ptr;
+    }
+    ptr[0] = '\0';
+    return cvtCharArrToInt(start);
+}
+
+int cvtCharArrToInt(char* start) {
+    char* cvtPtr;
+    int num = strtol(start, &cvtPtr, 10);
+
+    if (start == cvtPtr) {
+#ifdef IsDebug
+        fprintf(out, "Char* is not an Int - Conversion failed!\n");
+#endif
+        return 0;
+    } else if (*cvtPtr != '\0') {
+#ifdef IsDebug
+        fprintf(out, "Non-Int rest in Char* after Conversion - Conversion Warning!\n");
+        fprintf(out, "Rest char* starts with character with ascii value: %d\n", int(cvtPtr[0]));
+#endif
+    } else if (errno != 0 && num == 0) {
+#ifdef IsDebug
+        fprintf(out, "Conversion failed!\n");
+#endif
+        return 0;
+    }
+    return num;
+}
 
 int getCoreNumber(char* cmd) {
     printf("Execute command to get number of cores: %s\n", cmd);
