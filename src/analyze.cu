@@ -27,6 +27,33 @@ CudaDeviceInfo getDeviceProperties(char* nviCoreCmd, int coreSwitch, int deviceI
         deviceID = 0;
     }
     cudaGetDeviceProperties(&deviceProp, deviceID);
+#ifdef _WIN32
+    strcpy_s(info.GPUname, deviceProp.name);
+#else
+    strcpy(info.GPUname, deviceProp.name);
+#endif
+    info.cudaVersion = (float)deviceProp.major + (float)((float)deviceProp.minor / 10.);
+    info.sharedMemPerThreadBlock = deviceProp.sharedMemPerBlock;
+    info.sharedMemPerSM = deviceProp.sharedMemPerMultiprocessor;
+    info.numberOfSMs = deviceProp.multiProcessorCount;
+    info.registersPerThreadBlock = deviceProp.regsPerBlock;
+    info.registersPerSM = deviceProp.regsPerMultiprocessor;
+    info.cudaMaxGlobalMem = deviceProp.totalGlobalMem;
+    info.cudaMaxConstMem = deviceProp.totalConstMem;
+    info.L2CacheSize = deviceProp.l2CacheSize;
+    info.memClockRate = deviceProp.memoryClockRate;
+    info.memBusWidth = deviceProp.memoryBusWidth;
+    info.GPUClockRate = deviceProp.clockRate;
+    info.maxThreadsPerBlock = deviceProp.maxThreadsPerBlock;
+
+    if (coreSwitch == 0) {
+        printf("Using helper_cuda option for number of cores\n");
+        info.numberOfCores = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor) * info.numberOfSMs;
+    } else {
+        info.numberOfCores = getCoreNumber(nviCoreCmd);
+    }
+    return info;
+}
 
 void createOutputFile(CudaDeviceInfo cardInformation) {
     printf("Create the output file...\n");
