@@ -1,0 +1,1 @@
+GPU_vendor; "Nvidia"; GPU_name; "Quadro P6000"; CUDA_compute_capability; "6.10"; Number_of_streaming_multiprocessors; 30; Number_of_cores_in_GPU; 3840; Number_of_cores_per_SM; 128; Registers_per_thread_block; 65536; "32-bit registers"; Registers_per_SM; 65536; "32-bit registers"; 
