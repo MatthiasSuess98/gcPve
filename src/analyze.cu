@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <cuda.h>
 
 typedef struct CudaDeviceInfo {
     char GPUname[256];
@@ -17,6 +18,58 @@ typedef struct CudaDeviceInfo {
     int GPUClockRate;
     int maxThreadsPerBlock;
 } CudaDeviceInfo;
+
+int getCoreNumber(char* cmd) {
+    printf("Execute command to get number of cores: %s\n", cmd);
+#ifdef _WIN32
+    if (strstr(cmd, "nvidia-settings") != nullptr) {
+        printf("nvidia-settings does not work for windows\n");
+        return 0;
+    } else if(strstr(cmd, "deviceQuery.exe") == nullptr) {
+        printf("It is required to use deviceQuery.exe\n");
+        return 0;
+    }
+#else
+    if (strstr(cmd, "nvidia-settings") != nullptr && strstr(cmd, "deviceQuery") != nullptr)  {
+        printf("Nvidia-settings or deviceQuery not in command!\n");
+        return 0;
+    }
+#endif
+    FILE *p;
+#ifdef _WIN32
+    p = _popen(cmd, "r");
+#else
+    p = popen(cmd, "r");
+#endif
+    if (p == nullptr) {
+        printf("Could not execute command %s!\n", cmd);
+    }
+
+    int totalNumOfCores;
+    if (strstr(cmd, "deviceQuery") != nullptr) {
+        printf("Using deviceQuery option for number of cores\n");
+        char line[MAX_LINE_LENGTH] = {0};
+
+        while (fgets(line, MAX_LINE_LENGTH, p)) {
+            if (strstr(line, "core") || strstr(line, "Core")) {
+                totalNumOfCores = parseCoreLine(line);
+                break;
+            }
+        }
+    } else {
+        printf("Using nvidia-settings option for number of cores\n");
+        char num[16] = {0};
+        fgets(num, 16, p);
+        totalNumOfCores = cvtCharArrToInt(num);
+    }
+
+#ifdef _WIN32
+    _pclose(p);
+#else
+    pclose(p);
+#endif
+    return totalNumOfCores;
+}
 
 CudaDeviceInfo getDeviceProperties(char* nviCoreCmd, int coreSwitch, int deviceID) {
     CudaDeviceInfo info;
