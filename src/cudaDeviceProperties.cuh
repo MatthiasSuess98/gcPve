@@ -1,14 +1,9 @@
-//
-// Created by nick- on 6/26/2022.
-//
-
 #ifndef CUDATEST_CUDADEVICEPROPERTIES_CUH
 #define CUDATEST_CUDADEVICEPROPERTIES_CUH
 
 //TODO: compile switch
 #define USE_HELPER_CUDA_DEFINITION
 
-#include "eval.h"
 #include <cuda.h>
 #define __STDC_WANT_LIB_EXT1__ 1
 #include <cstring>
@@ -136,57 +131,33 @@ int getCoreNumber(char* cmd) {
 }
 
 typedef struct CudaDeviceInfo {
-    /* the name of the GPU device */
     char GPUname[256];
-    /* the cuda compute capability of the device */
     float cudaVersion;
-    /* the number of Streaming Multiprocessors */
     int numberOfSMs;
-    /* the number of cores per SM*/
     int numberOfCores;
-    /* the amount of shared memory per thread block */
     size_t sharedMemPerThreadBlock;
-    /* the amount of shared memory per streaming multiprocessor in bytes */
     size_t sharedMemPerSM;
-    /* the amount of registers per thread block in bytes */
     int registersPerThreadBlock;
-    /* the amount of registers per streaming multiprocessors */
     int registersPerSM;
-    /* the amount of global memory available in bytes */
     size_t cudaMaxGlobalMem;
-    /* the amount of constant memory available in bytes */
     size_t  cudaMaxConstMem;
-    /* the size of the L2 Cache in bytes */
     int L2CacheSize;
-    /* memory clock frequency in Kilohertz */
     int memClockRate;
-    /* memory bus width in bits */
     int memBusWidth;
-    /* GPU clock frequency in Kilohertz */
     int GPUClockRate;
-    /* Maximum Number of threads in a thread block */
     int maxThreadsPerBlock;
 } CudaDeviceInfo;
 
-/**
- * Get every possible information from CUDA
- * @param nviCoreCmd
- * @param coreSwitch
- * @param deviceID
- * @return
- */
 CudaDeviceInfo getDeviceProperties(char* nviCoreCmd, int coreSwitch, int deviceID) {
     CudaDeviceInfo info;
-
     int deviceCount;
     cudaGetDeviceCount(&deviceCount);
     cudaDeviceProp deviceProp{};
-
     if (deviceID >= deviceCount) {
         deviceID = 0;
     }
-
     cudaGetDeviceProperties(&deviceProp, deviceID);
+
 #ifdef _WIN32
     strcpy_s(info.GPUname, deviceProp.name);
 #else
@@ -216,3 +187,4 @@ CudaDeviceInfo getDeviceProperties(char* nviCoreCmd, int coreSwitch, int deviceI
 }
 
 #endif //CUDATEST_CUDADEVICEPROPERTIES_CUH
+
