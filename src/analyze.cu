@@ -22,6 +22,29 @@ typedef struct CudaDeviceInfo {
     int maxThreadsPerBlock;
 } CudaDeviceInfo;
 
+int cvtCharArrToInt(char* start) {
+    char* cvtPtr;
+    int num = strtol(start, &cvtPtr, 10);
+
+    if (start == cvtPtr) {
+#ifdef IsDebug
+        fprintf(out, "Char* is not an Int - Conversion failed!\n");
+#endif
+        return 0;
+    } else if (*cvtPtr != '\0') {
+#ifdef IsDebug
+        fprintf(out, "Non-Int rest in Char* after Conversion - Conversion Warning!\n");
+        fprintf(out, "Rest char* starts with character with ascii value: %d\n", int(cvtPtr[0]));
+#endif
+    } else if (errno != 0 && num == 0) {
+#ifdef IsDebug
+        fprintf(out, "Conversion failed!\n");
+#endif
+        return 0;
+    }
+    return num;
+}
+
 int parseCoreLine(char* line) {
     char *ptr = strstr(line, "MP");
     if (ptr == nullptr) {
@@ -45,29 +68,6 @@ int parseCoreLine(char* line) {
     }
     ptr[0] = '\0';
     return cvtCharArrToInt(start);
-}
-
-int cvtCharArrToInt(char* start) {
-    char* cvtPtr;
-    int num = strtol(start, &cvtPtr, 10);
-
-    if (start == cvtPtr) {
-#ifdef IsDebug
-        fprintf(out, "Char* is not an Int - Conversion failed!\n");
-#endif
-        return 0;
-    } else if (*cvtPtr != '\0') {
-#ifdef IsDebug
-        fprintf(out, "Non-Int rest in Char* after Conversion - Conversion Warning!\n");
-        fprintf(out, "Rest char* starts with character with ascii value: %d\n", int(cvtPtr[0]));
-#endif
-    } else if (errno != 0 && num == 0) {
-#ifdef IsDebug
-        fprintf(out, "Conversion failed!\n");
-#endif
-        return 0;
-    }
-    return num;
 }
 
 int getCoreNumber(char* cmd) {
