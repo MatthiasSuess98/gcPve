@@ -10,7 +10,6 @@
 #include <cstdlib>
 #include <cstdio>
 #ifdef USE_HELPER_CUDA_DEFINITION
-#include "cuda-samples/Common/helper_cuda.h"
 #endif
 
 #define MAX_LINE_LENGTH 1024
