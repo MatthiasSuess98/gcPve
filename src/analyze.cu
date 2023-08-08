@@ -1,5 +1,32 @@
 #include <cstdio>
-#include "cudaDeviceProperties.cuh"
+
+typedef struct CudaDeviceInfo {
+    char GPUname[256];
+    float cudaVersion;
+    int numberOfSMs;
+    int numberOfCores;
+    size_t sharedMemPerThreadBlock;
+    size_t sharedMemPerSM;
+    int registersPerThreadBlock;
+    int registersPerSM;
+    size_t cudaMaxGlobalMem;
+    size_t  cudaMaxConstMem;
+    int L2CacheSize;
+    int memClockRate;
+    int memBusWidth;
+    int GPUClockRate;
+    int maxThreadsPerBlock;
+} CudaDeviceInfo;
+
+CudaDeviceInfo getDeviceProperties(char* nviCoreCmd, int coreSwitch, int deviceID) {
+    CudaDeviceInfo info;
+    int deviceCount;
+    cudaGetDeviceCount(&deviceCount);
+    cudaDeviceProp deviceProp{};
+    if (deviceID >= deviceCount) {
+        deviceID = 0;
+    }
+    cudaGetDeviceProperties(&deviceProp, deviceID);
 
 void createOutputFile(CudaDeviceInfo cardInformation) {
     printf("Create the output file...\n");
