@@ -161,7 +161,7 @@ CudaDeviceInfo getDeviceProperties(char* nviCoreCmd, int coreSwitch, int deviceI
 
 void createOutputFile(CudaDeviceInfo cardInformation) {
     printf("Create the output file...\n");
-    char output[] = "Output";
+    char output[] = "Output.csv";
     FILE *csv = fopen(output, "w");
     if (csv == nullptr) {
         printf("[WARNING]: Cannot open output file for writing.\n");

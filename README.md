@@ -30,14 +30,14 @@ make all install
 ```
 
 ## Running the Benchmarks
-Run the benchmarking executable:
+Run the benchmarking executable in the specific directory with the following command:
 ```
-../inst-dir/mt4g
+./gcPve
 ```
 Options:
 - "-adv": The final file will provide advanced GPU information.
 - "-fas": The benchmarks will be executed faster than normal.
-When the benchmarks are finished, the final data will be stored in a csv-file named "Output".
+When the benchmarks are finished, the final data will be stored in a csv-file named "Output.csv".
 
 ## Known issues
 - No issues so far.
