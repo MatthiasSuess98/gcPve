@@ -1,7 +1,7 @@
 #ifndef GCPVE_C_C_GPUINFORMATION_CUH
 #define GCPVE_C_C_GPUINFORMATION_CUH
 
-struct GpuInformation {
+typedef struct GpuInformation {
     char name[256];
     size_t totalGlobalMem;
     size_t sharedMemPerBlock;
@@ -42,7 +42,7 @@ struct GpuInformation {
     int maxThreadsPerMultiProcessor;
 } GpuInformation;
 
-GpuInformation getGpuInformation((int gpuId) {
+GpuInformation getGpuInformation(int gpuId) {
     GpuInformation info;
     cudaDeviceProp deviceInfo{};
     cudaGetDeviceProperties(&deviceInfo, gpuId);

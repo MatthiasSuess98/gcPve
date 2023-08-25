@@ -209,9 +209,10 @@ int main(int argCount, char *argVariables[]) {
                     printf("-random Creates a Benchmark of random cores of the GPU.\n");
                 } else if (strcmp(arg, "-info") == 0) {
                     // Creates a file with all available information of the GPU.
-                    int *gpuId = argVariables[1];
+                    char *ptr;
+                    int gpuId = strtol(argVariables[1], &ptr, 10);
                     GpuInformation info = getGpuInformation(gpuId);
-                    createInfofile(info);
+                    createInfoFile(info);
 
                     //int coreSwitch = 0;
                     //int coreQuerySize = 1024;
@@ -234,7 +235,7 @@ int main(int argCount, char *argVariables[]) {
         }
     } else {
         printf("Please select the GPU for which the benchmarks should be created.\n");
-        printf("To do so, use the following syntax (here for GPU 0): \"gcPve 0\"")
+        printf("To do so, use the following syntax (here for GPU 0): \"gcPve 0\"");
         printf("To get a list of all available GPUs use the command \"nvidia-smi -L\".\n");
     }
 }
