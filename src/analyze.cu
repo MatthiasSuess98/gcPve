@@ -2,6 +2,8 @@
 #include <cuda.h>
 #include "cuda-samples/Common/helper_cuda.h"
 
+#include "GpuInformation.cuh"
+
 #define MAX_LINE_LENGTH 1024
 
 typedef struct CudaDeviceInfo {
@@ -48,6 +50,7 @@ int cvtCharArrToInt(char* start) {
 int parseCoreLine(char* line) {
     char *ptr = strstr(line, "MP");
     if (ptr == nullptr) {
+
 #ifdef IsDebug
         fprintf(out, "Output has unknown format!\n");
 #endif
@@ -72,6 +75,9 @@ int parseCoreLine(char* line) {
 
 int getCoreNumber(char* cmd) {
     printf("Execute command to get number of cores: %s\n", cmd);
+
+
+
 #ifdef _WIN32
     if (strstr(cmd, "nvidia-settings") != nullptr) {
         printf("nvidia-settings does not work for windows\n");
@@ -86,12 +92,19 @@ int getCoreNumber(char* cmd) {
         return 0;
     }
 #endif
+
+
+
     FILE *p;
 #ifdef _WIN32
     p = _popen(cmd, "r");
 #else
     p = popen(cmd, "r");
 #endif
+
+
+
+
     if (p == nullptr) {
         printf("Could not execute command %s!\n", cmd);
     }
@@ -114,11 +127,15 @@ int getCoreNumber(char* cmd) {
         totalNumOfCores = cvtCharArrToInt(num);
     }
 
+
+
 #ifdef _WIN32
     _pclose(p);
 #else
     pclose(p);
 #endif
+
+
     return totalNumOfCores;
 }
 
@@ -179,21 +196,46 @@ void createOutputFile(CudaDeviceInfo cardInformation) {
 }
 
 int main(int argCount, char *argVariables[]) {
-    for (int i = 1; i < argCount; i++) {
-        char *arg = argVariables[i];
-        if (strcmp(arg, "-adv") == 0) {
-            printf("The final file will provide advanced GPU information.\n");
-        } else if (strcmp(arg, "-fas") == 0) {
-            printf("The benchmarks will be executed faster than normal.\n");
+    // argVariables[0] is the command.
+    if (argCount >= 2) {
+        if (argCount >= 3) {
+            for (int i = 2; i < argCount; i++) {
+                char *arg = argVariables[i];
+                if (strcmp(arg, "-help") == 0) {
+                    // Lists all available parameters.
+                    printf("Here is a list of all available parameters:\n");
+                    printf("-help Lists all available parameters.\n");
+                    printf("-info Creates a file with all available information of the GPU.\n");
+                    printf("-random Creates a Benchmark of random cores of the GPU.\n");
+                } else if (strcmp(arg, "-info") == 0) {
+                    // Creates a file with all available information of the GPU.
+                    int *gpuId = argVariables[1];
+                    GpuInformation info = getGpuInformation(gpuId);
+                    createInfofile(info);
+
+                    //int coreSwitch = 0;
+                    //int coreQuerySize = 1024;
+                    //char cudaCoreQueryPath[coreQuerySize];
+                    //CudaDeviceInfo cardInformation = getDeviceProperties(cudaCoreQueryPath, coreSwitch, deviceID);
+                    //createOutputFile(cardInformation);
+
+                    printf("The file with all available information of the GPU was created.\n");
+                } else if (strcmp(arg, "-random") == 0) {
+                    // Creates a Benchmark of random cores of the GPU.
+
+                    int num;
+
+                    printf("The Benchmark of random cores of the GPU was created.\n");
+                }
+            }
         } else {
-            printf("No commands were given.\n");
+            printf("No parameters were given. Therefore gcPve won't do anything.\n");
+            printf("To get a list of all available parameters use the parameter -help.\n");
         }
+    } else {
+        printf("Please select the GPU for which the benchmarks should be created.\n");
+        printf("To do so, use the following syntax (here for GPU 0): \"gcPve 0\"")
+        printf("To get a list of all available GPUs use the command \"nvidia-smi -L\".\n");
     }
-    int coreSwitch = 0;
-    int deviceID = 0;
-    int coreQuerySize = 1024;
-    char cudaCoreQueryPath[coreQuerySize];
-    CudaDeviceInfo cardInformation = getDeviceProperties(cudaCoreQueryPath, coreSwitch, deviceID);
-    createOutputFile(cardInformation);
 }
 
