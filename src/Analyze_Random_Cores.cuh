@@ -62,7 +62,8 @@ __global__ void simpleAdd(int n, Benchmark *host) {
 
 void performRandomCoreBenchmark() {
     Benchmark benchmark;
-    Benchmark* ptr = benchmark;
+    Benchmark *ptr;
+    ptr = &benchmark;
     cudaMallocManaged(&ptr, 13631488);
     simpleAdd<<<256, 256>>>(256, ptr);
     cudaDeviceSynchronize();
