@@ -60,10 +60,6 @@ __global__ void simpleAdd(int n) {
 
 void performRandomCoreBenchmark() {
     simpleAdd<<<256, 256>>>(256);
-    createRandomCoreBenchmarkFile();
-}
-
-void createRandomCoreBenchmarkFile() {
     char output[] = "Benchmark.csv";
     FILE *csv = fopen(output, "w");
     fprintf(csv, "threadId ; blockId ; laneId ; warpId ; smId ; begin ; end \n");
