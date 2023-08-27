@@ -6,6 +6,7 @@ typedef struct BenchmarkThread {
     int blockId;
     int laneId;
     int warpId;
+    int warpNum;
     int smId;
     long long begin;
     long long end;
@@ -27,6 +28,12 @@ static __device__ __inline__ int getWarpId(){
     return warpId;
 }
 
+static __device__ __inline__ int getWarpNum(){
+    int warpNum;
+    asm volatile("mov.u32 %0, %%nwarpid;" : "=r"(warpNum));
+    return warpNum;
+}
+
 static __device__ __inline__ int getSmId() {
     int smId;
     asm volatile("mov.u32 %0, %%smid;" : "=r"(smId));
@@ -45,10 +52,10 @@ __global__ void simpleAdd(int n, Benchmark *host) {
     (*host).thread[current].blockId = blockIdx.x;
     (*host).thread[current].laneId = getLaneId();
     (*host).thread[current].warpId = getWarpId();
+    (*host).thread[current].warpNum = getWarpNum();
     (*host).thread[current].smId = getSmId();
     int x[256];
     int y[256];
-    int z[256];
     for (int i = 0; i < n; i++) {
         x[i] = i;
         y[i] = (n-i)-1;
@@ -69,12 +76,13 @@ void performRandomCoreBenchmark() {
     cudaDeviceSynchronize();
     char output[] = "Benchmark.csv";
     FILE *csv = fopen(output, "w");
-    fprintf(csv, "threadId ; blockId ; laneId ; warpId ; smId ; begin ; end \n");
+    fprintf(csv, "threadId ; blockId ; laneId ; warpId ; warpNum ; smId ; begin ; end \n");
     for (int i = 0; i < 65536; i++) {
         fprintf(csv, "%d ; ", (*ptr).thread[i].threadId);
         fprintf(csv, "%d ; ", (*ptr).thread[i].blockId);
         fprintf(csv, "%d ; ", (*ptr).thread[i].laneId);
         fprintf(csv, "%d ; ", (*ptr).thread[i].warpId);
+        fprintf(csv, "%d ; ", (*ptr).thread[i].warpNum);
         fprintf(csv, "%d ; ", (*ptr).thread[i].smId);
         fprintf(csv, "%lld ; ", (*ptr).thread[i].begin);
         fprintf(csv, "%lld \n", (*ptr).thread[i].end);
