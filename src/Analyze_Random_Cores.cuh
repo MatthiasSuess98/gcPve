@@ -11,6 +11,8 @@ typedef struct BenchmarkThread {
     long long end;
 } BenchmarkThread;
 
+BenchmarkThread thread[65536];
+
 static __device__ __inline__ int getLaneId() {
     int laneId;
     asm volatile("mov.u32 %0, %%laneid;" : "=r"(laneId));
@@ -35,13 +37,13 @@ static __device__ __inline__ long long getCounter() {
     return counter;
 }
 
-__global__ BenchmarkThread simpleAdd(int n) {
-    BenchmarkTread info;
-    info.threadID = threadIdx.x;
-    info.blockID = blockDim.x;
-    info.laneId = getLaneId();
-    info.warpID = getWarpId();
-    info.smID = getSmId();
+__global__ void simpleAdd(int n) {
+    int current = (blockIdx.x * blockDim.x) + threadIdx.x;
+    thread[current].threadId = threadIdx.x;
+    thread[current].blockId = blockIdx.x;
+    thread[current].laneId = getLaneId();
+    thread[current].warpID = getWarpId();
+    thread[current].smID = getSmId();
     int x[n];
     int y[n];
     int z[n];
@@ -49,38 +51,30 @@ __global__ BenchmarkThread simpleAdd(int n) {
         x[i] = i;
         y[i] = (n-i)-1;
     }
-    info.begin = getCounter();
+    thread[current].begin = getCounter();
     for (int i = 0; i < n; i ++) {
         z[i] = x[i] + y[i];
     }
-    info.end = getCounter();
-    return info;
+    thread[current].end = getCounter();
 }
 
-typedef struct RandomCoreBenchmark16bit {
-    BenchmarkThread thread[65536];
-} RandomCoreBenchmark16bit;
-
-RandomCoreBenchmark16bit performRandomCoreBenchmark() {
-    RandomCoreBenchmark16bit benchmark;
-    for (int i = 0; i < 65536; i++) {
-        benchmark.thread[i] = simpleAdd(256);
-    }
-    return benchmark;
+void performRandomCoreBenchmark() {
+    simpleAdd<<<256, 256>>>(256);
+    createRandomCoreBenchmarkFile;
 }
 
-void createRandomCoreBenchmarkFile(RandomCoreBenchmark16bit benchmark) {
+void createRandomCoreBenchmarkFile() {
     char output[] = "Benchmark.csv";
     FILE *csv = fopen(output, "w");
     fprintf(csv, "threadId ; blockId ; laneId ; warpId ; smId ; begin ; end \n");
     for (int i = 0; i < 65536; i++) {
-        fprintf(csv, "%d ; ", benchmark.thread[i].threadId);
-        fprintf(csv, "%d ; ", benchmark.thread[i].blockId);
-        fprintf(csv, "%d ; ", benchmark.thread[i].laneId);
-        fprintf(csv, "%d ; ", benchmark.thread[i].warpId);
-        fprintf(csv, "%d ; ", benchmark.thread[i].smId;);
-        fprintf(csv, "%lld ; ", benchmark.thread[i].begin);
-        fprintf(csv, "%lld \n", benchmark.thread[i].end);
+        fprintf(csv, "%d ; ", thread[i].threadId);
+        fprintf(csv, "%d ; ", thread[i].blockId);
+        fprintf(csv, "%d ; ", thread[i].laneId);
+        fprintf(csv, "%d ; ", thread[i].warpId);
+        fprintf(csv, "%d ; ", thread[i].smId);
+        fprintf(csv, "%lld ; ", thread[i].begin);
+        fprintf(csv, "%lld \n", thread[i].end);
     }
     fclose(csv);
 }

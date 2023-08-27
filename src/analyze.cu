@@ -224,8 +224,7 @@ int main(int argCount, char *argVariables[]) {
                     printf("The file with all available information of the GPU was created.\n");
                 } else if (strcmp(arg, "-random") == 0) {
                     // Creates a Benchmark of random cores of the GPU.
-                    RandomCoreBenchmark16bit benchmark = performRandomCoreBenchmark();
-                    createRandomCoreBenchmarkFile(benchmark);
+                    performRandomCoreBenchmark();
                     printf("The Benchmark of random cores of the GPU was created.\n");
                 }
             }
