@@ -3,6 +3,7 @@
 #include "cuda-samples/Common/helper_cuda.h"
 
 #include "GpuInformation.cuh"
+#include "Analyze_Random_Cores.cuh"
 
 #define MAX_LINE_LENGTH 1024
 
@@ -223,9 +224,8 @@ int main(int argCount, char *argVariables[]) {
                     printf("The file with all available information of the GPU was created.\n");
                 } else if (strcmp(arg, "-random") == 0) {
                     // Creates a Benchmark of random cores of the GPU.
-
-                    int num;
-
+                    RandomCoreBenchmark16bit benchmark = performRandomCoreBenchmark();
+                    createRandomCoreBenchmarkFile(benchmark);
                     printf("The Benchmark of random cores of the GPU was created.\n");
                 }
             }
