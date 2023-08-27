@@ -41,41 +41,42 @@ static __device__ __inline__ long long getCounter() {
 
 __global__ void simpleAdd(int n, Benchmark *host) {
     int current = (blockIdx.x * blockDim.x) + threadIdx.x;
-    host.thread[current].threadId = threadIdx.x;
-    host.thread[current].blockId = blockIdx.x;
-    host.thread[current].laneId = getLaneId();
-    host.thread[current].warpId = getWarpId();
-    host.thread[current].smId = getSmId();
-    int x[];
-    int y[];
-    int z[];
+    *host.thread[current].threadId = threadIdx.x;
+    *host.thread[current].blockId = blockIdx.x;
+    *host.thread[current].laneId = getLaneId();
+    *host.thread[current].warpId = getWarpId();
+    *host.thread[current].smId = getSmId();
+    int x[256];
+    int y[256];
+    int z[256];
     for (int i = 0; i < n; i++) {
         x[i] = i;
         y[i] = (n-i)-1;
     }
-    host.thread[current].begin = getCounter();
+    *host.thread[current].begin = getCounter();
     for (int i = 0; i < n; i ++) {
         z[i] = x[i] + y[i];
     }
-    host.thread[current].end = getCounter();
+    *host.thread[current].end = getCounter();
 }
 
 void performRandomCoreBenchmark() {
-    Benchmark* benchmark;
-    cudaMallocManaged(&benchmark, 13631488);
-    simpleAdd<<<256, 256>>>(256, benchmark);
+    Benchmark benchmark;
+    Benchmark* ptr = benchmark;
+    cudaMallocManaged(&ptr, 13631488);
+    simpleAdd<<<256, 256>>>(256, ptr);
     cudaDeviceSynchronize();
     char output[] = "Benchmark.csv";
     FILE *csv = fopen(output, "w");
     fprintf(csv, "threadId ; blockId ; laneId ; warpId ; smId ; begin ; end \n");
     for (int i = 0; i < 65536; i++) {
-        fprintf(csv, "%d ; ", benchmark.thread[i].threadId);
-        fprintf(csv, "%d ; ", benchmark.thread[i].blockId);
-        fprintf(csv, "%d ; ", benchmark.thread[i].laneId);
-        fprintf(csv, "%d ; ", benchmark.thread[i].warpId);
-        fprintf(csv, "%d ; ", benchmark.thread[i].smId);
-        fprintf(csv, "%lld ; ", benchmark.thread[i].begin);
-        fprintf(csv, "%lld \n", benchmark.thread[i].end);
+        fprintf(csv, "%d ; ", *ptr.thread[i].threadId);
+        fprintf(csv, "%d ; ", *ptr.thread[i].blockId);
+        fprintf(csv, "%d ; ", *ptr.thread[i].laneId);
+        fprintf(csv, "%d ; ", *ptr.thread[i].warpId);
+        fprintf(csv, "%d ; ", *ptr.thread[i].smId);
+        fprintf(csv, "%lld ; ", *ptr.thread[i].begin);
+        fprintf(csv, "%lld \n", *ptr.thread[i].end);
     }
     fclose(csv);
     cudaFree(benchmark);
