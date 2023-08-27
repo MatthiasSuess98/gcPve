@@ -56,6 +56,7 @@ __global__ void simpleAdd(int n, Benchmark *host) {
     (*host).thread[current].smId = getSmId();
     int x[256];
     int y[256];
+    int z[256];
     for (int i = 0; i < n; i++) {
         x[i] = i;
         y[i] = (n-i)-1;
