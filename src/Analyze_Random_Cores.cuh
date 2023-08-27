@@ -85,7 +85,7 @@ void performRandomCoreBenchmark() {
     cudaDeviceSynchronize();
     char output[] = "Benchmark.csv";
     FILE *csv = fopen(output, "w");
-    fprintf(csv, "threadId ; blockId ; laneId ; warpId ; warpNum ; smId ; begin ; end \n");
+    fprintf(csv, "threadId ; blockId ; laneId ; warpId ; warpNum ; smId ; smNum ; begin ; end \n");
     for (int i = 0; i < 65536; i++) {
         fprintf(csv, "%d ; ", (*ptr).thread[i].threadId);
         fprintf(csv, "%d ; ", (*ptr).thread[i].blockId);
