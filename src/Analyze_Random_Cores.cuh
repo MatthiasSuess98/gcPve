@@ -8,6 +8,7 @@ typedef struct BenchmarkThread {
     int warpId;
     int warpNum;
     int smId;
+    int smNum;
     long long begin;
     long long end;
 } BenchmarkThread;
@@ -40,6 +41,12 @@ static __device__ __inline__ int getSmId() {
     return smId;
 }
 
+static __device__ __inline__ int getSmNum() {
+    int smNum;
+    asm volatile("mov.u32 %0, %%nsmid;" : "=r"(smNum));
+    return smNum;
+}
+
 static __device__ __inline__ long long getCounter() {
     long long counter;
     asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(counter));
@@ -54,6 +61,7 @@ __global__ void simpleAdd(int n, Benchmark *host) {
     (*host).thread[current].warpId = getWarpId();
     (*host).thread[current].warpNum = getWarpNum();
     (*host).thread[current].smId = getSmId();
+    (*host).thread[current].smNum = getSmNum();
     int x[256];
     int y[256];
     int z[256];
@@ -85,6 +93,7 @@ void performRandomCoreBenchmark() {
         fprintf(csv, "%d ; ", (*ptr).thread[i].warpId);
         fprintf(csv, "%d ; ", (*ptr).thread[i].warpNum);
         fprintf(csv, "%d ; ", (*ptr).thread[i].smId);
+        fprintf(csv, "%d ; ", (*ptr).thread[i].smNum);
         fprintf(csv, "%lld ; ", (*ptr).thread[i].begin);
         fprintf(csv, "%lld \n", (*ptr).thread[i].end);
     }
