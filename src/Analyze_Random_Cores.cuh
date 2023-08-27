@@ -42,8 +42,8 @@ __global__ void simpleAdd(int n) {
     thread[current].threadId = threadIdx.x;
     thread[current].blockId = blockIdx.x;
     thread[current].laneId = getLaneId();
-    thread[current].warpID = getWarpId();
-    thread[current].smID = getSmId();
+    thread[current].warpId = getWarpId();
+    thread[current].smId = getSmId();
     int x[n];
     int y[n];
     int z[n];
@@ -60,7 +60,7 @@ __global__ void simpleAdd(int n) {
 
 void performRandomCoreBenchmark() {
     simpleAdd<<<256, 256>>>(256);
-    createRandomCoreBenchmarkFile;
+    createRandomCoreBenchmarkFile();
 }
 
 void createRandomCoreBenchmarkFile() {
