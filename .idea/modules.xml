@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/gpve.iml" filepath="$PROJECT_DIR$/.idea/gpve.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/gcPve.iml" filepath="$PROJECT_DIR$/.idea/gcPve.iml" />
     </modules>
   </component>
 </project>
