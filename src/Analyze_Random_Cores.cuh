@@ -115,7 +115,9 @@ void performRandomCoreBenchmark() {
     Benchmark *ptr2;
     ptr2 = &benchmark2;
     cudaMallocManaged(&ptr2, 230400);
-    for (long long i = 0; i < 256; i = i++) {
+    cudaDeviceSynchronize();
+    /*
+    for (long i = 0; i < 256; i = i++) {
         time = 0;
         sum = 0;
         counter = 0;
@@ -128,9 +130,10 @@ void performRandomCoreBenchmark() {
             }
         }
         time = sum / counter;
-        fprintf(csv2, "%lld ; ", i);
+        fprintf(csv2, "%ld ; ", (i*65536));
         fprintf(csv2, "%lf \n", time);
     }
+    */
     fclose(csv2);
     cudaFree(ptr2);
 
