@@ -118,7 +118,7 @@ void performRandomCoreBenchmark() {
         sum = 0;
         counter = 0;
         ptr[i] = &benchmark[i];
-        cudaMallocManaged(ptr[i], 230400);
+        cudaMallocManaged(&ptr[i], 230400);
         simpleAdd<<<30, 32>>>(i, ptr[i]);
         cudaDeviceSynchronize();
         for (int j = 0; j < 960; j++) {
