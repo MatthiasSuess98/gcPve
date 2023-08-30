@@ -112,7 +112,7 @@ void performRandomCoreBenchmark() {
     char output2[] = "Benchmark_2.csv";
     FILE *csv2 = fopen(output2, "w");
     //printf(csv2, "size ; averageComputationTime\n");
-    for (long long i = 0; i < 4294967296; i = i + 256) {
+    for (long long i = 0; i < 4294967296; i = i + 65536) {
         time = 0;
         sum = 0;
         counter = 0;
@@ -132,7 +132,6 @@ void performRandomCoreBenchmark() {
     fclose(csv2);
     cudaFree(ptr);
 
-    /*
     //Third benchmark
     cudaMallocManaged(&ptr, 872415232);
     simpleAdd<<<2048, 2048>>>(2048, ptr);
@@ -156,8 +155,6 @@ void performRandomCoreBenchmark() {
     }
     fclose(csv3);
     cudaFree(ptr);
-     */
-
 }
 
 #endif //GCPVE_C_C_ANALYZE_RANDOM_CORES_CUH
