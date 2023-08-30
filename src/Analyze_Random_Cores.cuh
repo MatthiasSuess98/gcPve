@@ -96,7 +96,7 @@ void performRandomCoreBenchmark() {
         counter = 0;
         for (int i = 0; i < 65536; i++) {
             if ((*ptr1).thread[i].smId == j) {
-                printf("%lld", (*ptr1).thread[i].end);
+                printf("%lld", ((*ptr1).thread[i].end - (*ptr1).thread[i].begin));
                 sum = sum + (((float) (*ptr1).thread[i].end) - ((float) (*ptr1).thread[i].begin));
                 counter = counter + 1.0;
             }
