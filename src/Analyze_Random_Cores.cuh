@@ -115,8 +115,8 @@ void performRandomCoreBenchmark() {
     Benchmark benchmark2;
     Benchmark *ptr2;
     ptr2 = &benchmark2;
-    cudaMallocManaged(&ptr2, 230400);
-    simpleAdd<<<30, 32>>>(16777216, ptr2);
+    cudaMallocManaged(&ptr2, 2457600);
+    simpleAdd<<<32, 32>>>(16777216, ptr2);
     cudaDeviceSynchronize();
     /*
     for (long i = 0; i < 256; i = i++) {
@@ -155,8 +155,8 @@ void performRandomCoreBenchmark() {
         counter = 0;
         for (int i = 0; i < 65536; i++) {
             if (((*ptr3).thread[i].smId == 0) && ((*ptr3).thread[i].laneId == j)) {
-                printf("%lf ", (*ptr3).thread[i].end);
-                printf("%lf\n", (*ptr3).thread[i].begin);
+                printf("%llf ", (*ptr3).thread[i].end);
+                printf("%llf\n", (*ptr3).thread[i].begin);
                 sum = sum + ((double) (*ptr3).thread[i].end - (*ptr3).thread[i].begin);
                 counter = counter + 1.0;
             }
