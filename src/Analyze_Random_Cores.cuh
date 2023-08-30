@@ -107,6 +107,7 @@ void performRandomCoreBenchmark() {
     fclose(csv1);
     cudaFree(ptr1);
 
+    /*
     //Second benchmark
     char output2[] = "Benchmark_2.csv";
     FILE *csv2 = fopen(output2, "w");
@@ -116,7 +117,6 @@ void performRandomCoreBenchmark() {
     ptr2 = &benchmark2;
     cudaMallocManaged(&ptr2, 230400);
     cudaDeviceSynchronize();
-    /*
     for (long i = 0; i < 256; i = i++) {
         time = 0;
         sum = 0;
@@ -133,9 +133,9 @@ void performRandomCoreBenchmark() {
         fprintf(csv2, "%ld ; ", (i*65536));
         fprintf(csv2, "%lf \n", time);
     }
-    */
     fclose(csv2);
     cudaFree(ptr2);
+    */
 
     //Third benchmark
     Benchmark benchmark3;
