@@ -108,6 +108,7 @@ void performRandomCoreBenchmark() {
     fclose(csv1);
     cudaFree(ptr);
 
+    /*
     //Second benchmark
     char output2[] = "Benchmark_2.csv";
     FILE *csv2 = fopen(output2, "w");
@@ -155,6 +156,8 @@ void performRandomCoreBenchmark() {
     }
     fclose(csv3);
     cudaFree(ptr);
+     */
+
 }
 
 #endif //GCPVE_C_C_ANALYZE_RANDOM_CORES_CUH
