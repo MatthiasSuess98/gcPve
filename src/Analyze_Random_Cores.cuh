@@ -107,13 +107,6 @@ void performRandomCoreBenchmark() {
     fclose(csv1);
     cudaFree(ptr1);
 
-    Benchmark benchmark2;
-    Benchmark *ptr2;
-    ptr2 = &benchmark2;
-    cudaMalloc(&ptr2, 15728640);
-    simpleAdd<<<2048, 32>>>(16777216, ptr2);
-    cudaDeviceSynchronize();
-    cudaFree(ptr2);
 /*
     //Second benchmark
     char output2[] = "Benchmark_2.csv";
