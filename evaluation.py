@@ -9,7 +9,7 @@ if __name__ == "__main__":
     plt.plot(smId, time, color='green')
     plt.title("Benchmark 1: Computation time of all streaming multiprocessors (sm\'s)")
     plt.xlabel("streaming multiprocessor (sm)")
-    plt.ylabel("computation time in")
+    plt.ylabel("computation time in ns")
     fig.savefig('Benchmark_1.pdf', bbox_inches='tight')
     plt.show()
 
@@ -19,8 +19,8 @@ if __name__ == "__main__":
     fig = plt.figure()
     plt.plot(smId, time, color='green')
     plt.title("Benchmark 2: Computation time per array size for sm 0")
-    plt.xlabel("array size in")
-    plt.ylabel("computation time in")
+    plt.xlabel("array size")
+    plt.ylabel("computation time in ns")
     fig.savefig('Benchmark_2.pdf', bbox_inches='tight')
     plt.show()
 
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     plt.plot(smId, time, color='green')
     plt.title("Benchmark 3: Differences of computation time in warp 0 for sm 0")
     plt.xlabel("lane id inside warp 0")
-    plt.ylabel("computation time in")
+    plt.ylabel("computation time in ns")
     fig.savefig('Benchmark_3.pdf', bbox_inches='tight')
     plt.show()
 

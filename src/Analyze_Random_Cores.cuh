@@ -96,7 +96,6 @@ void performRandomCoreBenchmark() {
         counter = 0;
         for (int i = 0; i < 65536; i++) {
             if ((*ptr1).thread[i].smId == j) {
-                printf("%f", ((float) ((*ptr1).thread[i].end - (*ptr1).thread[i].begin)));
                 sum = sum + ((float) ((*ptr1).thread[i].end - (*ptr1).thread[i].begin));
                 counter = counter + 1.0;
             }
@@ -108,7 +107,6 @@ void performRandomCoreBenchmark() {
     fclose(csv1);
     cudaFree(ptr1);
 
-    /*
     //Second benchmark
     char output2[] = "Benchmark_2.csv";
     FILE *csv2 = fopen(output2, "w");
@@ -117,12 +115,12 @@ void performRandomCoreBenchmark() {
         time = 0;
         sum = 0;
         counter = 0;
-        cudaMallocManaged(&ptr, 199680);
-        simpleAdd<<<30, 32>>>(i, ptr);
+        cudaMallocManaged(&ptr1, 15728640);
+        simpleAdd<<<30, 32>>>(i, ptr1);
         cudaDeviceSynchronize();
         for (int j = 0; j < 960; j++) {
-            if ((*ptr).thread[j].smId == 0) {
-                sum = sum + (((float) (*ptr).thread[j].end) - ((float) (*ptr).thread[j].begin));
+            if ((*ptr1).thread[j].smId == 0) {
+                sum = sum + ((float) ((*ptr1).thread[j].end - (*ptr).thread[j].begin));
                 counter = counter + 1.0;
             }
         }
@@ -131,14 +129,11 @@ void performRandomCoreBenchmark() {
         fprintf(csv2, "%f \n", time);
     }
     fclose(csv2);
-    cudaFree(ptr);
+    cudaFree(ptr1);
 
     //Third benchmark
-    Benchmark benchmark3;
-    Benchmark *ptr3;
-    ptr3 = &benchmark3;
-    cudaMallocManaged(&ptr3, 872415232);
-    simpleAdd<<<2048, 2048>>>(2048, ptr3);
+    cudaMallocManaged(&ptr1, 15728640);
+    simpleAdd<<<2048, 32>>>(2048, ptr1);
     cudaDeviceSynchronize();
     char output3[] = "Benchmark_3.csv";
     FILE *csv3 = fopen(output3, "w");
@@ -148,8 +143,8 @@ void performRandomCoreBenchmark() {
         sum = 0;
         counter = 0;
         for (int i = 0; i < 4194304; i++) {
-            if (((*ptr3).thread[i].smId == 0) && ((*ptr3).thread[i].laneId == j)) {
-                sum = sum + (((float) (*ptr3).thread[i].end) - ((float) (*ptr3).thread[i].begin));
+            if (((*ptr1).thread[i].smId == 0) && ((*ptr1).thread[i].laneId == j)) {
+                sum = sum + ((float) (*ptr1).thread[i].end - (*ptr1).thread[i].begin);
                 counter = counter + 1.0;
             }
         }
@@ -158,8 +153,7 @@ void performRandomCoreBenchmark() {
         fprintf(csv3, "%f \n", time);
     }
     fclose(csv3);
-    cudaFree(ptr3);
-    */
+    cudaFree(ptr1);
 }
 
 #endif //GCPVE_C_C_ANALYZE_RANDOM_CORES_CUH
