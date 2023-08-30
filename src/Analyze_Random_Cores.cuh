@@ -130,7 +130,7 @@ void performRandomCoreBenchmark() {
         time = sum / counter;
         fprintf(csv2, "%lld ; ", i);
         fprintf(csv2, "%lf \n", time);
-        cudaFree([i]);
+        cudaFree(ptr[i]);
     }
     fclose(csv2);
 
