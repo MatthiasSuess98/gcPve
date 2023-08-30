@@ -139,7 +139,6 @@ void performRandomCoreBenchmark() {
     cudaFree(ptr1);
     fclose(csv2);
 
-/*
     //Third benchmark
     float time;
     float sum;
