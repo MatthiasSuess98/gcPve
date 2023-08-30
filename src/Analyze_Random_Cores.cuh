@@ -149,6 +149,7 @@ void performRandomCoreBenchmark() {
         counter = 0;
         for (int i = 0; i < 65536; i++) {
             if (((*ptr3).thread[i].smId == 0) && ((*ptr3).thread[i].laneId == j)) {
+                printf("%f", (*ptr3).thread[i].end);
                 sum = sum + ((float) (*ptr3).thread[i].end - (*ptr3).thread[i].begin);
                 counter = counter + 1.0;
             }
