@@ -115,8 +115,8 @@ void performRandomCoreBenchmark() {
     Benchmark benchmark2;
     Benchmark *ptr2;
     ptr2 = &benchmark2;
-    cudaMallocManaged(&ptr2, 2457600);
-    simpleAdd<<<32, 32>>>(16777216, ptr2);
+    //cudaMallocManaged(&ptr2, 2457600);
+    //simpleAdd<<<32, 32>>>(16777216, ptr2);
     cudaDeviceSynchronize();
     /*
     for (long i = 0; i < 256; i = i++) {
