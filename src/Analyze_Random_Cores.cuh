@@ -114,7 +114,7 @@ void performRandomCoreBenchmark() {
     Benchmark benchmark2;
     Benchmark *ptr2;
     ptr2 = &benchmark2;
-    cudaMallocManaged(ptr2, 230400);
+    cudaMallocManaged(&ptr2, 230400);
     for (long long i = 0; i < 256; i = i++) {
         time = 0;
         sum = 0;
