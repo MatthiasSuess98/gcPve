@@ -107,6 +107,13 @@ void performRandomCoreBenchmark() {
     fclose(csv1);
     cudaFree(ptr1);
 
+    Benchmark benchmark2;
+    Benchmark *ptr2;
+    ptr2 = &benchmark2;
+    cudaMallocManaged(&ptr2, 15728640);
+    simpleAdd<<<2048, 32>>>(16777216, ptr2);
+    cudaDeviceSynchronize();
+    cudaFree(ptr2);
 /*
     //Second benchmark
     char output2[] = "Benchmark_2.csv";
@@ -153,7 +160,7 @@ void performRandomCoreBenchmark() {
         sum = 0;
         counter = 0;
         for (int i = 0; i < 65536; i++) {
-            if (((*ptr3).thread[i].smId == 0) && ((*ptr3).thread[i].laneId == j)) {
+            if (((*ptr3).thread[i].smId == 0) && ((*ptr3).thread[i].warpId == j)) {
                 printf("%lld ", (*ptr3).thread[i].end);
                 printf("%lld\n", (*ptr3).thread[i].begin);
                 sum = sum + ((double) (*ptr3).thread[i].end - (*ptr3).thread[i].begin);
