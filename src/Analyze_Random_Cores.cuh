@@ -78,11 +78,11 @@ __global__ void simpleAdd(int n, Benchmark *host) {
 
 void performRandomCoreBenchmark() {
     //First benchmark
-    Benchmark benchmark1;
-    Benchmark *ptr1;
-    ptr1 = &benchmark1;
-    cudaMallocManaged(&ptr1, 872415232);
-    simpleAdd<<<2048, 2048>>>(2048, ptr1);
+    Benchmark benchmark;
+    Benchmark *ptr;
+    ptr = &benchmark;
+    cudaMallocManaged(&ptr, 872415232);
+    simpleAdd<<<2048, 2048>>>(2048, ptr);
     cudaDeviceSynchronize();
     printf("%d", (*ptr).thread[2000000].smId)
     char output1[] = "Benchmark_1.csv";
