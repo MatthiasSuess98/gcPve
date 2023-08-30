@@ -85,9 +85,9 @@ void performRandomCoreBenchmark() {
     cudaMallocManaged(&ptr, 872415232);
     simpleAdd<<<2048, 2048>>>(2048, ptr);
     cudaDeviceSynchronize();
-    char output[] = "Benchmark_1.csv";
-    FILE *csv = fopen(output, "w");
-    //printf(csv, "smId ; averageComputationTime\n");
+    char output1[] = "Benchmark_1.csv";
+    FILE *csv1 = fopen(output1, "w");
+    //printf(csv1, "smId ; averageComputationTime\n");
     float time;
     float sum;
     float counter;
@@ -102,19 +102,16 @@ void performRandomCoreBenchmark() {
             }
         }
         time = sum / counter;
-        fprintf(csv, "%d ; ", j);
-        fprintf(csv, "%f ; ", time);
+        fprintf(csv1, "%d ; ", j);
+        fprintf(csv1, "%f ; ", time);
     }
-    fclose(csv);
+    fclose(csv1);
     cudaFree(ptr);
 
     //Second benchmark
-    char output[] = "Benchmark_2.csv";
-    FILE *csv = fopen(output, "w");
-    //printf(csv, "size ; averageComputationTime\n");
-    float time;
-    float sum;
-    float counter;
+    char output2[] = "Benchmark_2.csv";
+    FILE *csv2 = fopen(output2, "w");
+    //printf(csv2, "size ; averageComputationTime\n");
     for (long long i = 0; i < 4294967296; i = i + 256) {
         time = 0;
         sum = 0;
@@ -129,22 +126,19 @@ void performRandomCoreBenchmark() {
             }
         }
         time = sum / counter;
-        fprintf(csv, "%d ; ", i);
-        fprintf(csv, "%f ; ", time);
+        fprintf(csv2, "%d ; ", i);
+        fprintf(csv2, "%f ; ", time);
     }
-    fclose(csv);
+    fclose(csv2);
     cudaFree(ptr);
 
     //Third benchmark
     cudaMallocManaged(&ptr, 872415232);
     simpleAdd<<<2048, 2048>>>(2048, ptr);
     cudaDeviceSynchronize();
-    char output[] = "Benchmark_3.csv";
-    FILE *csv = fopen(output, "w");
-    //printf(csv, "laneId ; averageComputationTime\n");
-    float time;
-    float sum;
-    float counter;
+    char output3[] = "Benchmark_3.csv";
+    FILE *csv3 = fopen(output3, "w");
+    //printf(csv3, "laneId ; averageComputationTime\n");
     for (int j = 0; j < 32; j++) {
         time = 0;
         sum = 0;
@@ -156,10 +150,10 @@ void performRandomCoreBenchmark() {
             }
         }
         time = sum / counter;
-        fprintf(csv, "%d ; ", j);
-        fprintf(csv, "%f ; ", time);
+        fprintf(csv3, "%d ; ", j);
+        fprintf(csv3, "%f ; ", time);
     }
-    fclose(csv);
+    fclose(csv3);
     cudaFree(ptr);
 }
 
