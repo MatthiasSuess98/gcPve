@@ -14,7 +14,7 @@ typedef struct BenchmarkThread {
 } BenchmarkThread;
 
 typedef struct Benchmark {
-    BenchmarkThread thread[4194304];
+    BenchmarkThread thread[65536];
 } Benchmark;
 
 static __device__ __inline__ int getLaneId() {
@@ -81,8 +81,8 @@ void performRandomCoreBenchmark() {
     Benchmark benchmark1;
     Benchmark *ptr1;
     ptr1 = &benchmark1;
-    cudaMallocManaged(&ptr1, 1006632960);
-    simpleAdd<<<2048, 2048>>>(2048, ptr1);
+    cudaMallocManaged(&ptr1, 15728640);
+    simpleAdd<<<2048, 32>>>(2048, ptr1);
     cudaDeviceSynchronize();
     printf("%d", (*ptr1).thread[3].threadId);
     char output1[] = "Benchmark_1.csv";
@@ -95,7 +95,7 @@ void performRandomCoreBenchmark() {
         time = 0;
         sum = 0;
         counter = 0;
-        for (int i = 0; i < 4194304; i++) {
+        for (int i = 0; i < 65536; i++) {
             if ((*ptr1).thread[i].smId == j) {
                 sum = sum + (((float) (*ptr1).thread[i].end) - ((float) (*ptr1).thread[i].begin));
                 counter = counter + 1.0;
