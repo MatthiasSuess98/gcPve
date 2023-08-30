@@ -96,13 +96,12 @@ void performRandomCoreBenchmark() {
         sum = 0;
         counter = 0;
         for (int i = 0; i < 4194304; i++) {
+            printf("%d", (*ptr).thread[i].smId);
             if ((*ptr).thread[i].smId == j) {
                 sum = sum + (((float) (*ptr).thread[i].end) - ((float) (*ptr).thread[i].begin));
                 counter = counter + 1.0;
             }
         }
-        printf("%f", sum);
-        printf("%f", counter);
         time = sum / counter;
         fprintf(csv1, "%d ; ", j);
         fprintf(csv1, "%f \n", time);
