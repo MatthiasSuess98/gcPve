@@ -14,7 +14,7 @@ typedef struct BenchmarkThread {
 } BenchmarkThread;
 
 typedef struct Benchmark {
-    BenchmarkThread thread[65536];
+    BenchmarkThread thread[4194304];
 } Benchmark;
 
 static __device__ __inline__ int getLaneId() {
@@ -81,10 +81,10 @@ void performRandomCoreBenchmark() {
     Benchmark benchmark1;
     Benchmark *ptr1;
     ptr1 = &benchmark1;
-    cudaMallocManaged(&ptr1, 872415232);
+    cudaMallocManaged(&ptr1, 1006632960);
     simpleAdd<<<2048, 2048>>>(2048, ptr1);
     cudaDeviceSynchronize();
-    printf("%d", (*ptr1).thread[2000000].smId);
+    printf("%d", (*ptr1).thread[3].threadId);
     char output1[] = "Benchmark_1.csv";
     FILE *csv1 = fopen(output1, "w");
     //printf(csv1, "smId ; averageComputationTime\n");
@@ -108,6 +108,7 @@ void performRandomCoreBenchmark() {
     fclose(csv1);
     cudaFree(ptr1);
 
+    /*
     //Second benchmark
     char output2[] = "Benchmark_2.csv";
     FILE *csv2 = fopen(output2, "w");
@@ -158,6 +159,7 @@ void performRandomCoreBenchmark() {
     }
     fclose(csv3);
     cudaFree(ptr3);
+    */
 }
 
 #endif //GCPVE_C_C_ANALYZE_RANDOM_CORES_CUH
