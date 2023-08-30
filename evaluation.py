@@ -13,16 +13,16 @@ if __name__ == "__main__":
     fig.savefig('Benchmark_1.pdf', bbox_inches='tight')
     plt.show()
 
-    data = np.loadtxt("Benchmark_2.csv", delimiter=";", dtype="float")
-    smId = data[:, 0]
-    time = data[:, 1]
-    fig = plt.figure()
-    plt.plot(smId, time, color='green')
-    plt.title("Benchmark 2: Computation time per array size for sm 0")
-    plt.xlabel("array size")
-    plt.ylabel("computation time in ns")
-    fig.savefig('Benchmark_2.pdf', bbox_inches='tight')
-    plt.show()
+    #data = np.loadtxt("Benchmark_2.csv", delimiter=";", dtype="float")
+    #smId = data[:, 0]
+    #time = data[:, 1]
+    #fig = plt.figure()
+    #plt.plot(smId, time, color='green')
+    #plt.title("Benchmark 2: Computation time per array size for sm 0")
+    #plt.xlabel("array size")
+    #plt.ylabel("computation time in ns")
+    #fig.savefig('Benchmark_2.pdf', bbox_inches='tight')
+    #plt.show()
 
     data = np.loadtxt("Benchmark_3.csv", delimiter=";", dtype="float")
     smId = data[:, 0]

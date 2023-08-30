@@ -77,6 +77,7 @@ __global__ void simpleAdd(long n, Benchmark *host) {
 }
 
 void performRandomCoreBenchmark() {
+
     /*
     //First benchmark
     Benchmark benchmark1;
@@ -107,7 +108,6 @@ void performRandomCoreBenchmark() {
     }
     fclose(csv1);
     cudaFree(ptr1);
-    */
 
     //Second benchmark
     float time;
@@ -140,8 +140,8 @@ void performRandomCoreBenchmark() {
     }
     cudaFree(ptr1);
     fclose(csv2);
+    */
 
-    /*
     //Third benchmark
     Benchmark benchmark3;
     Benchmark *ptr3;
@@ -157,7 +157,7 @@ void performRandomCoreBenchmark() {
         sum = 0;
         counter = 0;
         for (int i = 0; i < 65536; i++) {
-            if (((*ptr3).thread[i].smId == 0) && ((*ptr3).thread[i].warpId == j)) {
+            if (((*ptr3).thread[i].smId == 0) && ((*ptr3).thread[i].laneId == j)) {
                 printf("%lld ", (*ptr3).thread[i].end);
                 printf("%lld\n", (*ptr3).thread[i].begin);
                 sum = sum + ((double) (*ptr3).thread[i].end - (*ptr3).thread[i].begin);
@@ -170,7 +170,7 @@ void performRandomCoreBenchmark() {
     }
     fclose(csv3);
     cudaFree(ptr3);
-    */
+
 }
 
 #endif //GCPVE_C_C_ANALYZE_RANDOM_CORES_CUH
