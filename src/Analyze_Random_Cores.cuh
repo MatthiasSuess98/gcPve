@@ -97,13 +97,13 @@ void performRandomCoreBenchmark() {
         counter = 0;
         for (int i = 0; i < 4194304; i++) {
             if ((*ptr).thread[i].smId == j) {
-                sum = sum + ((*ptr).thread[i].end - (*ptr).thread[i].begin);
-                counter = counter + 1;
+                sum = sum + (((float) (*ptr).thread[i].end) - ((float) (*ptr).thread[i].begin));
+                counter = counter + 1.0;
             }
         }
         time = sum / counter;
         fprintf(csv1, "%d ; ", j);
-        fprintf(csv1, "%f ; ", time);
+        fprintf(csv1, "%f \n", time);
     }
     fclose(csv1);
     cudaFree(ptr);
@@ -121,13 +121,13 @@ void performRandomCoreBenchmark() {
         cudaDeviceSynchronize();
         for (int j = 0; j < 960; j++) {
             if ((*ptr).thread[j].smId == 0) {
-                sum = sum + ((*ptr).thread[j].end - (*ptr).thread[j].begin);
-                counter = counter + 1;
+                sum = sum + (((float) (*ptr).thread[j].end) - ((float) (*ptr).thread[j].begin));
+                counter = counter + 1.0;
             }
         }
         time = sum / counter;
         fprintf(csv2, "%lld ; ", i);
-        fprintf(csv2, "%f ; ", time);
+        fprintf(csv2, "%f \n", time);
     }
     fclose(csv2);
     cudaFree(ptr);
@@ -145,13 +145,13 @@ void performRandomCoreBenchmark() {
         counter = 0;
         for (int i = 0; i < 4194304; i++) {
             if (((*ptr).thread[i].smId == 0) && ((*ptr).thread[i].laneId == j)) {
-                sum = sum + ((*ptr).thread[i].end - (*ptr).thread[i].begin);
-                counter = counter + 1;
+                sum = sum + (((float) (*ptr).thread[i].end) - ((float) (*ptr).thread[i].begin));
+                counter = counter + 1.0;
             }
         }
         time = sum / counter;
         fprintf(csv3, "%d ; ", j);
-        fprintf(csv3, "%f ; ", time);
+        fprintf(csv3, "%f \n", time);
     }
     fclose(csv3);
     cudaFree(ptr);

@@ -2,34 +2,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
-    data = np.loadtxt("Benchmark.csv", delimiter=";", dtype="int")
-    threadId = data[:, 0]
-    blockId = data[:, 1]
-    laneId = data[:, 2]
-    warpId = data[:, 3]
-    smId = data[:, 4]
-    begin = data[:, 5]
-    end = data[:, 6]
-    core = laneId + (warpId * 32) + (smId * 128)
-    timeDifference = end - begin
+    data = np.loadtxt("Benchmark_1.csv", delimiter=";", dtype="int")
+    smId = data[:, 0]
+    time = data[:, 1]
     fig = plt.figure()
-    test = np.arange(0, 65536)
-    plt.plot(test, timeDifference, color='red')
-    plt.title("Intensities after direct light")
-    plt.xlabel("Wavelength in nm")
-    plt.ylabel("Intensity in counts")
-    fig.savefig('Intensities2.pdf', bbox_inches='tight')
+    plt.plot(smId, time, color='green')
+    plt.title("Benchmark 1:")
+    plt.xlabel("streaming multiprocessor")
+    plt.ylabel("computation time")
+    fig.savefig('Benchmark_1.pdf', bbox_inches='tight')
     plt.show()
 
-
-
-    ##np.savetxt("Benchmark_new.csv", data, delimiter=" ; ", newline=" \n", fmt="%d")
-
-    print("threadId ; blockId ; laneId ; warpId ; smId ; begin ; end ; TimeDifference")
-    print(core)
-    print(timeDifference)
-
-## 1. benchmark: all 30 sm
-## 2. benchmark: computation time per array size for one sm
-## 3. benchmark: differences in one warp of one sm
+    ## 1. benchmark: all 30 sm
+    ## 2. benchmark: computation time per array size for one sm
+    ## 3. benchmark: differences in one warp of one sm
 
