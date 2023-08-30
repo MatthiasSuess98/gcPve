@@ -101,8 +101,8 @@ void performRandomCoreBenchmark() {
                 counter = counter + 1.0;
             }
         }
-        printf(sum);
-        printf(counter);
+        printf("%f", sum);
+        printf("%f", counter);
         time = sum / counter;
         fprintf(csv1, "%d ; ", j);
         fprintf(csv1, "%f \n", time);
