@@ -120,7 +120,7 @@ void performRandomCoreBenchmark() {
         cudaDeviceSynchronize();
         for (int j = 0; j < 960; j++) {
             if ((*ptr1).thread[j].smId == 0) {
-                sum = sum + ((float) ((*ptr1).thread[j].end - (*ptr).thread[j].begin));
+                sum = sum + ((float) ((*ptr1).thread[j].end - (*ptr1).thread[j].begin));
                 counter = counter + 1.0;
             }
         }
