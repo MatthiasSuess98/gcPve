@@ -110,6 +110,9 @@ void performRandomCoreBenchmark() {
     */
 
     //Second benchmark
+    float time;
+    float sum;
+    float counter;
     char output2[] = "Benchmark_2.csv";
     FILE *csv2 = fopen(output2, "w");
     //printf(csv2, "size ; averageComputationTime\n");
