@@ -136,8 +136,8 @@ void performRandomCoreBenchmark() {
         fprintf(csv2, "%lf \n", time);
     }
     */
-    fclose(csv2);
     cudaFree(ptr2);
+    fclose(csv2);
 
     //Third benchmark
     Benchmark benchmark3;
