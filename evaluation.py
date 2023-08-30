@@ -7,7 +7,7 @@ if __name__ == "__main__":
     time = data[:, 1]
     fig = plt.figure()
     plt.plot(smId, time, color='green')
-    plt.title("Benchmark 1: Computation time of all streaming multiprocessors (sm\'s)")
+    plt.title("Benchmark 1: Computation time of a 16777216-array")
     plt.xlabel("streaming multiprocessor (sm)")
     plt.ylabel("computation time in ns")
     fig.savefig('Benchmark_1.pdf', bbox_inches='tight')
@@ -29,8 +29,8 @@ if __name__ == "__main__":
     time = data[:, 1]
     fig = plt.figure()
     plt.plot(smId, time, color='green')
-    plt.title("Benchmark 3: Differences of computation time in warp 0 for sm 0")
-    plt.xlabel("lane id inside warp 0")
+    plt.title("Benchmark 3: Differences of computation time in sm 0")
+    plt.xlabel("lane id")
     plt.ylabel("computation time in ns")
     fig.savefig('Benchmark_3.pdf', bbox_inches='tight')
     plt.show()

@@ -155,12 +155,12 @@ void performRandomCoreBenchmark() {
     char output3[] = "Benchmark_3.csv";
     FILE *csv3 = fopen(output3, "w");
     //printf(csv3, "laneId ; averageComputationTime\n");
-    for (int j = 0; j < 32; j++) {
+    for (int j = 0; j < 64; j++) {
         time = 0;
         sum = 0;
         counter = 0;
         for (int i = 0; i < 65536; i++) {
-            if (((*ptr3).thread[i].smId == 0) && ((*ptr3).thread[i].laneId == j)) {
+            if (((*ptr3).thread[i].smId == 0) && ((*ptr3).thread[i].warpId == j)) {
                 printf("%lld ", (*ptr3).thread[i].end);
                 printf("%lld\n", (*ptr3).thread[i].begin);
                 sum = sum + ((double) (*ptr3).thread[i].end - (*ptr3).thread[i].begin);
