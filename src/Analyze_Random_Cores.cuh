@@ -107,6 +107,7 @@ void performRandomCoreBenchmark() {
     fclose(csv1);
     cudaFree(ptr1);
 
+    /*
     //Second benchmark
     char output2[] = "Benchmark_2.csv";
     FILE *csv2 = fopen(output2, "w");
@@ -130,6 +131,7 @@ void performRandomCoreBenchmark() {
     }
     fclose(csv2);
     cudaFree(ptr1);
+    */
 
     //Third benchmark
     cudaMallocManaged(&ptr1, 15728640);
