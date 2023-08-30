@@ -144,7 +144,7 @@ void performRandomCoreBenchmark() {
         time = 0;
         sum = 0;
         counter = 0;
-        for (int i = 0; i < 4194304; i++) {
+        for (int i = 0; i < 65536; i++) {
             if (((*ptr1).thread[i].smId == 0) && ((*ptr1).thread[i].laneId == j)) {
                 sum = sum + ((float) (*ptr1).thread[i].end - (*ptr1).thread[i].begin);
                 counter = counter + 1.0;
