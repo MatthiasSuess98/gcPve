@@ -126,7 +126,7 @@ void performRandomCoreBenchmark() {
             }
         }
         time = sum / counter;
-        fprintf(csv2, "%d ; ", i);
+        fprintf(csv2, "%lld ; ", i);
         fprintf(csv2, "%f ; ", time);
     }
     fclose(csv2);
