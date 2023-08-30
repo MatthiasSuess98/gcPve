@@ -84,7 +84,6 @@ void performRandomCoreBenchmark() {
     cudaMallocManaged(&ptr1, 15728640);
     simpleAdd<<<2048, 32>>>(2048, ptr1);
     cudaDeviceSynchronize();
-    printf("%d", (*ptr1).thread[3].threadId);
     char output1[] = "Benchmark_1.csv";
     FILE *csv1 = fopen(output1, "w");
     //printf(csv1, "smId ; averageComputationTime\n");
@@ -97,6 +96,7 @@ void performRandomCoreBenchmark() {
         counter = 0;
         for (int i = 0; i < 65536; i++) {
             if ((*ptr1).thread[i].smId == j) {
+                printf("%lld", (*ptr1).thread[i].end);
                 sum = sum + (((float) (*ptr1).thread[i].end) - ((float) (*ptr1).thread[i].begin));
                 counter = counter + 1.0;
             }
