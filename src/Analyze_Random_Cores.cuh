@@ -77,6 +77,7 @@ __global__ void simpleAdd(long n, Benchmark *host) {
 }
 
 void performRandomCoreBenchmark() {
+    /*
     //First benchmark
     Benchmark benchmark1;
     Benchmark *ptr1;
@@ -106,27 +107,27 @@ void performRandomCoreBenchmark() {
     }
     fclose(csv1);
     cudaFree(ptr1);
+    */
 
-/*
     //Second benchmark
     char output2[] = "Benchmark_2.csv";
     FILE *csv2 = fopen(output2, "w");
     //printf(csv2, "size ; averageComputationTime\n");
-    Benchmark benchmark2;
-    Benchmark *ptr2;
-    ptr2 = &benchmark2;
-    //cudaMallocManaged(&ptr2, 2457600);
+    Benchmark benchmark1;
+    Benchmark *ptr1;
+    ptr1 = &benchmark1;
+    cudaMallocManaged(&ptr1, 245760);
     //simpleAdd<<<32, 32>>>(16777216, ptr2);
-    cudaDeviceSynchronize();
+    //cudaDeviceSynchronize();
     for (long i = 0; i < 256; i = i++) {
         time = 0;
         sum = 0;
         counter = 0;
-        simpleAdd<<<30, 32>>>((i*65536), ptr2);
+        simpleAdd<<<32, 32>>>((i*65536), ptr1);
         cudaDeviceSynchronize();
         for (int j = 0; j < 960; j++) {
-            if ((*ptr2).thread[j].smId == 0) {
-                sum = sum + ((double) ((*ptr2).thread[j].end - (*ptr2).thread[j].begin));
+            if ((*ptr1).thread[j].smId == 0) {
+                sum = sum + ((double) ((*ptr1).thread[j].end - (*ptr1).thread[j].begin));
                 counter = counter + 1.0;
             }
         }
@@ -134,10 +135,10 @@ void performRandomCoreBenchmark() {
         fprintf(csv2, "%ld ; ", (i*65536));
         fprintf(csv2, "%lf \n", time);
     }
-    cudaFree(ptr2);
+    cudaFree(ptr1);
     fclose(csv2);
-    */
 
+    /*
     //Third benchmark
     Benchmark benchmark3;
     Benchmark *ptr3;
@@ -166,6 +167,7 @@ void performRandomCoreBenchmark() {
     }
     fclose(csv3);
     cudaFree(ptr3);
+    */
 }
 
 #endif //GCPVE_C_C_ANALYZE_RANDOM_CORES_CUH
