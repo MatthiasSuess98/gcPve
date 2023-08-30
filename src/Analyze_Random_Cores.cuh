@@ -111,25 +111,28 @@ void performRandomCoreBenchmark() {
     char output2[] = "Benchmark_2.csv";
     FILE *csv2 = fopen(output2, "w");
     //printf(csv2, "size ; averageComputationTime\n");
-    for (long long i = 0; i < 16777216; i = i + 265) {
+    Benchmark benchmark[256];
+    Benchmark *ptr[256];
+    for (long long i = 0; i < 256; i = i++) {
         time = 0;
         sum = 0;
         counter = 0;
-        cudaMallocManaged(&ptr1, 230400);
-        simpleAdd<<<30, 32>>>(i, ptr1);
+        ptr[i] = &benchmark[i];
+        cudaMallocManaged(ptr[i], 230400);
+        simpleAdd<<<30, 32>>>(i, ptr[i]);
         cudaDeviceSynchronize();
         for (int j = 0; j < 960; j++) {
-            if ((*ptr1).thread[j].smId == 0) {
-                sum = sum + ((double) ((*ptr1).thread[j].end - (*ptr1).thread[j].begin));
+            if ((*ptr[i]).thread[j].smId == 0) {
+                sum = sum + ((double) ((*ptr[i]).thread[j].end - (*ptr[i]).thread[j].begin));
                 counter = counter + 1.0;
             }
         }
         time = sum / counter;
         fprintf(csv2, "%lld ; ", i);
         fprintf(csv2, "%lf \n", time);
+        cudaFree([i]);
     }
     fclose(csv2);
-    cudaFree(ptr1);
 
     //Third benchmark
     Benchmark benchmark3;
@@ -147,8 +150,6 @@ void performRandomCoreBenchmark() {
         counter = 0;
         for (int i = 0; i < 65536; i++) {
             if (((*ptr3).thread[i].smId == 0) && ((*ptr3).thread[i].laneId == j)) {
-                printf("%lld ", (*ptr3).thread[i].end);
-                printf("%lld\n", (*ptr3).thread[i].begin);
                 sum = sum + ((double) (*ptr3).thread[i].end - (*ptr3).thread[i].begin);
                 counter = counter + 1.0;
             }
