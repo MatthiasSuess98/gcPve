@@ -62,9 +62,9 @@ __global__ void simpleAdd(int n, Benchmark *host) {
     (*host).thread[current].warpNum = getWarpNum();
     (*host).thread[current].smId = getSmId();
     (*host).thread[current].smNum = getSmNum();
-    int x[256];
-    int y[256];
-    int z[256];
+    int x[16777216];
+    int y[16777216];
+    int z[16777216];
     for (int i = 0; i < n; i++) {
         x[i] = i;
         y[i] = (n-i)-1;
@@ -80,22 +80,84 @@ void performRandomCoreBenchmark() {
     Benchmark benchmark;
     Benchmark *ptr;
     ptr = &benchmark;
-    cudaMallocManaged(&ptr, 13631488);
-    simpleAdd<<<256, 256>>>(256, ptr);
+
+    //First benchmark
+    cudaMallocManaged(&ptr, 872415232);
+    simpleAdd<<<2048, 2048>>>(2048, ptr);
     cudaDeviceSynchronize();
-    char output[] = "Benchmark.csv";
+    char output[] = "Benchmark_1.csv";
     FILE *csv = fopen(output, "w");
-    fprintf(csv, "threadId ; blockId ; laneId ; warpId ; warpNum ; smId ; smNum ; begin ; end \n");
-    for (int i = 0; i < 65536; i++) {
-        fprintf(csv, "%d ; ", (*ptr).thread[i].threadId);
-        fprintf(csv, "%d ; ", (*ptr).thread[i].blockId);
-        fprintf(csv, "%d ; ", (*ptr).thread[i].laneId);
-        fprintf(csv, "%d ; ", (*ptr).thread[i].warpId);
-        fprintf(csv, "%d ; ", (*ptr).thread[i].warpNum);
-        fprintf(csv, "%d ; ", (*ptr).thread[i].smId);
-        fprintf(csv, "%d ; ", (*ptr).thread[i].smNum);
-        fprintf(csv, "%lld ; ", (*ptr).thread[i].begin);
-        fprintf(csv, "%lld \n", (*ptr).thread[i].end);
+    //printf(csv, "smId ; averageComputationTime\n");
+    float time;
+    float sum;
+    float counter;
+    for (int j = 0; j < 30; j++) {
+        time = 0;
+        sum = 0;
+        counter = 0;
+        for (int i = 0; i < 4194304; i++) {
+            if ((*ptr).thread[i].smId == j) {
+                sum = sum + ((*ptr).thread[i].end - (*ptr).thread[i].begin);
+                counter = counter + 1;
+            }
+        }
+        time = sum / counter;
+        fprintf(csv, "%d ; ", j);
+        fprintf(csv, "%f ; ", time);
+    }
+    fclose(csv);
+    cudaFree(ptr);
+
+    //Second benchmark
+    char output[] = "Benchmark_2.csv";
+    FILE *csv = fopen(output, "w");
+    //printf(csv, "size ; averageComputationTime\n");
+    float time;
+    float sum;
+    float counter;
+    for (long long i = 0; i < 4294967296; i = i + 256) {
+        time = 0;
+        sum = 0;
+        counter = 0;
+        cudaMallocManaged(&ptr, 199680);
+        simpleAdd<<<30, 32>>>(i, ptr);
+        cudaDeviceSynchronize();
+        for (int j = 0; j < 960; j++) {
+            if ((*ptr).thread[j].smId == 0) {
+                sum = sum + ((*ptr).thread[j].end - (*ptr).thread[j].begin);
+                counter = counter + 1;
+            }
+        }
+        time = sum / counter;
+        fprintf(csv, "%d ; ", i);
+        fprintf(csv, "%f ; ", time);
+    }
+    fclose(csv);
+    cudaFree(ptr);
+
+    //Third benchmark
+    cudaMallocManaged(&ptr, 872415232);
+    simpleAdd<<<2048, 2048>>>(2048, ptr);
+    cudaDeviceSynchronize();
+    char output[] = "Benchmark_3.csv";
+    FILE *csv = fopen(output, "w");
+    //printf(csv, "laneId ; averageComputationTime\n");
+    float time;
+    float sum;
+    float counter;
+    for (int j = 0; j < 32; j++) {
+        time = 0;
+        sum = 0;
+        counter = 0;
+        for (int i = 0; i < 4194304; i++) {
+            if (((*ptr).thread[i].smId == 0) && ((*ptr).thread[i].laneId == j)) {
+                sum = sum + ((*ptr).thread[i].end - (*ptr).thread[i].begin);
+                counter = counter + 1;
+            }
+        }
+        time = sum / counter;
+        fprintf(csv, "%d ; ", j);
+        fprintf(csv, "%f ; ", time);
     }
     fclose(csv);
     cudaFree(ptr);

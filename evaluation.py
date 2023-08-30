@@ -28,3 +28,8 @@ if __name__ == "__main__":
     print("threadId ; blockId ; laneId ; warpId ; smId ; begin ; end ; TimeDifference")
     print(core)
     print(timeDifference)
+
+## 1. benchmark: all 30 sm
+## 2. benchmark: computation time per array size for one sm
+## 3. benchmark: differences in one warp of one sm
+
