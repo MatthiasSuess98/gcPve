@@ -143,6 +143,9 @@ void performRandomCoreBenchmark() {
     */
 
     //Third benchmark
+    float time;
+    float sum;
+    float counter;
     Benchmark benchmark3;
     Benchmark *ptr3;
     ptr3 = &benchmark3;
