@@ -20,16 +20,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3f010c8b-9be5-42a3-9535-544f1713a60f" name="Changes" comment="next">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Benchmark.csv" beforeDir="false" afterPath="$PROJECT_DIR$/out/Benchmark.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Benchmark_1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/out/Benchmark_1.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Benchmark_3.csv" beforeDir="false" afterPath="$PROJECT_DIR$/out/Benchmark_3.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GPU_Info.csv" beforeDir="false" afterPath="$PROJECT_DIR$/out/GPU_Info.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Output.csv" beforeDir="false" afterPath="$PROJECT_DIR$/out/Output.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/evaluation.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Analyze_Random_Cores.cuh" beforeDir="false" afterPath="$PROJECT_DIR$/src/2_Analyze_SM.cuh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GpuInformation.cuh" beforeDir="false" afterPath="$PROJECT_DIR$/src/1_Gpu_Information.cuh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/analyze.cu" beforeDir="false" afterPath="$PROJECT_DIR$/src/0_Main.cu" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/0_Main.cu" beforeDir="false" afterPath="$PROJECT_DIR$/src/0_Main.cu" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,6 +81,12 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/out" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
@@ -109,7 +106,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/evaluation.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/evaluation.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -127,15 +124,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1693297081469</updated>
-      <workItem from="1693297083534" duration="30248000" />
-    </task>
-    <task id="LOCAL-00010" summary="next">
-      <option name="closed" value="true" />
-      <created>1693370321353</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1693370321353</updated>
+      <workItem from="1693297083534" duration="32087000" />
     </task>
     <task id="LOCAL-00011" summary="next">
       <option name="closed" value="true" />
@@ -521,7 +510,15 @@
       <option name="project" value="LOCAL" />
       <updated>1693392564892</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="next">
+      <option name="closed" value="true" />
+      <created>1693751254238</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1693751254238</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

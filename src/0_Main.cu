@@ -7,42 +7,55 @@
 
 #define MAX_LINE_LENGTH 1024
 
-typedef struct CudaDeviceInfo {
-    char GPUname[256];
-    float cudaVersion;
-    int numberOfSMs;
-    int numberOfCores;
-    size_t sharedMemPerThreadBlock;
-    size_t sharedMemPerSM;
-    int registersPerThreadBlock;
-    int registersPerSM;
-    size_t cudaMaxGlobalMem;
-    size_t  cudaMaxConstMem;
-    int L2CacheSize;
-    int memClockRate;
-    int memBusWidth;
-    int GPUClockRate;
-    int maxThreadsPerBlock;
-} CudaDeviceInfo;
+int main(int argCount, char *argVariables[]) {
+    // argVariables[0] is the command.
+    if (argCount >= 2) {
+        if (argCount >= 3) {
+            for (int i = 2; i < argCount; i++) {
+                char *arg = argVariables[i];
+                if (strcmp(arg, "-help") == 0) {
+                    // Lists all available parameters.
+                    printf("Here is a list of all available parameters:\n");
+                    printf("-help Lists all available parameters.\n");
+                    printf("-info Creates a file with all available information of the GPU.\n");
+                    printf("-random Creates a Benchmark of random cores of the GPU.\n");
+                } else if (strcmp(arg, "-info") == 0) {
+                    // Creates a file with all available information of the GPU.
+                    char *ptr;
+                    int gpuId = strtol(argVariables[1], &ptr, 10);
+                    GpuInformation info = getGpuInformation(gpuId);
+                    createInfoFile(info);
+                    printf("The file with all available information of the GPU was created.\n");
+                } else if (strcmp(arg, "-random") == 0) {
+                    // Creates a Benchmark of random cores of the GPU.
+                    performRandomCoreBenchmark();
+                    printf("The Benchmark of random cores of the GPU was created.\n");
+                }
+            }
+        } else {
+            printf("No parameters were given. Therefore gcPve won't do anything.\n");
+            printf("To get a list of all available parameters use the parameter -help.\n");
+        }
+    } else {
+        printf("Please select the GPU for which the benchmarks should be created.\n");
+        printf("To do so, use the following syntax (here for GPU 0): \"gcPve 0\"");
+        printf("To get a list of all available GPUs use the command \"nvidia-smi -L\".\n");
+    }
+}
 
+
+/*
 int cvtCharArrToInt(char* start) {
     char* cvtPtr;
     int num = strtol(start, &cvtPtr, 10);
-
     if (start == cvtPtr) {
-#ifdef IsDebug
         fprintf(out, "Char* is not an Int - Conversion failed!\n");
-#endif
         return 0;
     } else if (*cvtPtr != '\0') {
-#ifdef IsDebug
         fprintf(out, "Non-Int rest in Char* after Conversion - Conversion Warning!\n");
         fprintf(out, "Rest char* starts with character with ascii value: %d\n", int(cvtPtr[0]));
-#endif
     } else if (errno != 0 && num == 0) {
-#ifdef IsDebug
         fprintf(out, "Conversion failed!\n");
-#endif
         return 0;
     }
     return num;
@@ -51,18 +64,13 @@ int cvtCharArrToInt(char* start) {
 int parseCoreLine(char* line) {
     char *ptr = strstr(line, "MP");
     if (ptr == nullptr) {
-
-#ifdef IsDebug
         fprintf(out, "Output has unknown format!\n");
-#endif
         return 0;
     }
     ptr = ptr + strlen("MP");
     if (strlen(ptr) < 10 || ptr[0] != ':' || ptr[1] != ' ' ||  ptr[2] != ' ' ||  ptr[3] != ' ' ||
         ptr[4] != ' ' || ptr[5] != ' ') {
-#ifdef IsDebug
         fprintf(out, "Output has unknown format!\n");
-#endif
         return 0;
     }
     ptr = ptr + 6;
@@ -76,36 +84,12 @@ int parseCoreLine(char* line) {
 
 int getCoreNumber(char* cmd) {
     printf("Execute command to get number of cores: %s\n", cmd);
-
-
-
-#ifdef _WIN32
-    if (strstr(cmd, "nvidia-settings") != nullptr) {
-        printf("nvidia-settings does not work for windows\n");
-        return 0;
-    } else if(strstr(cmd, "deviceQuery.exe") == nullptr) {
-        printf("It is required to use deviceQuery.exe\n");
-        return 0;
-    }
-#else
     if (strstr(cmd, "nvidia-settings") != nullptr && strstr(cmd, "deviceQuery") != nullptr)  {
         printf("Nvidia-settings or deviceQuery not in command!\n");
         return 0;
     }
-#endif
-
-
-
     FILE *p;
-#ifdef _WIN32
-    p = _popen(cmd, "r");
-#else
     p = popen(cmd, "r");
-#endif
-
-
-
-
     if (p == nullptr) {
         printf("Could not execute command %s!\n", cmd);
     }
@@ -127,16 +111,7 @@ int getCoreNumber(char* cmd) {
         fgets(num, 16, p);
         totalNumOfCores = cvtCharArrToInt(num);
     }
-
-
-
-#ifdef _WIN32
-    _pclose(p);
-#else
     pclose(p);
-#endif
-
-
     return totalNumOfCores;
 }
 
@@ -149,11 +124,7 @@ CudaDeviceInfo getDeviceProperties(char* nviCoreCmd, int coreSwitch, int deviceI
         deviceID = 0;
     }
     cudaGetDeviceProperties(&deviceProp, deviceID);
-#ifdef _WIN32
-    strcpy_s(info.GPUname, deviceProp.name);
-#else
     strcpy(info.GPUname, deviceProp.name);
-#endif
     info.cudaVersion = (float)deviceProp.major + (float)((float)deviceProp.minor / 10.);
     info.sharedMemPerThreadBlock = deviceProp.sharedMemPerBlock;
     info.sharedMemPerSM = deviceProp.sharedMemPerMultiprocessor;
@@ -167,7 +138,6 @@ CudaDeviceInfo getDeviceProperties(char* nviCoreCmd, int coreSwitch, int deviceI
     info.memBusWidth = deviceProp.memoryBusWidth;
     info.GPUClockRate = deviceProp.clockRate;
     info.maxThreadsPerBlock = deviceProp.maxThreadsPerBlock;
-
     if (coreSwitch == 0) {
         printf("Using helper_cuda option for number of cores\n");
         info.numberOfCores = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor) * info.numberOfSMs;
@@ -195,47 +165,6 @@ void createOutputFile(CudaDeviceInfo cardInformation) {
     fprintf(csv, "Registers_per_SM; %d; \"32-bit registers\"; ", cardInformation.registersPerSM);
     fclose(csv);
 }
+*/
 
-int main(int argCount, char *argVariables[]) {
-    // argVariables[0] is the command.
-    if (argCount >= 2) {
-        if (argCount >= 3) {
-            for (int i = 2; i < argCount; i++) {
-                char *arg = argVariables[i];
-                if (strcmp(arg, "-help") == 0) {
-                    // Lists all available parameters.
-                    printf("Here is a list of all available parameters:\n");
-                    printf("-help Lists all available parameters.\n");
-                    printf("-info Creates a file with all available information of the GPU.\n");
-                    printf("-random Creates a Benchmark of random cores of the GPU.\n");
-                } else if (strcmp(arg, "-info") == 0) {
-                    // Creates a file with all available information of the GPU.
-                    char *ptr;
-                    int gpuId = strtol(argVariables[1], &ptr, 10);
-                    GpuInformation info = getGpuInformation(gpuId);
-                    createInfoFile(info);
-
-                    //int coreSwitch = 0;
-                    //int coreQuerySize = 1024;
-                    //char cudaCoreQueryPath[coreQuerySize];
-                    //CudaDeviceInfo cardInformation = getDeviceProperties(cudaCoreQueryPath, coreSwitch, deviceID);
-                    //createOutputFile(cardInformation);
-
-                    printf("The file with all available information of the GPU was created.\n");
-                } else if (strcmp(arg, "-random") == 0) {
-                    // Creates a Benchmark of random cores of the GPU.
-                    performRandomCoreBenchmark();
-                    printf("The Benchmark of random cores of the GPU was created.\n");
-                }
-            }
-        } else {
-            printf("No parameters were given. Therefore gcPve won't do anything.\n");
-            printf("To get a list of all available parameters use the parameter -help.\n");
-        }
-    } else {
-        printf("Please select the GPU for which the benchmarks should be created.\n");
-        printf("To do so, use the following syntax (here for GPU 0): \"gcPve 0\"");
-        printf("To get a list of all available GPUs use the command \"nvidia-smi -L\".\n");
-    }
-}
 
