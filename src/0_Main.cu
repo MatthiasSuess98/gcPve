@@ -2,8 +2,8 @@
 #include <cuda.h>
 #include "cuda-samples/Common/helper_cuda.h"
 
-#include "GpuInformation.cuh"
-#include "Analyze_Random_Cores.cuh"
+#include "1_Gpu_Information.cuh"
+#include "2_Analyze_SM.cuh"
 
 #define MAX_LINE_LENGTH 1024
 
