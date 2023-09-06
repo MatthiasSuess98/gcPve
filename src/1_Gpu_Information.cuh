@@ -1,3 +1,6 @@
+#ifndef GCPVE_C_C_1_GPU_INFORMATION_CUH
+#define GCPVE_C_C_1_GPU_INFORMATION_CUH
+
 typedef struct GpuInformation {
     char name[256];
     size_t totalGlobalMem;
@@ -180,3 +183,4 @@ void createInfoFile(GpuInformation info) {
     fclose(csv);
 }
 
+#endif //GCPVE_C_C_1_GPU_INFORMATION_CUH
