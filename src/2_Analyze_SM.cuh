@@ -78,7 +78,7 @@ SmSimpleAddBenchmark16bit analyzeSm16bit(int sm, int summandSize, GpuInformation
         smSimpleAddBenchmark.laneFinal[i] = (*ptr).laneFinal[i];
         smSimpleAddBenchmark.warpFinal[i] = (*ptr).warpFinal[i];
         smSimpleAddBenchmark.smFinal[i] = (*ptr).smFinal[i];
-        printf("%f", (*ptr).smFinal[i]);
+        printf("%f", smSimpleAddBenchmark.smFinal[i]);
         smSimpleAddBenchmark.correctSm[i] = (*ptr).correctSm[i];
     }
     for (int i = (numberOfTrials * gpuInfo.warpSize); i < 65536; i++) {
