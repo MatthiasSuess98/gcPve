@@ -37,8 +37,8 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
                           "mov.u32 %5, %%laneid;"
                           "mov.u32 %6, %%warpid;"
                           "mov.u32 %7, %%smid;"
-                          : "=r"(startTime), "=r"(sum), "=r"(summand1), "=r"(summand2)
-                          , "=r"(endTime), "=r"(laneId), "=r"(warpId), "=r"(smId));
+                          : "=r"(startTime), "=r"(sum) : "r"(summand1), "r"(summand2)
+                          : "=r"(endTime), "=r"(laneId), "=r"(warpId), "=r"(smId));
             sumTime = sumTime + (endTime - startTime);
             laneSum = laneSum + laneId;
             warpSum = warpSum + warpId;
