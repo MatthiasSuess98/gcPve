@@ -34,7 +34,7 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
                       ".reg.u32 t2;\n\t"
                       ".reg.u32 t3;");*/
         unsigned int sumTimes[2048];
-        unsigned int laneSums[2048]];
+        unsigned int laneSums[2048];
         unsigned int warpSums[2048];
         unsigned int smSums[2048];
         for (int i = 0; i < numberOfIterations; i++) {
