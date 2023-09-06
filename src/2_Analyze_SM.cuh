@@ -12,7 +12,7 @@ typedef struct SmSimpleAddBenchmark16bit {
 } SmSimpleAddBenchmark16bit;
 
 __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int summandSize, SmSimpleAddBenchmark16bit *host) {
-    unsigned int numberOfIterations = 2048;
+    unsigned int numberOfIterations = 16777216;
     unsigned int currentSm;
     asm volatile("mov.u32 %0, %%smid;" : "=r"(currentSm));
     int pos = threadIdx.x + (blockIdx.x * blockSize);
@@ -75,7 +75,7 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
 }
 
 SmSimpleAddBenchmark16bit analyzeSm16bit(int sm, int summandSize, GpuInformation gpuInfo) {
-    int numberOfTrials = gpuInfo.multiProcessorCount * 32;
+    int numberOfTrials = gpuInfo.multiProcessorCount * 68;
     SmSimpleAddBenchmark16bit smSimpleAddBenchmark;
     SmSimpleAddBenchmark16bit *ptr;
     ptr = &smSimpleAddBenchmark;
