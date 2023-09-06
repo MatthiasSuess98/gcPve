@@ -64,7 +64,7 @@ SmSimpleAddBenchmark16bit analyzeSm16bit(int sm, int summandSize, GpuInformation
     SmSimpleAddBenchmark16bit smSimpleAddBenchmark;
     SmSimpleAddBenchmark16bit *ptr;
     ptr = &smSimpleAddBenchmark;
-    cudaMallocManaged(&ptr, ((65536 + (4 * (65536 * 32))) / 8));
+    cudaMallocManaged(&ptr, ((65536 + (4 * (65536 * 32))) / 1));
     if ((numberOfTrials * gpuInfo.warpSize) > 65536) {
         for (int i = 0; i < 65536; i++) {
             smSimpleAddBenchmark.correctSm[i] = false;
@@ -78,7 +78,6 @@ SmSimpleAddBenchmark16bit analyzeSm16bit(int sm, int summandSize, GpuInformation
         smSimpleAddBenchmark.laneFinal[i] = (*ptr).laneFinal[i];
         smSimpleAddBenchmark.warpFinal[i] = (*ptr).warpFinal[i];
         smSimpleAddBenchmark.smFinal[i] = (*ptr).smFinal[i];
-        printf("%f", smSimpleAddBenchmark.smFinal[i]);
         smSimpleAddBenchmark.correctSm[i] = (*ptr).correctSm[i];
     }
     for (int i = (numberOfTrials * gpuInfo.warpSize); i < 65536; i++) {
