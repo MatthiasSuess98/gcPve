@@ -16,18 +16,18 @@ void createBenchmarks(int gpuId) {
     char output1[] = "Benchmark_16bit.csv";
     FILE *csv1 = fopen(output1, "w");
     for (int i = 0; i < gpuInfo.multiProcessorCount; i++) {
-        smSimpleAddBenchmark = analyzeSm(i, gpuInfo);
+        smSimpleAddBenchmark = analyzeSm16bit(i, gpuInfo);
         averageTime = 0;
         averageLane = 0;
         averageWarp = 0;
         averageSm = 0;
         counter = 0;
         for (int j = 0; j < 65536; j++) {
-            if (smSimpleAddBenchmark[i].correctSm[j]) {
-                averageTime = averageTime + smSimpleAddBenchmark[i].finalTime;
-                averageLane = averageLane + smSimpleAddBenchmark[i].laneFinal;
-                averageWarp = averageWarp + smSimpleAddBenchmark[i].warpFinal;
-                averageSm = averageSm + smSimpleAddBenchmark[i].smFinal;
+            if ((smSimpleAddBenchmark[i]).correctSm[j]) {
+                averageTime = averageTime + (smSimpleAddBenchmark[i]).finalTime;
+                averageLane = averageLane + (smSimpleAddBenchmark[i]).laneFinal;
+                averageWarp = averageWarp + (smSimpleAddBenchmark[i]).warpFinal;
+                averageSm = averageSm + (smSimpleAddBenchmark[i]).smFinal;
                 counter++;
             }
         }
@@ -54,7 +54,6 @@ int main(int argCount, char *argVariables[]) {
                     createBenchmarks(gpuId);
                 }
             }
-        }
     } else {
         printf("Please select the GPU for which the benchmarks should be created.\n");
         printf("To do so, use the following syntax (here for GPU 0): \"gcPve 0\"");

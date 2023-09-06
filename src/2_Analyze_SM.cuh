@@ -5,13 +5,14 @@
 
 typedef struct SmSimpleAddBenchmark16bit {
     bool correctSm[65536];
-    unsigned float finalTime[65536];
-    unsigned float laneFinal[65536];
-    unsigned float warpFinal[65536];
-    unsigned float smFinal[65536];
+    float finalTime[65536];
+    float laneFinal[65536];
+    float warpFinal[65536];
+    float smFinal[65536];
 } SmSimpleAddBenchmark16bit;
 
 __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int summandSize, SmSimpleAddBenchmark16bit *host) {
+    unsigned int intnumberOfIterations = 2048;
     unsigned int currentSm;
     asm volatile("mov.u32 %0, %%smid;" : "=r"(currentSm));
     int pos = threadIdx.x + (blockIdx.x * blockSize);
