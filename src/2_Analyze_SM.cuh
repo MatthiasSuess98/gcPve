@@ -61,12 +61,10 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
         //(*host).finalTime[pos] = ((float) sumTime) / ((float) numberOfIterations);
         //(*host).laneFinal[pos] = ((float) laneSum) / ((float) numberOfIterations);
         //(*host).warpFinal[pos] = ((float) warpSum) / ((float) numberOfIterations);
-        //(*host).smFinal[pos] = ((float) smSum) / ((float) numberOfIterations);
+        (*host).smFinal[pos] = ((float) smSum) / ((float) numberOfIterations);
         (*host).finalTime[pos] = 11;
         (*host).laneFinal[pos] = 12;
         (*host).warpFinal[pos] = 13;
-        asm volatile("mov.u32 %0, %%smid;" : "=r"(currentSm));
-        (*host).smFinal[pos] = currentSm;
         (*host).correctSm[pos] = true;
     }
 }
