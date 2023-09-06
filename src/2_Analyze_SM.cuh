@@ -30,11 +30,11 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
         unsigned int laneSum;
         unsigned int warpSum;
         unsigned int smSum;
-        asm volatile (".reg.u32 t1;\n\t"
+        /*asm volatile (".reg.u32 t1;\n\t"
                       ".reg.u32 t2;\n\t"
-                      ".reg.u32 t3;");
+                      ".reg.u32 t3;");*/
         for (int i = 0; i < numberOfIterations; i++) {
-            asm volatile ("mov.u32 t1, %6;\n\t"
+            /*asm volatile ("mov.u32 t1, %6;\n\t"
                           "mov.u32 t2, %7;\n\t"
                           "mov.u32 %0, %%clock;\n\t"
                           "add.u32 t3, t1, t2;\n\t"
@@ -44,7 +44,15 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
                           "mov.u32 %4, %%warpid;\n\t"
                           "mov.u32 %5, %%smid;"
                           : "=r"(startTime), "=r"(sum), "=r"(endTime), "=r"(laneId), "=r"(warpId), "=r"(smId)
-                          : "r"(summand1), "r"(summand2));
+                          : "r"(summand1), "r"(summand2));*/
+            asm volatile ("mov.u32 %0, %%clock;\n\t"
+                          "add.u32 %1, %7, %6;\n\t"
+                          "mov.u32 %2, %%clock;\n\t"
+                          "mov.u32 %3, %%laneid;\n\t"
+                          "mov.u32 %4, %%warpid;\n\t"
+                          "mov.u32 %5, %%smid;"
+                    : "=r"(startTime), "=r"(sum), "=r"(endTime), "=r"(laneId), "=r"(warpId), "=r"(smId)
+                    : "r"(summand1), "r"(summand2));
             sumTime = sumTime + (endTime - startTime);
             laneSum = laneSum + laneId;
             warpSum = warpSum + warpId;
@@ -64,7 +72,7 @@ SmSimpleAddBenchmark16bit analyzeSm16bit(int sm, int summandSize, GpuInformation
     SmSimpleAddBenchmark16bit smSimpleAddBenchmark;
     SmSimpleAddBenchmark16bit *ptr;
     ptr = &smSimpleAddBenchmark;
-    cudaMallocManaged(&ptr, ((65536 + (4 * (65536 * 32))) / 1));
+    cudaMallocManaged(&ptr, ((65536 + (4 * (65536 * 32))) / 8));
     if ((numberOfTrials * gpuInfo.warpSize) > 65536) {
         for (int i = 0; i < 65536; i++) {
             smSimpleAddBenchmark.correctSm[i] = false;
