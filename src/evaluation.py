@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
-    data = np.loadtxt("../out/Benchmark_1.csv", delimiter=";", dtype="float")
+    data = np.loadtxt("../old/Benchmark_1.csv", delimiter=";", dtype="float")
     smId = data[:, 0]
     time = data[:, 1]
     fig = plt.figure()

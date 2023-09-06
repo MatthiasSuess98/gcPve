@@ -3,9 +3,9 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
-  <component name="CMakePresetLoader"><![CDATA[{
-  "useNewFormat": true
-}]]></component>
+  <component name="CMakePresetLoader">{
+  &quot;useNewFormat&quot;: true
+}</component>
   <component name="CMakeReloadState">
     <option name="reloaded" value="true" />
   </component>
@@ -20,7 +20,19 @@
   <component name="ChangeListManager">
     <list default="true" id="3f010c8b-9be5-42a3-9535-544f1713a60f" name="Changes" comment="next">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/Benchmark.csv" beforeDir="false" afterPath="$PROJECT_DIR$/old/Benchmark.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/Benchmark_1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/old/Benchmark_1.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/Benchmark_1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/old/Benchmark_1.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/Benchmark_3.csv" beforeDir="false" afterPath="$PROJECT_DIR$/old/Benchmark_3.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/Benchmark_3.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/old/Benchmark_3.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/GPU_Info.csv" beforeDir="false" afterPath="$PROJECT_DIR$/old/GPU_Info.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/Output.csv" beforeDir="false" afterPath="$PROJECT_DIR$/old/Output.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/0_Main.cu" beforeDir="false" afterPath="$PROJECT_DIR$/src/0_Main.cu" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/1_Gpu_Information.cuh" beforeDir="false" afterPath="$PROJECT_DIR$/src/1_Gpu_Information.cuh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/2_Analyze_SM.cuh" beforeDir="false" afterPath="$PROJECT_DIR$/src/2_Analyze_SM.cuh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cuda-samples/Common/helper_cuda.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cuda-samples/Common/helper_string.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/evaluation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/evaluation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,12 +45,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "MatthiasSuess98"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;MatthiasSuess98&quot;
   }
-}]]></component>
+}</component>
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
@@ -55,42 +67,43 @@
     <option name="majorVersion" value="2023" />
     <option name="minorVersion" value="2" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2UePTdPNul2Qi3p8ZwgmiTsOlKT" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "http.proxy",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;http.proxy&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/out" />
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <configuration name="evaluation" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
@@ -124,15 +137,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1693297081469</updated>
-      <workItem from="1693297083534" duration="32087000" />
-    </task>
-    <task id="LOCAL-00011" summary="next">
-      <option name="closed" value="true" />
-      <created>1693370784427</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1693370784427</updated>
+      <workItem from="1693297083534" duration="34459000" />
+      <workItem from="1693889568860" duration="7331000" />
     </task>
     <task id="LOCAL-00012" summary="next">
       <option name="closed" value="true" />
@@ -518,7 +524,15 @@
       <option name="project" value="LOCAL" />
       <updated>1693751254238</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <task id="LOCAL-00060" summary="next">
+      <option name="closed" value="true" />
+      <created>1693759387047</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1693759387047</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

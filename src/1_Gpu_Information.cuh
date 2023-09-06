@@ -1,5 +1,5 @@
-#ifndef GCPVE_C_C_GPUINFORMATION_CUH
-#define GCPVE_C_C_GPUINFORMATION_CUH
+#include <cstdio>
+#include <cuda.h>
 
 typedef struct GpuInformation {
     char name[256];
@@ -40,7 +40,53 @@ typedef struct GpuInformation {
     int memoryBusWidth;
     int l2CacheSize;
     int maxThreadsPerMultiProcessor;
+    float cudaVersion;
+    int numberOfCores;
+    int maxNumberOfWarpsPerSm;
 } GpuInformation;
+
+int getNumberOfCores(int major, int minor) {
+    // Data from "helper_cuda.h".
+    if ((major == 3) && (minor == 0)) {
+        return 192;
+    } else if ((major == 3) && (minor == 2)) {
+        return 192;
+    } else if ((major == 3) && (minor == 5)) {
+        return 192;
+    } else if ((major == 3) && (minor == 7)) {
+        return 192;
+    } else if ((major == 5) && (minor == 0)) {
+        return 128;
+    } else if ((major == 5) && (minor == 2)) {
+        return 128;
+    } else if ((major == 5) && (minor == 3)) {
+        return 128;
+    } else if ((major == 6) && (minor == 0)) {
+        return 64;
+    } else if ((major == 6) && (minor == 1)) {
+        return 128;
+    } else if ((major == 6) && (minor == 2)) {
+        return 128;
+    } else if ((major == 7) && (minor == 0)) {
+        return 64;
+    } else if ((major == 7) && (minor == 2)) {
+        return 64;
+    } else if ((major == 7) && (minor == 5)) {
+        return 64;
+    } else if ((major == 8) && (minor == 0)) {
+        return 64;
+    } else if ((major == 8) && (minor == 6)) {
+        return 128;
+    } else if ((major == 8) && (minor == 7)) {
+        return 128;
+    } else if ((major == 8) && (minor == 9)) {
+        return 128;
+    } else if ((major == 9) && (minor == 0)) {
+        return 128;
+    } else {
+        return 0;
+    }
+}
 
 GpuInformation getGpuInformation(int gpuId) {
     GpuInformation info;
@@ -84,6 +130,9 @@ GpuInformation getGpuInformation(int gpuId) {
     info.memoryBusWidth = deviceInfo.memoryBusWidth;
     info.l2CacheSize = deviceInfo.l2CacheSize;
     info.maxThreadsPerMultiProcessor = deviceInfo.maxThreadsPerMultiProcessor;
+    info.cudaVersion = (((float) info.major) + (((float) info.minor) / 10.));
+    info.numberOfCores = getNumberOfCores(info.major, info.minor);
+    info.maxNumberOfWarpsPerSm = info.maxThreadsPerMultiProcessor / info.warpSize;
     return info;
 }
 
@@ -128,8 +177,9 @@ void createInfoFile(GpuInformation info) {
     fprintf(csv, "memoryBusWidth; \"%d\"\n", info.memoryBusWidth);
     fprintf(csv, "l2CacheSize; \"%d\"\n", info.l2CacheSize);
     fprintf(csv, "maxThreadsPerMultiProcessor; \"%d\"\n", info.maxThreadsPerMultiProcessor);
+    fprintf(csv, "cudaVersion; \"%f\"\n", info.cudaVersion);
+    fprintf(csv, "numberOfCores; \"%d\"\n", info.numberOfCores);
+    fprintf(csv, "maxNumberOfWarpsPerSm; \"%d\"\n", info.maxNumberOfWarpsPerSm);
     fclose(csv);
 }
-
-#endif //GCPVE_C_C_GPUINFORMATION_CUH
 
