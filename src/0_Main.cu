@@ -24,10 +24,10 @@ void createBenchmarks(int gpuId) {
         counter = 0;
         for (int j = 0; j < 65536; j++) {
             if (smSimpleAddBenchmark.correctSm[j]) {
-                averageTime = averageTime + smSimpleAddBenchmark.finalTime;
-                averageLane = averageLane + smSimpleAddBenchmark.laneFinal;
-                averageWarp = averageWarp + smSimpleAddBenchmark.warpFinal;
-                averageSm = averageSm + smSimpleAddBenchmark.smFinal;
+                averageTime = averageTime + smSimpleAddBenchmark.finalTime[j];
+                averageLane = averageLane + smSimpleAddBenchmark.laneFinal[j];
+                averageWarp = averageWarp + smSimpleAddBenchmark.warpFinal[j];
+                averageSm = averageSm + smSimpleAddBenchmark.smFinal[j];
                 counter++;
             }
         }
