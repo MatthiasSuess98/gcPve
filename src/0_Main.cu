@@ -9,10 +9,10 @@ void createBenchmarks(int gpuId) {
     createInfoFile(gpuInfo);
     SmSimpleAddBenchmark16bit smSimpleAddBenchmark;
     int counter;
-    int averageTime;
-    int averageLane;
-    int averageWarp;
-    int averageSm;
+    float averageTime;
+    float averageLane;
+    float averageWarp;
+    float averageSm;
     char output1[] = "Benchmark_16bit.csv";
     FILE *csv1 = fopen(output1, "w");
     for (int i = 0; i < gpuInfo.multiProcessorCount; i++) {
