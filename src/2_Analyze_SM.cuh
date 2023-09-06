@@ -30,15 +30,15 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
         float  laneSum;
         float  warpSum;
         float  smSum;
-        /*asm volatile (".reg.u32 t1;\n\t"
+        asm volatile (".reg.u32 t1;\n\t"
                       ".reg.u32 t2;\n\t"
-                      ".reg.u32 t3;");*/
+                      ".reg.u32 t3;");
         float sumTimes;
         float laneSums;
         float warpSums;
         float smSums;
         for (int i = 0; i < numberOfIterations; i++) {
-            /*asm volatile ("mov.u32 t1, %6;\n\t"
+            asm volatile ("mov.u32 t1, %6;\n\t"
                           "mov.u32 t2, %7;\n\t"
                           "mov.u32 %0, %%clock;\n\t"
                           "add.u32 t3, t1, t2;\n\t"
@@ -48,18 +48,17 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
                           "mov.u32 %4, %%warpid;\n\t"
                           "mov.u32 %5, %%smid;"
                           : "=r"(startTime), "=r"(sum), "=r"(endTime), "=r"(laneId), "=r"(warpId), "=r"(smId)
-                          : "r"(summand1), "r"(summand2));*/
-            asm volatile ("mov.u32 %0, %%clock;\n\t"
+                          : "r"(summand1), "r"(summand2));
+            /*asm volatile ("mov.u32 %0, %%clock;\n\t"
                           "add.u32 %1, %3, %4;\n\t"
                           "mov.u32 %2, %%clock;\n\t": "=r"(startTime), "=r"(sum), "=r"(endTime) : "r"(summand1), "r"(summand2));
             asm volatile ("mov.u32 %0, %%laneid;\n\t"
                           "mov.u32 %1, %%warpid;\n\t"
                           "mov.u32 %2, %%smid;"
-                    : "=r"(laneId), "=r"(warpId), "=r"(smId));
+                    : "=r"(laneId), "=r"(warpId), "=r"(smId));*/
             sumTimes = (float) (endTime - startTime);
             laneSums = (float) laneId;
             warpSums = (float) warpId;
-            asm volatile("mov.u32 %0, %%smid;" : "=r"(smId));
             smSums = (float) smId;
             sum = 0;
             sumTime = sumTime + sumTimes;
@@ -67,15 +66,10 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
             warpSum = warpSum + warpSums;
             smSum = smSum + smSums;
         }
-
         (*host).finalTime[pos] = sumTime / ((float) numberOfIterations);
         (*host).laneFinal[pos] = laneSum / ((float) numberOfIterations);
         (*host).warpFinal[pos] = warpSum / ((float) numberOfIterations);
         (*host).smFinal[pos] = smSum / ((float) numberOfIterations);
-        //(*host).smFinal[pos] = ((float) smId);
-        //(*host).finalTime[pos] = 11;
-        //(*host).laneFinal[pos] = 12;
-        //(*host).warpFinal[pos] = 13;
         (*host).correctSm[pos] = true;
     }
 }
