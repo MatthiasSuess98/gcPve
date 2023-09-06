@@ -65,7 +65,7 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
         (*host).finalTime[pos] = 11;
         (*host).laneFinal[pos] = 12;
         (*host).warpFinal[pos] = 13;
-        (*host).smFinal[pos] = 14;
+        (*host).smFinal[pos] = currentSm;
         (*host).correctSm[pos] = true;
     }
 }
