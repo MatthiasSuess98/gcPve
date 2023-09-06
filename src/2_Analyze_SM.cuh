@@ -33,6 +33,10 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
         /*asm volatile (".reg.u32 t1;\n\t"
                       ".reg.u32 t2;\n\t"
                       ".reg.u32 t3;");*/
+        unsigned int sumTimes[numberOfIterations];
+        unsigned int laneSums[numberOfIterations];
+        unsigned int warpSums[numberOfIterations];
+        unsigned int smSums[numberOfIterations];
         for (int i = 0; i < numberOfIterations; i++) {
             /*asm volatile ("mov.u32 t1, %6;\n\t"
                           "mov.u32 t2, %7;\n\t"
@@ -52,21 +56,27 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
                           "mov.u32 %1, %%warpid;\n\t"
                           "mov.u32 %2, %%smid;"
                     : "=r"(laneId), "=r"(warpId), "=r"(smId));
-            sumTime = sumTime + (endTime - startTime);
-            laneSum = laneSum + laneId;
-            warpSum = warpSum + warpId;
+            sumTimes[i] = (endTime - startTime);
+            laneSums[i] = laneId;
+            warpSums[i] = warpId;
             asm volatile("mov.u32 %0, %%smid;" : "=r"(smId));
-            //smSum = smSum + smId;
+            smSums[i] = smId;
             sum = 0;
         }
-        //(*host).finalTime[pos] = ((float) sumTime) / ((float) numberOfIterations);
-        //(*host).laneFinal[pos] = ((float) laneSum) / ((float) numberOfIterations);
-        //(*host).warpFinal[pos] = ((float) warpSum) / ((float) numberOfIterations);
-        //(*host).smFinal[pos] = ((float) smSum) / ((float) numberOfIterations);
-        (*host).smFinal[pos] = ((float) smId);
-        (*host).finalTime[pos] = 11;
-        (*host).laneFinal[pos] = 12;
-        (*host).warpFinal[pos] = 13;
+        for (int i = 0; i < numberOfIterations; i++) {
+            sumTime = sumTime + sumTimes[i];
+            laneSum = laneSum + laneSums[i];
+            warpSum = warpSum + warpSums[i];
+            smSum = smSum + smSums[i];
+        }
+        (*host).finalTime[pos] = ((float) sumTime) / ((float) numberOfIterations);
+        (*host).laneFinal[pos] = ((float) laneSum) / ((float) numberOfIterations);
+        (*host).warpFinal[pos] = ((float) warpSum) / ((float) numberOfIterations);
+        (*host).smFinal[pos] = ((float) smSum) / ((float) numberOfIterations);
+        //(*host).smFinal[pos] = ((float) smId);
+        //(*host).finalTime[pos] = 11;
+        //(*host).laneFinal[pos] = 12;
+        //(*host).warpFinal[pos] = 13;
         (*host).correctSm[pos] = true;
     }
 }
