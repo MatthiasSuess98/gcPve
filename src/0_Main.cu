@@ -35,7 +35,7 @@ void createBenchmarks(int gpuId) {
         fprintf(csv1, "%f ; ", (((float) averageLane) / ((float) counter)));
         fprintf(csv1, "%f ; ", (((float) averageWarp) / ((float) counter)));
         fprintf(csv1, "%f ; ", (((float) averageSm) / ((float) counter)));
-        fprintf(csv1, "%f ; ", (((float) averageTime) / ((float) counter)));
+        fprintf(csv1, "%f \n", (((float) averageTime) / ((float) counter)));
     }
     fclose(csv1);
 }
