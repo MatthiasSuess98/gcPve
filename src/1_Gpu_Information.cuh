@@ -184,3 +184,4 @@ void createInfoFile(GpuInformation info) {
 }
 
 #endif //GCPVE_C_C_1_GPU_INFORMATION_CUH
+

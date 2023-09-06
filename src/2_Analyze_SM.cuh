@@ -1,3 +1,6 @@
+#ifndef GCPVE_C_C_2_ANALYZE_SM_CUH
+#define GCPVE_C_C_2_ANALYZE_SM_CUH
+
 #include "1_Gpu_Information.cuh"
 
 typedef struct SmSimpleAddBenchmark16bit {
@@ -76,6 +79,9 @@ SmSimpleAddBenchmark16bit analyzeSm16bit(int sm, int summandSize, GpuInformation
     cudaFree(ptr);
     return smSimpleAddBenchmark;
 }
+
+#endif //GCPVE_C_C_2_ANALYZE_SM_CUH
+
 
 /*
 void createSm16bitFile(SmSimpleAddBenchmark16bit smSimpleAddBenchmark) {
