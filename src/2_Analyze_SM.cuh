@@ -32,7 +32,7 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
         unsigned int smSum;
         for (int i = 0; i < numberOfIterations; i++) {
             asm volatile ("mov.u32 %0, %%clock;\n\t"
-                          "add.u32 %1 %6 %7;\n\t"
+                          "add.u32 %1, %6, %7;\n\t"
                           "mov.u32 %2, %%clock;\n\t"
                           "mov.u32 %3, %%laneid;\n\t"
                           "mov.u32 %4, %%warpid;\n\t"
