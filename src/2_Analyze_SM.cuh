@@ -46,13 +46,12 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
                           : "=r"(startTime), "=r"(sum), "=r"(endTime), "=r"(laneId), "=r"(warpId), "=r"(smId)
                           : "r"(summand1), "r"(summand2));*/
             asm volatile ("mov.u32 %0, %%clock;\n\t"
-                          "add.u32 %1, %7, %6;\n\t"
-                          "mov.u32 %2, %%clock;\n\t"
-                          "mov.u32 %3, %%laneid;\n\t"
+                          "add.u32 %1, %3, %4;\n\t"
+                          "mov.u32 %2, %%clock;\n\t": "=r"(startTime), "=r"(sum), "=r"(endTime) : "r"(summand1), "r"(summand2));
+            asm volatile ("mov.u32 %3, %%laneid;\n\t"
                           "mov.u32 %4, %%warpid;\n\t"
                           "mov.u32 %5, %%smid;"
-                    : "=r"(startTime), "=r"(sum), "=r"(endTime), "=r"(laneId), "=r"(warpId), "=r"(smId)
-                    : "r"(summand1), "r"(summand2));
+                    : "=r"(laneId), "=r"(warpId), "=r"(smId));
             sumTime = sumTime + (endTime - startTime);
             laneSum = laneSum + laneId;
             warpSum = warpSum + warpId;
