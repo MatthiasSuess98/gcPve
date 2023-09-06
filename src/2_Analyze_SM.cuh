@@ -34,9 +34,9 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
             asm volatile ("mov.u32 %0, %%clock;\n"
                           "add.u32 %1 %6 %7;\n"
                           "mov.u32 %2, %%clock;\n"
-                          "mov.u32 %3, %%laneid;"
-                          "mov.u32 %4, %%warpid;"
-                          "mov.u32 %5, %%smid;"
+                          "mov.u32 %3, %%laneid;\n"
+                          "mov.u32 %4, %%warpid;\n"
+                          "mov.u32 %5, %%smid;\n"
                           : "=r"(startTime), "=r"(sum), "=r"(endTime), "=r"(laneId), "=r"(warpId), "=r"(smId)
                           : "r"(summand1), "r"(summand2));
             sumTime = sumTime + (endTime - startTime);
