@@ -56,7 +56,7 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
             laneSum = laneSum + laneId;
             warpSum = warpSum + warpId;
             asm volatile("mov.u32 %0, %%smid;" : "=r"(smId));
-            smSum = smSum + smId;
+            //smSum = smSum + smId;
             sum = 0;
         }
         //(*host).finalTime[pos] = ((float) sumTime) / ((float) numberOfIterations);
