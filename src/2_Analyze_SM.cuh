@@ -33,10 +33,10 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
         /*asm volatile (".reg.u32 t1;\n\t"
                       ".reg.u32 t2;\n\t"
                       ".reg.u32 t3;");*/
-        float sumTimes[2048];
-        float laneSums[2048];
-        float warpSums[2048];
-        float smSums[2048];
+        float sumTimes;
+        float laneSums;
+        float warpSums;
+        float smSums;
         for (int i = 0; i < numberOfIterations; i++) {
             /*asm volatile ("mov.u32 t1, %6;\n\t"
                           "mov.u32 t2, %7;\n\t"
@@ -56,20 +56,18 @@ __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int s
                           "mov.u32 %1, %%warpid;\n\t"
                           "mov.u32 %2, %%smid;"
                     : "=r"(laneId), "=r"(warpId), "=r"(smId));
-            sumTimes[i] = (float) (endTime - startTime);
-            laneSums[i] = (float) laneId;
-            warpSums[i] = (float) warpId;
+            sumTimes = (float) (endTime - startTime);
+            laneSums = (float) laneId;
+            warpSums = (float) warpId;
             asm volatile("mov.u32 %0, %%smid;" : "=r"(smId));
-            smSums[i] = (float) smId;
+            smSums = (float) smId;
             sum = 0;
+            sumTime = sumTime + sumTimes;
+            laneSum = laneSum + laneSums;
+            warpSum = warpSum + warpSums;
+            smSum = smSum + smSums;
         }
 
-        for (int i = 0; i < numberOfIterations; i++) {
-            sumTime = sumTime + sumTimes[i];
-            laneSum = laneSum + laneSums[i];
-            warpSum = warpSum + warpSums[i];
-            smSum = smSum + smSums[i];
-        }
         (*host).finalTime[pos] = sumTime / ((float) numberOfIterations);
         (*host).laneFinal[pos] = laneSum / ((float) numberOfIterations);
         (*host).warpFinal[pos] = warpSum / ((float) numberOfIterations);
