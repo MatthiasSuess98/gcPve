@@ -1,6 +1,3 @@
-#include <cstdio>
-#include <cuda.h>
-
 typedef struct GpuInformation {
     char name[256];
     size_t totalGlobalMem;

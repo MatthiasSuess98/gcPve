@@ -1,6 +1,3 @@
-#include <cstdio>
-#include <cuda.h>
-
 #include "1_Gpu_Information.cuh"
 
 typedef struct SmSimpleAddBenchmark16bit {
@@ -12,7 +9,7 @@ typedef struct SmSimpleAddBenchmark16bit {
 } SmSimpleAddBenchmark16bit;
 
 __global__ void performSmSimpleAddBenchmark(int requiredSm, int blockSize, int summandSize, SmSimpleAddBenchmark16bit *host) {
-    unsigned int intnumberOfIterations = 2048;
+    unsigned int numberOfIterations = 2048;
     unsigned int currentSm;
     asm volatile("mov.u32 %0, %%smid;" : "=r"(currentSm));
     int pos = threadIdx.x + (blockIdx.x * blockSize);
