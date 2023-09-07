@@ -5,6 +5,7 @@
 #include "2_Analyze_SM.cuh"
 
 void createBenchmarks(int gpuId) {
+    /*
     GpuInformation gpuInfo = getGpuInformation(gpuId);
     createInfoFile(gpuInfo);
     SmSimpleAddBenchmark16bit smSimpleAddBenchmark;
@@ -36,6 +37,31 @@ void createBenchmarks(int gpuId) {
         fprintf(csv1, "%f ; ", (((float) averageWarp) / ((float) counter)));
         fprintf(csv1, "%f ; ", (((float) averageSm) / ((float) counter)));
         fprintf(csv1, "%f \n", (((float) averageTime) / ((float) counter)));
+    }
+    fclose(csv1);
+     */
+    GpuInformation gpuInfo = getGpuInformation(gpuId);
+    createInfoFile(gpuInfo);
+    SmSimpleAddBenchmark16bit smSimpleAddBenchmark;
+    int counter;
+    char output1[] = "Benchmark_16bit.csv";
+    FILE *csv1 = fopen(output1, "w");
+    for (int i = 0; i < gpuInfo.multiProcessorCount; i++) {
+        smSimpleAddBenchmark = analyzeSm16bit(i, 16777216, gpuInfo);
+        if (i == 0) {
+            averageTime = 0;
+            averageLane = 0;
+            averageWarp = 0;
+            averageSm = 0;
+            counter = 0;
+            for (int j = 0; j < 65536; j++) {
+                if (smSimpleAddBenchmark.correctSm[j]) {
+                    fprintf(csv1, "%d ; ", counter);
+                    fprintf(csv1, "%f \n", smSimpleAddBenchmark.finalTime[j]);
+                    counter++;
+                }
+            }
+        }
     }
     fclose(csv1);
 }
