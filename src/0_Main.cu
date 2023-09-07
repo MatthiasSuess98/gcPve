@@ -49,10 +49,6 @@ void createBenchmarks(int gpuId) {
     for (int i = 0; i < gpuInfo.multiProcessorCount; i++) {
         smSimpleAddBenchmark = analyzeSm16bit(i, 16777216, gpuInfo);
         if (i == 0) {
-            averageTime = 0;
-            averageLane = 0;
-            averageWarp = 0;
-            averageSm = 0;
             counter = 0;
             for (int j = 0; j < 65536; j++) {
                 if (smSimpleAddBenchmark.correctSm[j]) {
