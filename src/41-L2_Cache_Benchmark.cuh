@@ -1,8 +1,9 @@
-//
-// Created by Matthias Suess on 17.09.23.
-//
+#ifndef GCPVE_41_L2_CACHE_BENCHMARK_CUH
+#define GCPVE_41_L2_CACHE_BENCHMARK_CUH
 
-#ifndef GCPVE_3_L2_CACHE_CUH
-#define GCPVE_3_L2_CACHE_CUH
 
-#endif //GCPVE_3_L2_CACHE_CUH
+
+#endif //GCPVE_41_L2_CACHE_BENCHMARK_CUH
+
+//FINISHED
+

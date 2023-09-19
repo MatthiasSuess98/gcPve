@@ -1,29 +1,58 @@
-#ifndef GCPVE_ANALYZE_SCHEDULING_CUH
-#define GCPVE_ANALYZE_SCHEDULING_CUH
+#ifndef GCPVE_C_C_2_BENCHMARK_PROPERTIES_CUH
+#define GCPVE_C_C_2_BENCHMARK_PROPERTIES_CUH
 
+/**
+ * Data structure for all properties of the benchmark.
+ */
 typedef struct BenchmarkProperties {
-    // Update in data collection
-    small 65536
-    medium 16777216
-    large 4294967296
+
+    // Variables.
+    unsigned int small;
+    unsigned int medium;
+    unsigned int large;
 } BenchmarkProperties;
 
+
+/**
+ * Creates a data structure with all properties of the benchmark.
+ * @return Data structure with all properties of the benchmark.
+ */
 BenchmarkProperties getBenchmarkProperties() {
-    GpuInformation info;
-    cudaDeviceProp deviceInfo{};
-    cudaGetDeviceProperties(&deviceInfo, gpuId);
-    strcpy(info.name, deviceInfo.name);
-    info.totalGlobalMem = deviceInfo.totalGlobalMem;
-    info.maxNumberOfWarpsPerSm = info.maxThreadsPerMultiProcessor / info.warpSize;
+
+    // Create the final data structure.
+    BenchmarkProperties prop;
+
+    // Size of the data collections.
+    // Warning: If these three variables get updated, update the variables in 04-Core_Characteristics also!
+    prop.small = 65536;
+    prop.medium = 16777216;
+    prop.large = 4294967296;
+
+    // Return the final data structure.
     return info;
 }
 
-void createInfoFile(GpuInformation info) {
-    char output[] = "GPU_Info.csv";
+
+/**
+ * Creates a csv file with all information of the given data structure.
+ * @param prop The given data structure.
+ */
+void createPropFile(BenchmarkProperties prop) {
+
+    // Creation and opening of the csv file.
+    char output[] = "BenchProp.csv";
     FILE *csv = fopen(output, "w");
-    fprintf(csv, "name; \"%s\"\n", info.name);
+
+    // Writing all the information into the csv file.
+    fprintf(csv, "small; \"%d\"\n", prop.small);
+    fprintf(csv, "medium; \"%d\"\n", prop.medium);
+    fprintf(csv, "large; \"%d\"\n", prop.large);
+
+    // Close the csv file.
     fclose(csv);
 }
 
-#endif //GCPVE_ANALYZE_SCHEDULING_CUH
+#endif //GCPVE_C_C_2_BENCHMARK_PROPERTIES_CUH
+
+//FINISHED
 

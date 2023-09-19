@@ -2,6 +2,11 @@
 #include <cuda.h>
 
 #include "01-Gpu_Information.cuh"
+#include "02-Benchmark_Properties.cuh"
+#include "03-Info_Prop_Derivatives.cuh"
+#include "04-Core_Characteristics.cuh"
+#include "05-Data_Collection.cuh"
+
 #include "10-Perform_Benchmark.cuh"
 
 void createBenchmarks(int gpuId) {

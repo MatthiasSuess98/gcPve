@@ -1,7 +1,13 @@
 #ifndef GCPVE_C_C_1_GPU_INFORMATION_CUH
 #define GCPVE_C_C_1_GPU_INFORMATION_CUH
 
+/**
+ * Data structure for all available information of the current gpu.
+ */
 typedef struct GpuInformation {
+
+    // Variables.
+    int gpuId;
     char name[256];
     size_t totalGlobalMem;
     size_t sharedMemPerBlock;
@@ -40,59 +46,23 @@ typedef struct GpuInformation {
     int memoryBusWidth;
     int l2CacheSize;
     int maxThreadsPerMultiProcessor;
-    float cudaVersion;
-    int numberOfCoresPerSm;
-    int maxNumberOfWarpsPerSm;
-    int totalNumberOfCores;
 } GpuInformation;
 
-int getNumberOfCores(int major, int minor) {
-    // Data from "helper_cuda.h".
-    if ((major == 3) && (minor == 0)) {
-        return 192;
-    } else if ((major == 3) && (minor == 2)) {
-        return 192;
-    } else if ((major == 3) && (minor == 5)) {
-        return 192;
-    } else if ((major == 3) && (minor == 7)) {
-        return 192;
-    } else if ((major == 5) && (minor == 0)) {
-        return 128;
-    } else if ((major == 5) && (minor == 2)) {
-        return 128;
-    } else if ((major == 5) && (minor == 3)) {
-        return 128;
-    } else if ((major == 6) && (minor == 0)) {
-        return 64;
-    } else if ((major == 6) && (minor == 1)) {
-        return 128;
-    } else if ((major == 6) && (minor == 2)) {
-        return 128;
-    } else if ((major == 7) && (minor == 0)) {
-        return 64;
-    } else if ((major == 7) && (minor == 2)) {
-        return 64;
-    } else if ((major == 7) && (minor == 5)) {
-        return 64;
-    } else if ((major == 8) && (minor == 0)) {
-        return 64;
-    } else if ((major == 8) && (minor == 6)) {
-        return 128;
-    } else if ((major == 8) && (minor == 7)) {
-        return 128;
-    } else if ((major == 8) && (minor == 9)) {
-        return 128;
-    } else if ((major == 9) && (minor == 0)) {
-        return 128;
-    } else {
-        return 0;
-    }
-}
 
+/**
+ * Function which determines all available information of the current gpu.
+ * @param gpuId Id of the selected gpu.
+ * @return All available information of the selected gpu.
+ */
 GpuInformation getGpuInformation(int gpuId) {
+
+    // Create the final data structure.
     GpuInformation info;
     cudaDeviceProp deviceInfo{};
     cudaGetDeviceProperties(&deviceInfo, gpuId);
+
+    // Determines all available information and write it into the final data structure.
+    info.gpuId = gpuId;
     strcpy(info.name, deviceInfo.name);
     info.totalGlobalMem = deviceInfo.totalGlobalMem;
     info.sharedMemPerBlock = deviceInfo.sharedMemPerBlock;
@@ -131,15 +101,23 @@ GpuInformation getGpuInformation(int gpuId) {
     info.memoryBusWidth = deviceInfo.memoryBusWidth;
     info.l2CacheSize = deviceInfo.l2CacheSize;
     info.maxThreadsPerMultiProcessor = deviceInfo.maxThreadsPerMultiProcessor;
-    info.cudaVersion = (((float) info.major) + (((float) info.minor) / 10.));
-    info.numberOfCores = getNumberOfCores(info.major, info.minor);
-    info.maxNumberOfWarpsPerSm = info.maxThreadsPerMultiProcessor / info.warpSize;
+
+    //Return the final data structure.
     return info;
 }
 
+
+/**
+ * Creates a csv file with all information of the given data structure.
+ * @param info The given data structure.
+ */
 void createInfoFile(GpuInformation info) {
+
+    // Creation and opening of the csv file.
     char output[] = "GPU_Info.csv";
     FILE *csv = fopen(output, "w");
+
+    // Writing all the information into the csv file.
     fprintf(csv, "name; \"%s\"\n", info.name);
     fprintf(csv, "totalGlobalMem; \"%zu\"\n", info.totalGlobalMem);
     fprintf(csv, "sharedMemPerBlock; \"%zu\"\n", info.sharedMemPerBlock);
@@ -178,11 +156,12 @@ void createInfoFile(GpuInformation info) {
     fprintf(csv, "memoryBusWidth; \"%d\"\n", info.memoryBusWidth);
     fprintf(csv, "l2CacheSize; \"%d\"\n", info.l2CacheSize);
     fprintf(csv, "maxThreadsPerMultiProcessor; \"%d\"\n", info.maxThreadsPerMultiProcessor);
-    fprintf(csv, "cudaVersion; \"%f\"\n", info.cudaVersion);
-    fprintf(csv, "numberOfCores; \"%d\"\n", info.numberOfCores);
-    fprintf(csv, "maxNumberOfWarpsPerSm; \"%d\"\n", info.maxNumberOfWarpsPerSm);
+
+    // Close the csv file.
     fclose(csv);
 }
 
 #endif //GCPVE_C_C_1_GPU_INFORMATION_CUH
+
+//FINISHED
 

@@ -1,6 +1,9 @@
-#ifndef GCPVE_03_CORE_CHARACTERISTICS_CUH
-#define GCPVE_03_CORE_CHARACTERISTICS_CUH
+#ifndef GCPVE_04_CORE_CHARACTERISTICS_CUH
+#define GCPVE_04_CORE_CHARACTERISTICS_CUH
 
+/**
+ * Object class of the core characteristics.
+ */
 class CoreCharacteristics {
 private:
     unsigned int smId;
@@ -67,5 +70,7 @@ public:
     }
 };
 
-#endif //GCPVE_03_CORE_CHARACTERISTICS_CUH
+#endif //GCPVE_04_CORE_CHARACTERISTICS_CUH
+
+//FINISHED
 
