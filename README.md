@@ -38,6 +38,10 @@ Options:
 - "-adv": The final file will provide advanced GPU information.
 - "-fas": The benchmarks will be executed faster than normal.
 When the benchmarks are finished, the final data will be stored in a csv-file named "Output.csv".
+-
+      printf("[ERROR] To do so, use the following syntax (here for GPU 0): \"gcPve 0\"");
+      printf("To get a list of all available GPUs use the command \"nvidia-smi -L\".\n");
+      printf("It is also possible to select multiple GPUs by appending multiple numbers.\n");
 
 ## Known issues
 - No issues so far.

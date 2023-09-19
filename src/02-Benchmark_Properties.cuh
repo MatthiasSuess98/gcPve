@@ -10,6 +10,7 @@ typedef struct BenchmarkProperties {
     unsigned int small;
     unsigned int medium;
     unsigned int large;
+    unsigned int maximumNumberOfTrials;
 } BenchmarkProperties;
 
 
@@ -22,6 +23,8 @@ BenchmarkProperties getBenchmarkProperties() {
     // Create the final data structure.
     BenchmarkProperties prop;
 
+    // Initialize the properties and writes them into the final data structure.
+    prop.maximumNumberOfTrials = 16;
     // Size of the data collections.
     // Warning: If these three variables get updated, update the variables in 04-Core_Characteristics also!
     prop.small = 65536;
@@ -47,6 +50,7 @@ void createPropFile(BenchmarkProperties prop) {
     fprintf(csv, "small; \"%d\"\n", prop.small);
     fprintf(csv, "medium; \"%d\"\n", prop.medium);
     fprintf(csv, "large; \"%d\"\n", prop.large);
+    fprintf(csv, "maximumNumberOfTrials; \"%d\"\n", prop.maximumNumberOfTrials);
 
     // Close the csv file.
     fclose(csv);

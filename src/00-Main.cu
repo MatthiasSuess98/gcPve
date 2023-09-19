@@ -1,3 +1,6 @@
+#ifndef GCPVE_00_MAIN_CU
+#define GCPVE_00_MAIN_CU
+
 #include <cstdio>
 #include <cuda.h>
 
@@ -9,17 +12,34 @@
 
 #include "10-Perform_Benchmark.cuh"
 
+/**
+ * Create all Benchmarks for the selected GPU.
+ * @param gpuId The selected GPU.
+ */
 void createBenchmarks(int gpuId) {
-    GpuInformation gpuInfo = getGpuInformation(gpuId);
-    createInfoFile(gpuInfo);
-    if (areThereWarpDifferences(gpuId, gpuInfo)) {
-        //analyzeScheduling
-    } else {
-        //useWarpOne
-    }
+
+    // Determine all information, properties and derivatives for the selected GPU.
+    GpuInformation info = getGpuInformation(gpuId);
+    createInfoFile(info);
+    BenchmarkProperties prop = getBenchmarkProperties();
+    createPropFile(prop);
+    InfoPropDerivatives derivatives = getInfoPropDerivatives(info, prop);
+    createInfoPropDerivatives(derivatives);
+
+    // Perform the benchmarks.
+    performBenchmark1(info, prop, derivatives);
 }
 
+
+/**
+ * Main function of the program which is initially called.
+ * @param argCount Number of given parameters.
+ * @param argVariables The given parameters.
+ * @return For stopping the program it returns the value zero.
+ */
 int main(int argCount, char *argVariables[]) {
+
+    // Interpretation of the given parameters.
     // argVariables[0] is the command.
     if (argCount >= 2) {
         int deviceCount;
@@ -28,16 +48,20 @@ int main(int argCount, char *argVariables[]) {
                 char *ptr;
                 int gpuId = strtol(argVariables[i], &ptr, 10);
                 if (*ptr || (gpuId >= deviceCount)) {
-                    printf("There is no GPU \"%d\".\n", gpuId);
+                    printf("There is no GPU \"%s\".\n", argVariables[i]);
                 } else {
                     createBenchmarks(gpuId);
                 }
             }
     } else {
-        printf("Please select the GPU for which the benchmarks should be created.\n");
-        printf("To do so, use the following syntax (here for GPU 0): \"gcPve 0\"");
-        printf("To get a list of all available GPUs use the command \"nvidia-smi -L\".\n");
-        printf("It is also possible to select multiple GPUs by appending multiple numbers.\n");
+        printf("[ERROR] Please select the GPU for which the benchmarks should be created.\n");
     }
+
+    // Stopping the program.
+    return 0;
 }
+
+#endif //GCPVE_00_MAIN_CU
+
+//FINISHED
 

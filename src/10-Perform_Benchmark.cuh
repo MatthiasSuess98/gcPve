@@ -1,14 +1,22 @@
-#ifndef GCPVE_C_C_2_ANALYZE_SM_CUH
-#define GCPVE_C_C_2_ANALYZE_SM_CUH
+#ifndef GCPVE_10_PERFORM_BENCHMARK_CUH
+#define GCPVE_10_PERFORM_BENCHMARK_CUH
 
 #include <vector>
 
 #include "01-Gpu_Information.cuh"
+#include "02-Benchmark_Properties.cuh"
+#include "03-Info_Prop_Derivatives.cuh"
 #include "04-Core_Characteristics.cuh"
 #include "05-Data_Collection.cuh"
-#include "10-CollectData.cuh.
 
-void performBenchmark(GpuInformation gpuInfo, unsigned int numberOfIterations, unsigned int num) {
+/**
+ *
+ * @param info
+ * @param prop
+ * @param derivatives
+ */
+void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
+
     // Declare all core characteristics.
     std::vector<coreCharacteristics> gpuCores (gpuInfo.totalNumberOfCores);
     for (unsigned int i = 0; i < gpuInfo.multiProcessorCount; i++) {
@@ -43,5 +51,5 @@ void performBenchmark(GpuInformation gpuInfo, unsigned int numberOfIterations, u
 
 }
 
-#endif //GCPVE_C_C_2_ANALYZE_SM_CUH
+#endif //GCPVE_10_PERFORM_BENCHMARK_CUH
 

@@ -1,7 +1,11 @@
-#ifndef GCPVE_COLLECTDATA_CUH
-#define GCPVE_COLLECTDATA_CUH
+#ifndef GCPVE_20_L1_CACHE_LAUNCHER_CUH
+#define GCPVE_20_L1_CACHE_LAUNCHER_CUH
 
-#define maximumNumberOfTrials 16
+#include "01-Gpu_Information.cuh"
+#include "02-Benchmark_Properties.cuh"
+#include "03-Info_Prop_Derivatives.cuh"
+#include "04-Core_Characteristics.cuh"
+#include "05-Data_Collection.cuh"
 
 /**
  * Function that performs a L1 benchmark for small data collections.
@@ -10,7 +14,7 @@
  * @param benProp All properties of the benchmarks.
  * @return A complete fully sorted SmallDataCollection for the L1 cache.
  */
-SmallDataCollection performSmallL1Benchmark (GpuInformation gpuInfo, BenchmarkProperties benProp) {
+SmallDataCollection performSmallL1Benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
     // gpuInfo and benProp derivatives.
     numberOfBlocks = benProp.small / gpuInfo.warpSize;
@@ -39,7 +43,7 @@ SmallDataCollection performSmallL1Benchmark (GpuInformation gpuInfo, BenchmarkPr
         while (moveOn) {
 
             // Check whether the maximum of trails is reached.
-            if (numberOfTrials < maximumNumberOfTrials) {
+            if (numberOfTrials < prop.maximumNumberOfTrials) {
 
                 // Launch a trail.
                 numberOfTrials++;
@@ -92,5 +96,5 @@ SmallDataCollection performSmallL1Benchmark (GpuInformation gpuInfo, BenchmarkPr
 
 
 
-#endif //GCPVE_COLLECTDATA_CUH
+#endif //GCPVE_20_L1_CACHE_LAUNCHER_CUH
 
