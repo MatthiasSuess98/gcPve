@@ -1,7 +1,64 @@
+/*
+    GpuInformation gpuInfo = getGpuInformation(gpuId);
+    createInfoFile(gpuInfo);
+    SmSimpleAddBenchmark16bit smSimpleAddBenchmark;
+    int counter;
+    float averageTime;
+    float averageLane;
+    float averageWarp;
+    float averageSm;
+    char output1[] = "Benchmark_16bit.csv";
+    FILE *csv1 = fopen(output1, "w");
+    for (int i = 0; i < gpuInfo.multiProcessorCount; i++) {
+        smSimpleAddBenchmark = analyzeSm16bit(i, 16777216, gpuInfo);
+        averageTime = 0;
+        averageLane = 0;
+        averageWarp = 0;
+        averageSm = 0;
+        counter = 0;
+        for (int j = 0; j < 65536; j++) {
+            if (smSimpleAddBenchmark.correctSm[j]) {
+                averageTime = averageTime + smSimpleAddBenchmark.finalTime[j];
+                averageLane = averageLane + smSimpleAddBenchmark.laneFinal[j];
+                averageWarp = averageWarp + smSimpleAddBenchmark.warpFinal[j];
+                averageSm = averageSm + smSimpleAddBenchmark.smFinal[j];
+                counter++;
+            }
+        }
+        fprintf(csv1, "%d ; ", i);
+        fprintf(csv1, "%f ; ", (((float) averageLane) / ((float) counter)));
+        fprintf(csv1, "%f ; ", (((float) averageWarp) / ((float) counter)));
+        fprintf(csv1, "%f ; ", (((float) averageSm) / ((float) counter)));
+        fprintf(csv1, "%f \n", (((float) averageTime) / ((float) counter)));
+    }
+    fclose(csv1);
+     */
+    GpuInformation gpuInfo = getGpuInformation(gpuId);
+    createInfoFile(gpuInfo);
+    SmSimpleAddBenchmark16bit smSimpleAddBenchmark;
+    int counter;
+    char output1[] = "Benchmark_16bit.csv";
+    FILE *csv1 = fopen(output1, "w");
+    for (int i = 0; i < gpuInfo.multiProcessorCount; i++) {
+        smSimpleAddBenchmark = analyzeSm16bit(i, 16777216, gpuInfo);
+        if (i == 0) {
+            counter = 0;
+            for (int j = 0; j < 65536; j++) {
+                if (smSimpleAddBenchmark.correctSm[j]) {
+                    fprintf(csv1, "%d ; ", counter);
+                    fprintf(csv1, "%f \n", smSimpleAddBenchmark.finalTime[j]);
+                    counter++;
+                }
+            }
+        }
+    }
+    fclose(csv1);
+
+
 #ifndef GCPVE_C_C_2_ANALYZE_SM_CUH
 #define GCPVE_C_C_2_ANALYZE_SM_CUH
 
-#include "1_Gpu_Information.cuh"
+#include "01-Gpu_Information.cuh"
 
 typedef struct SmSimpleAddBenchmark16bit {
     bool correctSm[65536];

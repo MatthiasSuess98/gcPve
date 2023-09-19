@@ -41,8 +41,9 @@ typedef struct GpuInformation {
     int l2CacheSize;
     int maxThreadsPerMultiProcessor;
     float cudaVersion;
-    int numberOfCores;
+    int numberOfCoresPerSm;
     int maxNumberOfWarpsPerSm;
+    int totalNumberOfCores;
 } GpuInformation;
 
 int getNumberOfCores(int major, int minor) {

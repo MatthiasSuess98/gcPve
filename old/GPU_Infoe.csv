@@ -39,3 +39,4 @@ maxThreadsPerMultiProcessor; "2048"
 cudaVersion; "6.100000"
 numberOfCores; "128"
 maxNumberOfWarpsPerSm; "64"
+
