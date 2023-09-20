@@ -9,47 +9,155 @@
 #include "04-Core_Characteristics.cuh"
 #include "05-Data_Collection.cuh"
 
+#include "20-L1_Cache_Launcher.cuh"
+
 /**
- *
- * @param info
- * @param prop
- * @param derivatives
+ * Performs Benchmark 1.
+ * @param info All available information of the current GPU.
+ * @param prop All properties of the benchmarks.
+ * @param derivatives All derivatives of info and prop.
  */
 void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
-    // Declare all core characteristics.
-    std::vector<coreCharacteristics> gpuCores (gpuInfo.totalNumberOfCores);
-    for (unsigned int i = 0; i < gpuInfo.multiProcessorCount; i++) {
-        for (unsigned int j = 0; j < gpuInfo.warpCoresPerSm; j++) {
-            for (unsigned int k = 0; k < gpuInfo.warpSize; k++) {
-                unsigned int gpuCore = (i * gpuInfo.numberOfCoresPerSm) + (j * gpuInfo.warpSize) + k;
-                gpuCores[gpuCore] = new CoreCharacteristics(i, j ,k);
+    // Choose the collection size.
+    int collectionSize;
+    if (info.totalGlobalMem >= (sizeof(LargeDataCollection) * prop.memoryOverlap)) {
+        LargeDataCollection data;
+        collectionSize = large;
+    } else if (info.totalGlobalMem >= (sizeof(MediumDataCollection) * prop.memoryOverlap)) {
+        MediumDataCollection data;
+        collectionSize = medium;
+    } else {
+        SmallDataCollection data;
+        collectionSize = small;
+    }
+
+    // Declare and initialize all core characteristics.
+    std::vector<coreCharacteristics> gpuCores (derivatives.totalNumberOfCores);
+    for (unsigned int i = 0; i < info.multiProcessorCount; i++) {
+        for (unsigned int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
+            for (unsigned int k = 0; k < info.warpSize; k++) {
+                gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * gpuInfo.warpSize) + k] = new CoreCharacteristics(i, j ,k);
             }
         }
     }
 
-    // Multiprocessor: deterministic mapping
-    // HardwareWarp: random mapping
-    // WarpCore: deterministic mapping
-
     // Perform the benchmark loop.
-    for (unsigned int iteration; iteration < numberOfIterations; iteration++) {
-        unsigned int dataSize;
-        if (gpuInfo.totalGlobalMem > sizeof(LargeDataCollection)) {
-            LargeDataCollection data;
-            dataSize = large;
-        } else if (gpuInfo.totalGlobalMem > sizeof(MediumDataCollection)) {
-            MediumDataCollection data;
-            dataSize = medium;
-        } else {
-            SmallDataCollection data;
-            dataSize = small;
+    int hardwareWarpScore;
+    int smallestNumber;
+    int bestHardwareWarp;
+    std::vector<int> dontFits (derivatives.hardwareWarpsPerSm);
+    for (unsigned int trailLoop; trailLoop < prop.maximumNumberOfTrials; trailLoop++) {
+        for (int resetLoop; resetLoop < collectionSize; resetLoop++) {
+            data.mulp[resetloop] = 0;
+            data.warp[resetLoop] = 0;
+            data.lane[resetLoop] = 0;
+            data.time[resetLoop] = 0;
         }
-
-
+        if (collectionSize == large) {
+            data = performSmallL1Benchmark(info, prop, derivatives);
+        } else if (collectionSize == medium) {
+            data = performSmallL1Benchmark(info, prop, derivatives);
+        } else (collectionSize == small) {
+            data = performSmallL1Benchmark(info, prop, derivatives);
+        }
+        for (int blockLoop = 0; blockLoop < collectionSize; blockLoop = blockLoop + info.warpSize) {
+            if (data.time[blockLoop] != 0) {
+                hardwareWarpScore = 0;
+                for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
+                    dontFits[hardWareLoop] = 0;
+                }
+                for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
+                    if (gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * gpuInfo.warpSize)].getTypicalL1Time() != 0) {
+                        hardwareWarpScore++;
+                    }
+                }
+                if (hardwareWarpScore == 0) {
+                    for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
+                        gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + laneLoop].setTypicalL1Time(data.time[blockLoop + laneLoop]);
+                    }
+                } else if (hardwareWarpScore == derivatives.hardwareWarpsPerSm) {
+                    for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
+                        for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
+                            if (std::abs(gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * info.warpSize) + laneLoop].getTypicalL1Time() - data.time[blockLoop]) > prop.maxDelta) {
+                                dontFits[hardwareWarpLoop]++;
+                            }
+                        }
+                    }
+                    smallestNumber = 0;
+                    bestHardwareWarp = 0;
+                    for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
+                        if (hardwareWarpLoop == 0) {
+                            smallestNumber = dontFits[hardwareWarpLoop];
+                        } else {
+                            if (smallestNumber > dontFits[hardwareWarpLoop]) {
+                                smallestNumber = dontFits[hardwareWarpLoop];
+                            }
+                        }
+                    }
+                    for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
+                        if (smallestNumber == dontFits[hardwareWarpLoop]) {
+                            bestHardwareWarp = hardwareWarpLoop;
+                        }
+                    }
+                    for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
+                        gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].setTypicalL1Time(data.time[blockLoop + laneLoop]);
+                    }
+                } else {
+                    for (int hardwareWarpLoop = 0; hardwareWarpLoop < hardwareWarpScore; hardwareWarpLoop++) {
+                        for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
+                            if (std::abs(gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * info.warpSize) + laneLoop].getTypicalL1Time() - data.time[blockLoop]) > prop.maxDelta) {
+                                dontFits[hardwareWarpLoop]++;
+                            }
+                        }
+                    }
+                    smallestNumber = 0;
+                    bestHardwareWarp = 0;
+                    for (int hardwareWarpLoop = 0; hardwareWarpLoop < hardwareWarpScore; hardwareWarpLoop++) {
+                        if (hardwareWarpLoop == 0) {
+                            smallestNumber = dontFits[hardwareWarpLoop];
+                        } else {
+                            if (smallestNumber > dontFits[hardwareWarpLoop]) {
+                                smallestNumber = dontFits[hardwareWarpLoop];
+                            }
+                        }
+                    }
+                    for (int hardwareWarpLoop = 0; hardwareWarpLoop < hardwareWarpScore; hardwareWarpLoop++) {
+                        if (smallestNumber == dontFits[hardwareWarpLoop]) {
+                            bestHardwareWarp = hardwareWarpLoop;
+                        }
+                    }
+                    if (dontFits[bestHardwareWarp] > prop.maxDontFit) {
+                        for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
+                            gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpScore * info.warpSize) + laneLoop].setTypicalL1Time(data.time[blockLoop + laneLoop]);
+                        }
+                    } else {
+                        for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
+                            gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].setTypicalL1Time(data.time[blockLoop + laneLoop]);
+                        }
+                    }
+                }
+            }
+        }
     }
 
+    // Create file with all benchmark data.
+    char output[] = "Benchmark1_L1.csv";
+    FILE *csv = fopen(output, "w");
+    for (unsigned int i = 0; i < info.multiProcessorCount; i++) {
+        for (unsigned int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
+            for (unsigned int k = 0; k < info.warpSize; k++) {
+                fprintf(csv, "\"%f\" ; ", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * gpuInfo.warpSize) + k].getTypicalL1Time());
+                delete gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * gpuInfo.warpSize) + k];
+            }
+            fprintf(csv, "\b\b\b\n");
+        }
+        fprintf(csv, "\n");
+    }
+    fclose(csv);
 }
 
 #endif //GCPVE_10_PERFORM_BENCHMARK_CUH
+
+//FINISHED
 

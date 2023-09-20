@@ -11,6 +11,9 @@ typedef struct BenchmarkProperties {
     unsigned int medium;
     unsigned int large;
     unsigned int maximumNumberOfTrials;
+    unsigned int memoryOverlap;
+    int maxDelta;
+    int maxDontFit;
 } BenchmarkProperties;
 
 
@@ -25,6 +28,9 @@ BenchmarkProperties getBenchmarkProperties() {
 
     // Initialize the properties and writes them into the final data structure.
     prop.maximumNumberOfTrials = 16;
+    prop.memoryOverlap = 1024;
+    prop.maxDelta = 10;
+    prop.maxDontFit = 3;
     // Size of the data collections.
     // Warning: If these three variables get updated, update the variables in 04-Core_Characteristics also!
     prop.small = 65536;
@@ -51,6 +57,9 @@ void createPropFile(BenchmarkProperties prop) {
     fprintf(csv, "medium; \"%d\"\n", prop.medium);
     fprintf(csv, "large; \"%d\"\n", prop.large);
     fprintf(csv, "maximumNumberOfTrials; \"%d\"\n", prop.maximumNumberOfTrials);
+    fprintf(csv, "memoryOverlap; \"%d\"\n", prop.memoryOverlap);
+    fprintf(csv, "maxDelta; \"%d\"\n", prop.maxDelta);
+    fprintf(csv, "maxDontFit; \"%d\"\n", prop.maxDontFit);
 
     // Close the csv file.
     fclose(csv);

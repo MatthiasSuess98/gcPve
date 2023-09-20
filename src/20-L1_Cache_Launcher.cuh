@@ -7,18 +7,17 @@
 #include "04-Core_Characteristics.cuh"
 #include "05-Data_Collection.cuh"
 
+#include "21-L1_Cache_Benchmark.cuh"
+
 /**
  * Function that performs a L1 benchmark for small data collections.
- * It uses a shotgun technique
- * @param gpuInfo All available information of the current GPU.
- * @param benProp All properties of the benchmarks.
- * @return A complete fully sorted SmallDataCollection for the L1 cache.
+ * It uses a shotgun technique to get the full data.
+ * @param info All available information of the current GPU.
+ * @param prop All properties of the benchmarks.
+ * @param derivatives All derivatives of info and prop.
+ * @return A complete fully sorted small data collection for the L1 cache.
  */
 SmallDataCollection performSmallL1Benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
-
-    // gpuInfo and benProp derivatives.
-    numberOfBlocks = benProp.small / gpuInfo.warpSize;
-    numberOfBlocksPerMulp = numberOfBlocks / gpuInfo.multiProcessorCount;
 
     // Collection A: For host use only.
     SmallDataCollection finalCollection;
@@ -26,75 +25,64 @@ SmallDataCollection performSmallL1Benchmark(GpuInformation info, BenchmarkProper
     // Collection B: For both host use and device use.
     SmallDataCollection benchCollection;
 
+    // Initialize Collection A.
+    for (int initializeLoop = 0; initializeLoop < prop.small; initializeLoop++) {
+        finalCollection.mulp[initializeLoop] = 0;
+        finalCollection.warp[initializeLoop] = 0;
+        finalCollection.lane[initializeLoop] = 0;
+        finalCollection.time[initializeLoop] = 0;
+    }
+
     // Allocation of collection B to the global device memory.
     SmallDataCollection *ptr;
-    ptr = &collection;
-    cudaMallocManaged(&ptr, sizeof(collection));
+    ptr = &benchCollection;
+    cudaMallocManaged(&ptr, sizeof(benchCollection));
 
-    // Loop variables.
-    bool moveOn = true;
-    int numberOfTrials = 0;
-    int numberOfSets = 0;
-
-    // Multiprocessor loop.
-    for (int i = 0; i < gpuInfo.multiProcessorCount; i++) {
-
-        // Trail loop.
-        while (moveOn) {
-
-            // Check whether the maximum of trails is reached.
-            if (numberOfTrials < prop.maximumNumberOfTrials) {
-
-                // Launch a trail.
-                numberOfTrials++;
-                launchL1Benchmarks(ptr, numberOfBlocks);
-                cudaDeviceSynchronize();
-
-                // Analyze the trail by checking all launched blocks.
-                for (int j = 0; j < numberOfBlocks; j = j++) {
-
-                    // Check whether the block is relevant.
-                    if (moveOn && ((*ptr).time[j] != 0)) {
-
-                        // Copy the data of this block into collection A.
-                        finalCollection.mulp[(i * numberOfSetsPerMulp) + numberOfSets] = (*ptr).mulp[j];
-                        finalCollection.warp[(i * numberOfSetsPerMulp) + numberOfSets] = (*ptr).warp[j];
-                        finalCollection.lane[(i * numberOfSetsPerMulp) + numberOfSets] = (*ptr).lane[j];
-                        finalCollection.time[(i * numberOfSetsPerMulp) + numberOfSets] = (*ptr).time[j];
-                        numberOfSets++;
-
-                        // Check whether all available sets are used.
-                        if (numberOfSets >= numberOfSetsPerMulp) {
+    // Getting and sorting the data.
+    bool moveOn;
+    for (int mulpLoop = 0; mulpLoop < info.multiProcessorCount; mulpLoop++) {
+        moveOn = true;
+        for (int trailLoop = 0; moveOn && (trailLoop < prop.maximumNumberOfTrials); trailLoop++) {
+            for (int resetLoop = 0; resetLoop < prop.small; resetLoop++) {
+                (*ptr).mulp[resetLoop] = 0;
+                (*ptr).warp[resetLoop] = 0;
+                (*ptr).lane[resetLoop] = 0;
+                (*ptr).time[resetLoop] = 0;
+            }
+            launchL1Benchmarks(ptr, info, prop, derivatives);
+            cudaDeviceSynchronize();
+            for (int blockLoop = 0; moveOn && (blockLoop < derivatives.smallNumberOfBlocks); blockLoop++) {
+                if (moveOn && ((*ptr).mulp[blockLoop * info.warpSize] == mulpLoop) && ((*ptr).time[blockLoop * info.warpSize] != 0)) {
+                    for (int freeLoop = 0; moveOn && (freeLoop < derivatives.smallNumberOfBlocksPerMulp); freeLoop++) {
+                        if (moveOn && (finalCollection.time[(mulpLoop * derivatives.smallNumberOfBlocksPerMulp) + freeLoop] != 0)) {
+                            for (int laneLoop = 0; moveOn && (laneLoop < info.warpSize); laneLoop++) {
+                                finalCollection.mulp[(((mulpLoop * derivatives.smallNumberOfBlocksPerMulp) + freeLoop) * info.warpSize) + laneLoop] = (*ptr).mulp[(blockLoop * info.warpSize) + laneLoop];
+                                finalCollection.warp[(((mulpLoop * derivatives.smallNumberOfBlocksPerMulp) + freeLoop) * info.warpSize) + laneLoop] = (*ptr).warp[(blockLoop * info.warpSize) + laneLoop];
+                                finalCollection.lane[(((mulpLoop * derivatives.smallNumberOfBlocksPerMulp) + freeLoop) * info.warpSize) + laneLoop] = (*ptr).lane[(blockLoop * info.warpSize) + laneLoop];
+                                finalCollection.time[(((mulpLoop * derivatives.smallNumberOfBlocksPerMulp) + freeLoop) * info.warpSize) + laneLoop] = (*ptr).time[(blockLoop * info.warpSize) + laneLoop];
+                            }
+                        }
+                        if (moveOn && (finalCollection.time[((mulpLoop + 1) * derivatives.smallNumberOfBlocksPerMulp) - 1] != 0)) {
                             moveOn = false;
                         }
                     }
                 }
-
-            // If the maximum of trails is reached and some sets could not be filled: Print error.
-            } else {
-                moveOn = false;
-                printf("[ERROR] Failed to get full l1 data for streaming multiprocessor %d in small benchmark.", i);
             }
+        }
+        // If the maximum of trails is reached and some sets could not be filled: Print error.
+        if (moveOn && (finalCollection.time[((mulpLoop + 1) * derivatives.smallNumberOfBlocksPerMulp) - 1] == 0)) {
+            printf("[ERROR] Failed to get full l1 data for streaming multiprocessor %d in small benchmark.", i);
         }
     }
 
     // Free the allocated global device memory of collection B.
     cudaFree(ptr);
 
-    // Fill the remaining sets of collection A with void data.
-    for (int i = numberOfSetsPerMulp * gpuInfo.multiProcessorCount; i < numberOfBlocks; i++) {
-        finalCollection.mulp[i] = 0;
-        finalCollection.warp[i] = 0;
-        finalCollection.lane[i] = 0;
-        finalCollection.time[i] = 0;
-    }
-
     //Return the data collection A with the final benchmark data.
     return finalCollection;
 }
 
-
-
-
 #endif //GCPVE_20_L1_CACHE_LAUNCHER_CUH
+
+//FINISHED
 

@@ -84,6 +84,7 @@ launchSmallL1Benchmark(ptr, numberOfBlocks) {
 
 performSmSimpleAddBenchmark<<<numberOfTrials, gpuInfo.warpSize>>>(sm, gpuInfo.warpSize, summandSize, ptr);
 
+
 }
 
 #endif //GCPVE_21_L1_CACHE_BENCHMARK_CUH
