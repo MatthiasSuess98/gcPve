@@ -44,6 +44,8 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
         }
     }
 
+    /*
+
     // Perform the benchmark loop.
     int hardwareWarpScore;
     int smallestNumber;
@@ -159,6 +161,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
         fprintf(csv, "\n");
     }
     fclose(csv);
+     */
 }
 
 #endif //GCPVE_10_PERFORM_BENCHMARK_CUH
