@@ -81,7 +81,7 @@ SmallDataCollection performSmallL1Benchmark(GpuInformation info, BenchmarkProper
         printf("%d  ", finalCollection.mulp[initializeLoop]);
         printf("%d  ", finalCollection.warp[initializeLoop]);
         printf("%d  ", finalCollection.lane[initializeLoop]);
-        printf("%d\n", finalCollection.time[initializeLoop]);
+        printf("%.2f\n", finalCollection.time[initializeLoop]);
     }
 
     //Return the data collection A with the final benchmark data.
