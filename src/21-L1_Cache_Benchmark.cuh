@@ -23,7 +23,6 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, 
     asm volatile ("mov.u32 %0, %%smid;" : "=r"(mulp));
     asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
     asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
-    //printf("%d", mulp);
     mulp = (*ptr).mulp[pos];
     warp = (*ptr).warp[pos];
     lane = (*ptr).lane[pos];
@@ -40,7 +39,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, 
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
     asm volatile ("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
-    (*ptr).lane[pos] = ((float) (endTime - startTime)) / ((float) prop.numberOfTrialsBenchmark);
+    (*ptr).time[pos] = ((float) (endTime - startTime)) / ((float) prop.numberOfTrialsBenchmark);
 }
 
 /**
