@@ -20,7 +20,7 @@
 void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
     // Choose the collection size.
-    //int collectionSize;
+    int collectionSize;
     //if (info.totalGlobalMem >= (sizeof(LargeDataCollection) * prop.memoryOverlap)) {
     //    SmallDataCollection data;
     //    collectionSize = prop.small;
