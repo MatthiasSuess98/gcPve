@@ -16,7 +16,7 @@
  */
 __global__ void smallL1Benchmark(SmallDataCollection *ptr) {
 
-    int pos = (blockIdx.x * info.warpSize) + threadIdx.x;
+    int pos = (blockIdx.x * 1024) + threadIdx.x;
     int mulp;
     int warp;
     int lane;
