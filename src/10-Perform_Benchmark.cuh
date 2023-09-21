@@ -36,7 +36,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
 
     // Declare and initialize all core characteristics.
     std::vector<CoreCharacteristics> gpuCores;
-    CoreCharacteristics gpuCore = CoreCharacteristics(0, 0 ,0);
+    CoreCharacteristics gpuCore = new CoreCharacteristics(0, 0 ,0);
     gpuCores.push_back(gpuCore);
 
     /*
