@@ -27,7 +27,7 @@ void createBenchmarks(int gpuId) {
     createInfoPropDerivatives(derivatives);
 
     // Perform the benchmarks.
-    performBenchmark1(info, prop, derivatives);
+    //performBenchmark1(info, prop, derivatives);
 }
 
 
@@ -48,9 +48,9 @@ int main(int argCount, char *argVariables[]) {
                 char *ptr;
                 int gpuId = strtol(argVariables[i], &ptr, 10);
                 if (*ptr || (gpuId >= deviceCount)) {
-                //    printf("There is no GPU \"%s\".\n", argVariables[i]);
+                    printf("There is no GPU \"%s\".\n", argVariables[i]);
                 } else {
-                //    createBenchmarks(gpuId);
+                    createBenchmarks(gpuId);
                 }
             }
     } else {
