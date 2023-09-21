@@ -22,11 +22,11 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     // Choose the collection size.
     int collectionSize;
     if (info.totalGlobalMem >= (sizeof(LargeDataCollection) * prop.memoryOverlap)) {
-        LargeDataCollection data;
-        collectionSize = large;
+        SmallDataCollection data;
+        collectionSize = small;
     } else if (info.totalGlobalMem >= (sizeof(MediumDataCollection) * prop.memoryOverlap)) {
-        MediumDataCollection data;
-        collectionSize = medium;
+        SmallDataCollection data;
+        collectionSize = small;
     } else {
         SmallDataCollection data;
         collectionSize = small;
@@ -47,7 +47,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     int smallestNumber;
     int bestHardwareWarp;
     std::vector<int> dontFits (derivatives.hardwareWarpsPerSm);
-    for (unsigned int trailLoop; trailLoop < prop.maximumNumberOfTrials; trailLoop++) {
+    for (unsigned int trailLoop; trailLoop < prop.numberOfTrialsPerform; trailLoop++) {
         for (int resetLoop; resetLoop < collectionSize; resetLoop++) {
             data.mulp[resetloop] = 0;
             data.warp[resetLoop] = 0;

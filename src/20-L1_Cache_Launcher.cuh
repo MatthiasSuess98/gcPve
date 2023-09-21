@@ -42,15 +42,14 @@ SmallDataCollection performSmallL1Benchmark(GpuInformation info, BenchmarkProper
     bool moveOn;
     for (int mulpLoop = 0; mulpLoop < info.multiProcessorCount; mulpLoop++) {
         moveOn = true;
-        for (int trailLoop = 0; moveOn && (trailLoop < prop.maximumNumberOfTrials); trailLoop++) {
+        for (int trailLoop = 0; moveOn && (trailLoop < prop.numberOfTrialsLaunch); trailLoop++) {
             for (int resetLoop = 0; resetLoop < prop.small; resetLoop++) {
                 (*ptr).mulp[resetLoop] = 0;
                 (*ptr).warp[resetLoop] = 0;
                 (*ptr).lane[resetLoop] = 0;
                 (*ptr).time[resetLoop] = 0;
             }
-            launchL1Benchmarks(ptr, info, prop, derivatives);
-            cudaDeviceSynchronize();
+            launchSmallL1Benchmarks(ptr, info, prop, derivatives);
             for (int blockLoop = 0; moveOn && (blockLoop < derivatives.smallNumberOfBlocks); blockLoop++) {
                 if (moveOn && ((*ptr).mulp[blockLoop * info.warpSize] == mulpLoop) && ((*ptr).time[blockLoop * info.warpSize] != 0)) {
                     for (int freeLoop = 0; moveOn && (freeLoop < derivatives.smallNumberOfBlocksPerMulp); freeLoop++) {

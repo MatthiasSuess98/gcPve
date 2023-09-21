@@ -8,84 +8,46 @@
 #include "05-Data_Collection.cuh"
 
 /**
- *
- * @param requiredSm
- * @param blockSize
- * @param summandSize
- * @param host
+ * The L1 benchmark which uses the small data collection.
+ * @param ptr The small data collection where the data of the benchmark is stored.
+ * @param info All available information of the current GPU.
+ * @param prop All properties of the benchmarks.
+ * @param derivatives All derivatives of info and prop.
  */
-__global__ void smallL1Benchmark(int requiredSm, int blockSize, int summandSize, SmSimpleAddBenchmark16bit *host) {
-    unsigned int numberOfIterations = 65536;
-    unsigned int currentSm;
-    asm volatile("mov.u32 %0, %%smid;" : "=r"(currentSm));
-    int pos = threadIdx.x + (blockIdx.x * blockSize);
-    (*host).correctSm[pos] = false;
-    if (currentSm == requiredSm) {
-        unsigned int startTime;
-        unsigned int endTime;
-        float  sumTime;
-        unsigned int summand1 = summandSize;
-        unsigned int summand2 = summandSize;
-        unsigned int sum;
-        unsigned int laneId;
-        unsigned int warpId;
-        unsigned int smId;
-        float  laneSum;
-        float  warpSum;
-        float  smSum;
-        asm volatile (".reg.u32 t1;\n\t"
-                      ".reg.u32 t2;\n\t"
-                      ".reg.u32 t3;");
-        float sumTimes;
-        float laneSums;
-        float warpSums;
-        float smSums;
-        for (int i = 0; i < numberOfIterations; i++) {
-            asm volatile ("mov.u32 t1, %6;\n\t"
-                          "mov.u32 t2, %7;\n\t"
-                          "mov.u32 %0, %%clock;\n\t"
-                          "add.u32 t3, t1, t2;\n\t"
-                          "mov.u32 %2, %%clock;\n\t"
-                          "mov.u32 %1, t3;\n\t"
-                          "mov.u32 %3, %%laneid;\n\t"
-                          "mov.u32 %4, %%warpid;\n\t"
-                          "mov.u32 %5, %%smid;"
-                    : "=r"(startTime), "=r"(sum), "=r"(endTime), "=r"(laneId), "=r"(warpId), "=r"(smId)
-                    : "r"(summand1), "r"(summand2));
-            /*asm volatile ("mov.u32 %0, %%clock;\n\t"
-                          "add.u32 %1, %3, %4;\n\t"
-                          "mov.u32 %2, %%clock;\n\t": "=r"(startTime), "=r"(sum), "=r"(endTime) : "r"(summand1), "r"(summand2));
-            asm volatile ("mov.u32 %0, %%laneid;\n\t"
-                          "mov.u32 %1, %%warpid;\n\t"
-                          "mov.u32 %2, %%smid;"
-                    : "=r"(laneId), "=r"(warpId), "=r"(smId));*/
-            sumTimes = (float) (endTime - startTime);
-            laneSums = (float) laneId;
-            warpSums = (float) warpId;
-            smSums = (float) smId;
-            sum = 0;
-            sumTime = sumTime + sumTimes;
-            laneSum = laneSum + laneSums;
-            warpSum = warpSum + warpSums;
-            smSum = smSum + smSums;
-        }
-        (*host).finalTime[pos] = sumTime / ((float) numberOfIterations);
-        (*host).laneFinal[pos] = laneSum / ((float) numberOfIterations);
-        (*host).warpFinal[pos] = warpSum / ((float) numberOfIterations);
-        (*host).smFinal[pos] = smSum / ((float) numberOfIterations);
-        (*host).correctSm[pos] = true;
+__global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
+
+    int pos = (blockIdx.x * info.warpSize) + threadIdx.x;
+    asm volatile ("mov.u32 %0, %%smid;" : "=r"((*ptr).mulp[pos]));
+    asm volatile ("mov.u32 %0, %%warpid;" : "=r"((*ptr).warp[pos]));
+    asm volatile ("mov.u32 %0, %%laneid;" : "=r"((*ptr).lane[pos]));
+    unsigned int startTime;
+    unsigned int endTime;
+    unsigned int load = prop.load;
+    for (int preparationLoop; preparationLoop < prop.numberOfTrialsBenchmark; preparationLoop++) {
+        asm volatile ("ld.global.ca.u32 r0, [%0];" : "l"(load) : "memory");
     }
+    asm volatile ("mov.u64 %0, %%globaltimer;" : "=r"(startTime));
+    for (int measureLoop; measureLoop < prop.numberOfTrialsBenchmark; measureLoop++) {
+        asm volatile ("ld.global.ca.u32 r0, [%0];" : "l"(load) : "memory");
+    }
+    asm volatile ("mov.u64 %0, %%globaltimer;" : "=r"(endTime));
+    (*ptr).lane[pos] = (endTime - startTime) / prop.numberOfTrialsBenchmark;
 }
 
 /**
- *
+ * Launches the L1 benchmarks with small data collection.
+ * @param ptr The small data collection where the data of the benchmarks is stored.
+ * @param info All available information of the current GPU.
+ * @param prop All properties of the benchmarks.
+ * @param derivatives All derivatives of info and prop.
  */
-launchSmallL1Benchmark(ptr, numberOfBlocks) {
+void launchSmallL1Benchmarks(SmallDataCollection *ptr, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
-performSmSimpleAddBenchmark<<<numberOfTrials, gpuInfo.warpSize>>>(sm, gpuInfo.warpSize, summandSize, ptr);
-
-
+    smallL1Benchmark<<<derivatives.smallNumberOfBlocks, info.warpSize>>>(ptr, info, prop, derivatives);
+    cudaDeviceSynchronize();
 }
 
 #endif //GCPVE_21_L1_CACHE_BENCHMARK_CUH
+
+//FINISHED
 

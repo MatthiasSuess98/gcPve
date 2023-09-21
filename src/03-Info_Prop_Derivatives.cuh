@@ -16,10 +16,13 @@ typedef struct InfoPropDerivatives {
     int totalNumberOfCores;
     int smallNumberOfBlocks;
     int smallNumberOfBlocksPerMulp;
+    int smallTotalNumberOfBlocks;
     int mediumNumberOfBlocks;
     int mediumNumberOfBlocksPerMulp;
+    int mediumTotalNumberOfBlocks;
     int largeNumberOfBlocks;
     int largeNumberOfBlocksPerMulp;
+    int largeTotalNumberOfBlocks;
     int hardwareWarpsPerSm;
 } InfoPropDerivatives;
 
