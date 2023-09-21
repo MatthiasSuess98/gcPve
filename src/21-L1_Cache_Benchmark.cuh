@@ -23,12 +23,13 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, 
     int startTime;
     int endTime;
     int load = prop.load;
+    int zero = 0;
     for (int preparationLoop = 0; preparationLoop < prop.numberOfTrialsBenchmark; preparationLoop++) {
-        asm volatile ("ld.global.ca.u32 r0, [%0];" : "l"(load) : "memory");
+        asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
     asm volatile ("mov.u64 %0, %%globaltimer;" : "=r"(startTime));
     for (int measureLoop = 0; measureLoop < prop.numberOfTrialsBenchmark; measureLoop++) {
-        asm volatile ("ld.global.ca.u32 r0, [%0];" : "l"(load) : "memory");
+        asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
     asm volatile ("mov.u64 %0, %%globaltimer;" : "=r"(endTime));
     (*ptr).lane[pos] = ((float) (endTime - startTime)) / ((float) prop.numberOfTrialsBenchmark);

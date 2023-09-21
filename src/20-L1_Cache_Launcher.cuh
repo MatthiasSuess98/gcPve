@@ -70,7 +70,7 @@ SmallDataCollection performSmallL1Benchmark(GpuInformation info, BenchmarkProper
         }
         // If the maximum of trails is reached and some sets could not be filled: Print error.
         if (moveOn && (finalCollection.time[((mulpLoop + 1) * derivatives.smallNumberOfBlocksPerMulp) - 1] == 0)) {
-            printf("[ERROR] Failed to get full l1 data for streaming multiprocessor %d in small benchmark.", i);
+            printf("[ERROR] Failed to get full l1 data for streaming multiprocessor %d in small benchmark.", mulpLoop);
         }
     }
 

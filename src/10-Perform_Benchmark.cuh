@@ -23,17 +23,17 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     int collectionSize;
     if (info.totalGlobalMem >= (sizeof(LargeDataCollection) * prop.memoryOverlap)) {
         SmallDataCollection data;
-        collectionSize = small;
+        collectionSize = prop.small;
     } else if (info.totalGlobalMem >= (sizeof(MediumDataCollection) * prop.memoryOverlap)) {
         SmallDataCollection data;
-        collectionSize = small;
+        collectionSize = prop.small;
     } else {
         SmallDataCollection data;
-        collectionSize = small;
+        collectionSize = prop.small;
     }
 
     // Declare and initialize all core characteristics.
-    std::vector<coreCharacteristics> gpuCores (derivatives.totalNumberOfCores);
+    std::vector<CoreCharacteristics> gpuCores (derivatives.totalNumberOfCores);
     for (int i = 0; i < info.multiProcessorCount; i++) {
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
             for (int k = 0; k < info.warpSize; k++) {
