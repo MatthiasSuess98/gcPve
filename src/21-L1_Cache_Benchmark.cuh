@@ -17,12 +17,19 @@
 __global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
     int pos = (blockIdx.x * info.warpSize) + threadIdx.x;
-    asm volatile ("mov.u32 %0, %%smid;" : "=r"((*ptr).mulp[pos]));
-    asm volatile ("mov.u32 %0, %%warpid;" : "=r"((*ptr).warp[pos]));
-    asm volatile ("mov.u32 %0, %%laneid;" : "=r"((*ptr).lane[pos]));
+    int mulp;
+    int warp;
+    int lane;
+    asm volatile ("mov.u32 %0, %%smid;" : "=r"(mulp));
+    asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
+    asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
+    mulp = (*ptr).mulp[pos];
+    warp = (*ptr).warp[pos];
+    lane = (*ptr).lane[pos];
     int startTime;
     int endTime;
-    int load = prop.load;
+    //int load = prop.load;
+    int load = 0;
     int zero = 0;
     for (int preparationLoop = 0; preparationLoop < prop.numberOfTrialsBenchmark; preparationLoop++) {
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
