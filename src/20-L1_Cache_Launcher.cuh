@@ -62,6 +62,7 @@ SmallDataCollection performSmallL1Benchmark(GpuInformation info, BenchmarkProper
                             }
                         }
                         if (moveOn && (finalCollection.time[((mulpLoop + 1) * derivatives.smallNumberOfBlocksPerMulp) - 1] != 0)) {
+                            printf("test");
                             moveOn = false;
                         }
                     }
