@@ -14,7 +14,7 @@
  * @param prop All properties of the benchmarks.
  * @param derivatives All derivatives of info and prop.
  */
-__global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
+__global__ void smallL1Benchmark(SmallDataCollection *ptr) {
 
     int pos = (blockIdx.x * info.warpSize) + threadIdx.x;
     int mulp;
@@ -30,11 +30,11 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, 
     //int load = prop.load;
     unsigned int* load;
     unsigned int zero = 0;
-    for (int preparationLoop = 0; preparationLoop < prop.numberOfTrialsBenchmark; preparationLoop++) {
+    for (int preparationLoop = 0; preparationLoop < 1024; preparationLoop++) {
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
     asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(start_time));
-    for (long long measureLoop = 0; measureLoop < prop.numberOfTrialsBenchmark; measureLoop++) {
+    for (long long measureLoop = 0; measureLoop < 1024; measureLoop++) {
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
     asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(end_time));
@@ -52,7 +52,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, 
  */
 void launchSmallL1Benchmarks(SmallDataCollection *ptr, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
-    smallL1Benchmark<<<derivatives.smallNumberOfBlocks, info.warpSize>>>(ptr, info, prop, derivatives);
+    smallL1Benchmark<<<derivatives.smallNumberOfBlocks, info.warpSize>>>(ptr);
     cudaDeviceSynchronize();
 }
 
