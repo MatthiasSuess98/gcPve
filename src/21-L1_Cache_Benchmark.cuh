@@ -14,9 +14,9 @@
  * @param prop All properties of the benchmarks.
  * @param derivatives All derivatives of info and prop.
  */
-__global__ void smallL1Benchmark(SmallDataCollection *ptr) {
+__global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
-    int pos = (blockIdx.x * 1024) + threadIdx.x;
+    int pos = (blockIdx.x * info.warpSize) + threadIdx.x;
     int mulp;
     int warp;
     int lane;
@@ -26,21 +26,20 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr) {
     mulp = (*ptr).mulp[pos];
     warp = (*ptr).warp[pos];
     lane = (*ptr).lane[pos];
-    unsigned int start_time, end_time;
-    //int load = prop.load;
+    long long int startTime;
+    long long int endTime;
     unsigned int* load;
     unsigned int zero = 0;
-    for (int preparationLoop = 0; preparationLoop < 1024000; preparationLoop++) {
+    for (int preparationLoop = 0; preparationLoop < prop.numberOfTrialsBenchmark; preparationLoop++) {
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
-    start_time = clock();
-    for (long long measureLoop = 0; measureLoop < 1024000; measureLoop++) {
+    startTime = clock64();
+    for (int measureLoop = 0; measureLoop < prop.numberOfTrialsBenchmark; measureLoop++) {
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
-    end_time = clock();
-    unsigned int diff = (unsigned int) (end_time - start_time);
-    //(*ptr).time[pos] = (float) (diff / prop.numberOfTrialsBenchmark);
-    printf("%lld\n", (end_time - start_time));
+    endTime = clock64();
+    (*ptr).time[pos] = ((float) (endTime - startTime)) / ((float) prop.numberOfTrialsBenchmark);
+    printf("%lld\n", (*ptr).time[pos]);
 }
 
 /**
@@ -52,7 +51,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr) {
  */
 void launchSmallL1Benchmarks(SmallDataCollection *ptr, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
-    smallL1Benchmark<<<derivatives.smallNumberOfBlocks, info.warpSize>>>(ptr);
+    smallL1Benchmark<<<derivatives.smallNumberOfBlocks, info.warpSize>>>(ptr, info, prop, derivatives);
     cudaDeviceSynchronize();
 }
 
