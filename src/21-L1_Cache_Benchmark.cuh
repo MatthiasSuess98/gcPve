@@ -34,13 +34,13 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, 
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
     asm volatile("mov.u64 %0, %globaltimer;" : "=l"(start_time));
-    for (int measureLoop = 0; measureLoop < prop.numberOfTrialsBenchmark; measureLoop++) {
+    for (long long measureLoop = 0; measureLoop < 4294967296; measureLoop++) {
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
     asm volatile("mov.u64 %0, %globaltimer;" : "=l"(end_time));
     unsigned int diff = (unsigned int) (end_time - start_time);
     (*ptr).time[pos] = (float) (diff / prop.numberOfTrialsBenchmark);
-    printf("%lld\n", end_time);
+    printf("%lld\n", diff);
 }
 
 /**
