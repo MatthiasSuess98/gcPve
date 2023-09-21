@@ -27,7 +27,7 @@ void createBenchmarks(int gpuId) {
     createInfoPropDerivatives(derivatives);
 
     // Perform the benchmarks.
-    //performBenchmark1(info, prop, derivatives);
+    performBenchmark1(info, prop, derivatives);
 }
 
 
