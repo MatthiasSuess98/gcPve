@@ -44,7 +44,7 @@ BenchmarkProperties getBenchmarkProperties() {
     prop.large = 4294967296;
 
     // Return the final data structure.
-    return info;
+    return prop;
 }
 
 

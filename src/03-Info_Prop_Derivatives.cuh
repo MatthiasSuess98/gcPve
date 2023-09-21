@@ -74,7 +74,7 @@ InfoPropDerivatives getInfoPropDerivatives(GpuInformation info, BenchmarkPropert
         derivatives.numberOfCoresPerSm = 128;
     } else if ((info.major == 8) && (info.minor == 9)) {
         derivatives.numberOfCoresPerSm = 128;
-    } else if ((info.ajor == 9) && (info.minor == 0)) {
+    } else if ((info.major == 9) && (info.minor == 0)) {
         derivatives.numberOfCoresPerSm = 128;
     } else {
         derivatives.numberOfCoresPerSm = 0;
@@ -92,7 +92,7 @@ InfoPropDerivatives getInfoPropDerivatives(GpuInformation info, BenchmarkPropert
     derivatives.hardwareWarpsPerSm = derivatives.numberOfCoresPerSm / info.warpSize;
 
     // Return the final data structure.
-    return info;
+    return derivatives;
 }
 
 

@@ -9,10 +9,10 @@ private:
     int smId;
     int hardwareWarpId;
     int warpCoreId;
-    unsigned float typicalL1Time;
-    unsigned float typicalSmTime;
-    unsigned float typicalL2Time;
-    unsigned float typicalGmTime;
+    float typicalL1Time;
+    float typicalSmTime;
+    float typicalL2Time;
+    float typicalGmTime;
 
 public:
     CoreCharacteristics(int newSmId, int newHardwareWarpId, int newWarpCoreId) {
@@ -25,19 +25,19 @@ public:
         typicalGmTime = 0;
     }
 
-    setTypicalL1Time(unsigned float newTypicalL1Time) {
+    setTypicalL1Time(float newTypicalL1Time) {
         typicalL1Time = newTypicalL1Time;
     }
 
-    setTypicalSmTime(unsigned float newTypicalSmTime) {
+    setTypicalSmTime(float newTypicalSmTime) {
         typicalSmTime = newTypicalSmTime;
     }
 
-    setTypicalL2Time(unsigned float newTypicalL2Time) {
+    setTypicalL2Time(float newTypicalL2Time) {
         typicalL2Time = newTypicalL2Time;
     }
 
-    setTypicalGmTime(unsigned float newTypicalGmTime) {
+    setTypicalGmTime(float newTypicalGmTime) {
         typicalGmTime = newTypicalGmTime;
     }
 
@@ -53,19 +53,19 @@ public:
         return warpCoreId;
     }
 
-    unsigned float getTypicalL1Time() {
+    float getTypicalL1Time() {
         return typicalL1Time;
     }
 
-    unsigned float getTypicalSmTime() {
+    float getTypicalSmTime() {
         return typicalSmTime;
     }
 
-    unsigned float getTypicalL2Time() {
+    float getTypicalL2Time() {
         return typicalL2Time;
     }
 
-    unsigned float getTypicalGmTime() {
+    float getTypicalGmTime() {
         return typicalGmTime;
     }
 };
