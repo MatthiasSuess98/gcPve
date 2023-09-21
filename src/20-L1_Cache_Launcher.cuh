@@ -77,10 +77,10 @@ SmallDataCollection performSmallL1Benchmark(GpuInformation info, BenchmarkProper
     // Free the allocated global device memory of collection B.
     cudaFree(ptr);
 
-    for (int initializeLoop = 0; initializeLoop < prop.small; initializeLoop++) {
-        printf("%d  ", finalCollection.mulp[initializeLoop]);
-        printf("%d  ", finalCollection.warp[initializeLoop]);
-        printf("%d  ", finalCollection.lane[initializeLoop]);
+    for (int initializeLoop = prop.small; initializeLoop > 0; initializeLoop--) {
+        printf("%d ", finalCollection.mulp[initializeLoop]);
+        printf("%d ", finalCollection.warp[initializeLoop]);
+        printf("%d ", finalCollection.lane[initializeLoop]);
         printf("%.2f\n", finalCollection.time[initializeLoop]);
     }
 
