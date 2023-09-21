@@ -44,7 +44,6 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, 
     }
     endTime = clock64();
     (*ptr).time[pos] = ((float) (endTime - startTime)) / ((float) prop.numberOfTrialsBenchmark);
-    printf("%f\n", (*ptr).time[pos]);
 }
 
 /**
