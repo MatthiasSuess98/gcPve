@@ -9,7 +9,7 @@ typedef struct BenchmarkProperties {
     // Variables.
     int small;
     int medium;
-    int large;
+    long large;
     int numberOfTrialsPerform;
     int numberOfTrialsLaunch;
     int numberOfTrialsBenchmark;
@@ -61,7 +61,7 @@ void createPropFile(BenchmarkProperties prop) {
     // Writing all the information into the csv file.
     fprintf(csv, "small; \"%d\"\n", prop.small);
     fprintf(csv, "medium; \"%d\"\n", prop.medium);
-    fprintf(csv, "large; \"%d\"\n", prop.large);
+    fprintf(csv, "large; \"%ld\"\n", prop.large);
     fprintf(csv, "numberOfTrialsPerform; \"%d\"\n", prop.numberOfTrialsPerform);
     fprintf(csv, "numberOfTrialsLaunch; \"%d\"\n", prop.numberOfTrialsLaunch);
     fprintf(csv, "numberOfTrialsBenchmark; \"%d\"\n", prop.numberOfTrialsBenchmark);

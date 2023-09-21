@@ -25,19 +25,19 @@ public:
         typicalGmTime = 0;
     }
 
-    setTypicalL1Time(float newTypicalL1Time) {
+    void setTypicalL1Time(float newTypicalL1Time) {
         typicalL1Time = newTypicalL1Time;
     }
 
-    setTypicalSmTime(float newTypicalSmTime) {
+    void setTypicalSmTime(float newTypicalSmTime) {
         typicalSmTime = newTypicalSmTime;
     }
 
-    setTypicalL2Time(float newTypicalL2Time) {
+    void setTypicalL2Time(float newTypicalL2Time) {
         typicalL2Time = newTypicalL2Time;
     }
 
-    setTypicalGmTime(float newTypicalGmTime) {
+    void setTypicalGmTime(float newTypicalGmTime) {
         typicalGmTime = newTypicalGmTime;
     }
 
