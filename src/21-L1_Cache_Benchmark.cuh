@@ -28,13 +28,18 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, 
     lane = (*ptr).lane[pos];
     long long int startTime;
     long long int endTime;
+    unsigned int value = 0;
     unsigned int* load;
+    load = &value;
     unsigned int zero = 0;
     for (int preparationLoop = 0; preparationLoop < prop.numberOfTrialsBenchmark; preparationLoop++) {
+        value = preparationLoop;
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
+    value = 0;
     startTime = clock64();
     for (int measureLoop = 0; measureLoop < prop.numberOfTrialsBenchmark; measureLoop++) {
+        value = measureLoop;
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
     endTime = clock64();
