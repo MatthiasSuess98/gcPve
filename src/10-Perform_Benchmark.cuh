@@ -58,11 +58,11 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
             data.time[resetLoop] = 0;
         }
         if (collectionSize == prop.large) {
-            data = performSmallL1Benchmark(info, prop, derivatives);
+            //data = performSmallL1Benchmark(info, prop, derivatives);
         } else if (collectionSize == prop.medium) {
-            data = performSmallL1Benchmark(info, prop, derivatives);
+            //data = performSmallL1Benchmark(info, prop, derivatives);
         } else if (collectionSize == prop.small) {
-            data = performSmallL1Benchmark(info, prop, derivatives);
+            //data = performSmallL1Benchmark(info, prop, derivatives);
         }
         for (int blockLoop = 0; blockLoop < collectionSize; blockLoop = blockLoop + info.warpSize) {
             if (data.time[blockLoop] != 0) {
