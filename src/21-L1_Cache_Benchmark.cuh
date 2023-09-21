@@ -30,11 +30,11 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr) {
     //int load = prop.load;
     unsigned int* load;
     unsigned int zero = 0;
-    for (int preparationLoop = 0; preparationLoop < 102400; preparationLoop++) {
+    for (int preparationLoop = 0; preparationLoop < 1024000; preparationLoop++) {
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
     start_time = clock();
-    for (long long measureLoop = 0; measureLoop < 102400; measureLoop++) {
+    for (long long measureLoop = 0; measureLoop < 1024000; measureLoop++) {
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
     end_time = clock();
