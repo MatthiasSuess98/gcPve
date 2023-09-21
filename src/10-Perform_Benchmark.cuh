@@ -71,10 +71,10 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
             if (data.time[blockLoop] != 0) {
                 hardwareWarpScore = 0;
                 for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
-                    dontFits[hardWareLoop] = 0;
+                    dontFits[hardwareWarpLoop] = 0;
                 }
                 for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
-                    if (gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * gpuInfo.warpSize)].getTypicalL1Time() != 0) {
+                    if (gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * info.warpSize)].getTypicalL1Time() != 0) {
                         hardwareWarpScore++;
                     }
                 }
@@ -155,7 +155,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     for (int i = 0; i < info.multiProcessorCount; i++) {
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
             for (int k = 0; k < info.warpSize; k++) {
-                fprintf(csv, "\"%f\" ; ", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * gpuInfo.warpSize) + k].getTypicalL1Time());
+                fprintf(csv, "\"%f\" ; ", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time());
                 delete gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * gpuInfo.warpSize) + k];
             }
             fprintf(csv, "\b\b\b\n");
