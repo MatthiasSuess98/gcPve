@@ -36,7 +36,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
 
     // Declare and initialize all core characteristics.
     std::vector<CoreCharacteristics> gpuCores;
-    gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k] = CoreCharacteristics(0, 0 ,0);
+    gpuCores[0] = CoreCharacteristics(0, 0 ,0);
 
     /*
     for (int i = 0; i < 1; i++) {
