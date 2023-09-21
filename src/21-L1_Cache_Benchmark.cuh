@@ -29,8 +29,8 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, 
     int startTime;
     int endTime;
     //int load = prop.load;
-    int load = 0;
-    int zero = 0;
+    unsigned int load = 0;
+    unsigned int zero = 0;
     for (int preparationLoop = 0; preparationLoop < prop.numberOfTrialsBenchmark; preparationLoop++) {
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
