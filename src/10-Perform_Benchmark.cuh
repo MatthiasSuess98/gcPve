@@ -55,7 +55,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     std::vector<int> dontFits (derivatives.hardwareWarpsPerSm);
     for (int trailLoop = 0; trailLoop < prop.numberOfTrialsPerform; trailLoop++) {
         for (int resetLoop = 0; resetLoop < collectionSize; resetLoop++) {
-            data.mulp[resetloop] = 0;
+            data.mulp[resetLoop] = 0;
             data.warp[resetLoop] = 0;
             data.lane[resetLoop] = 0;
             data.time[resetLoop] = 0;
@@ -64,7 +64,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
             data = performSmallL1Benchmark(info, prop, derivatives);
         } else if (collectionSize == prop.medium) {
             data = performSmallL1Benchmark(info, prop, derivatives);
-        } else (collectionSize == prop.small) {
+        } else if (collectionSize == prop.small) {
             data = performSmallL1Benchmark(info, prop, derivatives);
         }
         for (int blockLoop = 0; blockLoop < collectionSize; blockLoop = blockLoop + info.warpSize) {
