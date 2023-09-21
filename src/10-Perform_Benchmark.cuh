@@ -156,7 +156,6 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
             for (int k = 0; k < info.warpSize; k++) {
                 fprintf(csv, "\"%f\" ; ", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time());
-                delete gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k];
             }
             fprintf(csv, "\b\b\b\n");
         }
