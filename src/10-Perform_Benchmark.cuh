@@ -36,25 +36,27 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
 
     // Declare and initialize all core characteristics.
     std::vector<CoreCharacteristics> gpuCores;
-    CoreCharacteristics gpuCore = CoreCharacteristics(0, 0 ,0);
-    gpuCores.push_back(gpuCore);
-
-    /*
-    for (int i = 0; i < 1; i++) {
+    CoreCharacteristics gpuCore;
+    for (int i = 0; i < info.multiProcessorCount; i++) {
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
             for (int k = 0; k < info.warpSize; k++) {
-                gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k] = CoreCharacteristics(i, j ,k);
+                gpuCore = CoreCharacteristics(i, j ,k);
+                gpuCores.push_back(gpuCore);
             }
         }
     }
-
 
     // Perform the benchmark loop.
     int hardwareWarpScore;
     int smallestNumber;
     int bestHardwareWarp;
     int currentTime;
-    std::vector<int> dontFits (derivatives.hardwareWarpsPerSm);
+    std::vector<int> dontFits;
+    int dontFit;
+    for (int warpLoop = 0; warpLoop < info.Warpsize; warpLoop++) {
+        dontFit = 0;
+        dontFits.push_back(dontFit);
+    }
     for (int trailLoop = 0; trailLoop < prop.numberOfTrialsPerform; trailLoop++) {
         for (int resetLoop = 0; resetLoop < collectionSize; resetLoop++) {
             data.mulp[resetLoop] = 0;
@@ -150,6 +152,9 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
             }
         }
     }
+    for (int warpLoop = 0; warpLoop < info.Warpsize; warpLoop++) {
+        delete dontFits[warpLoop];
+    }
 
     // Create file with all benchmark data.
     char output[] = "Benchmark1_L1.csv";
@@ -158,13 +163,13 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
             for (int k = 0; k < info.warpSize; k++) {
                 fprintf(csv, "\"%f\" ; ", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time());
+                delete gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k];
             }
             fprintf(csv, "\b\b\b\n");
         }
         fprintf(csv, "\n");
     }
     fclose(csv);
-     */
 }
 
 #endif //GCPVE_10_PERFORM_BENCHMARK_CUH
