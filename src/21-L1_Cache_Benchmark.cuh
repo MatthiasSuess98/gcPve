@@ -26,18 +26,18 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr) {
     mulp = (*ptr).mulp[pos];
     warp = (*ptr).warp[pos];
     lane = (*ptr).lane[pos];
-    unsigned long long start_time, end_time;
+    unsigned int start_time, end_time;
     //int load = prop.load;
     unsigned int* load;
     unsigned int zero = 0;
     for (int preparationLoop = 0; preparationLoop < 102400; preparationLoop++) {
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
-    asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(start_time));
+    start_time = clock();
     for (long long measureLoop = 0; measureLoop < 102400; measureLoop++) {
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
-    asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(end_time));
+    end_time = clock();
     unsigned int diff = (unsigned int) (end_time - start_time);
     //(*ptr).time[pos] = (float) (diff / prop.numberOfTrialsBenchmark);
     printf("%lld\n", (end_time - start_time));
