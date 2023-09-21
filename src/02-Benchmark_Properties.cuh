@@ -7,14 +7,14 @@
 typedef struct BenchmarkProperties {
 
     // Variables.
-    unsigned int small;
-    unsigned int medium;
-    unsigned int large;
-    unsigned int numberOfTrialsPerform;
-    unsigned int numberOfTrialsLaunch;
-    unsigned int numberOfTrialsBenchmark;
-    unsigned int memoryOverlap;
-    unsigned int load;
+    int small;
+    int medium;
+    int large;
+    int numberOfTrialsPerform;
+    int numberOfTrialsLaunch;
+    int numberOfTrialsBenchmark;
+    int memoryOverlap;
+    int load;
     int maxDelta;
     int maxDontFit;
 } BenchmarkProperties;

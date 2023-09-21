@@ -6,16 +6,16 @@
  */
 class CoreCharacteristics {
 private:
-    unsigned int smId;
-    unsigned int hardwareWarpId;
-    unsigned int warpCoreId;
+    int smId;
+    int hardwareWarpId;
+    int warpCoreId;
     unsigned float typicalL1Time;
     unsigned float typicalSmTime;
     unsigned float typicalL2Time;
     unsigned float typicalGmTime;
 
 public:
-    CoreCharacteristics(unsigned int newSmId, unsigned int newHardwareWarpId, unsigned int newWarpCoreId) {
+    CoreCharacteristics(int newSmId, int newHardwareWarpId, int newWarpCoreId) {
         smId = newSmId;
         hardwareWarpId = newHardwareWarpId;
         warpCoreId = newWarpCoreId;
@@ -41,15 +41,15 @@ public:
         typicalGmTime = newTypicalGmTime;
     }
 
-    unsigned int getSmId() {
+    int getSmId() {
         return smId;
     }
 
-    unsigned int getHardwareWarpId() {
+    int getHardwareWarpId() {
         return hardwareWarpId;
     }
 
-    unsigned int getWarpCoreId() {
+    int getWarpCoreId() {
         return warpCoreId;
     }
 
