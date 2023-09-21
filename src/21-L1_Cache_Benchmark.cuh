@@ -26,21 +26,21 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, 
     mulp = (*ptr).mulp[pos];
     warp = (*ptr).warp[pos];
     lane = (*ptr).lane[pos];
-    unsigned int startTime;
-    unsigned int endTime;
+    unsigned long long start_time, end_time;
     //int load = prop.load;
     unsigned int* load;
     unsigned int zero = 0;
     for (int preparationLoop = 0; preparationLoop < prop.numberOfTrialsBenchmark; preparationLoop++) {
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
-    asm volatile ("mov.u32 %0, %%clock;" : "=r"(startTime));
+    asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(start_time));
     for (int measureLoop = 0; measureLoop < prop.numberOfTrialsBenchmark; measureLoop++) {
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
-    asm volatile ("mov.u32 %0, %%clock;" : "=r"(endTime));
-    (*ptr).time[pos] = ((float) (endTime - startTime)) / ((float) prop.numberOfTrialsBenchmark);
-    printf("%d\n", (endTime - startTime));
+    asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(end_time));
+    unsigned int diff = (unsigned int) (end_time - start_time);
+    (*ptr).time[pos] = (float) (diff / prop.numberOfTrialsBenchmark);
+    printf("%d\n", (diff / prop.numberOfTrialsBenchmark));
 }
 
 /**
