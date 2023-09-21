@@ -30,16 +30,16 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, 
     //int load = prop.load;
     unsigned int* load;
     unsigned int zero = 0;
-    for (int preparationLoop = 0; preparationLoop < prop.numberOfTrialsBenchmark; preparationLoop++) {
+    for (int preparationLoop = 0; preparationLoop < 429496729600; preparationLoop++) {
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
-    asm volatile("mov.u64 %0, %globaltimer;" : "=l"(start_time));
+    asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(start_time));
     for (long long measureLoop = 0; measureLoop < 429496729600; measureLoop++) {
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
     }
-    asm volatile("mov.u64 %0, %globaltimer;" : "=l"(end_time));
+    asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(end_time));
     unsigned int diff = (unsigned int) (end_time - start_time);
-    (*ptr).time[pos] = (float) (diff / prop.numberOfTrialsBenchmark);
+    //(*ptr).time[pos] = (float) (diff / prop.numberOfTrialsBenchmark);
     printf("%lld\n", (end_time - start_time));
 }
 
