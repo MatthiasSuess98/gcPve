@@ -26,8 +26,8 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, 
     mulp = (*ptr).mulp[pos];
     warp = (*ptr).warp[pos];
     lane = (*ptr).lane[pos];
-    unsigned long long startTime;
-    unsigned long long endTime;
+    unsigned int startTime;
+    unsigned int endTime;
     //int load = prop.load;
     unsigned int* load;
     unsigned int zero = 0;
