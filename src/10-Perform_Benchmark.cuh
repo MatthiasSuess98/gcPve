@@ -20,24 +20,29 @@
 void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
     // Choose the collection size.
-    int collectionSize;
-    if (info.totalGlobalMem >= (sizeof(LargeDataCollection) * prop.memoryOverlap)) {
-        SmallDataCollection data;
-        collectionSize = prop.small;
-    } else if (info.totalGlobalMem >= (sizeof(MediumDataCollection) * prop.memoryOverlap)) {
-        SmallDataCollection data;
-        collectionSize = prop.small;
-    } else {
-        SmallDataCollection data;
-        collectionSize = prop.small;
-    }
+    //int collectionSize;
+    //if (info.totalGlobalMem >= (sizeof(LargeDataCollection) * prop.memoryOverlap)) {
+    //    SmallDataCollection data;
+    //    collectionSize = prop.small;
+    //} else if (info.totalGlobalMem >= (sizeof(MediumDataCollection) * prop.memoryOverlap)) {
+    //    SmallDataCollection data;
+    //    collectionSize = prop.small;
+    //} else {
+    //    SmallDataCollection data;
+    //    collectionSize = prop.small;
+    //}
+    SmallDataCollection data;
+    collectionSize = prop.small;
+
+
+
 
     // Declare and initialize all core characteristics.
     std::vector<CoreCharacteristics> gpuCores (derivatives.totalNumberOfCores);
     for (int i = 0; i < info.multiProcessorCount; i++) {
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
             for (int k = 0; k < info.warpSize; k++) {
-                gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * gpuInfo.warpSize) + k] = new CoreCharacteristics(i, j ,k);
+                gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k] = new CoreCharacteristics(i, j ,k);
             }
         }
     }
@@ -48,18 +53,18 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     int bestHardwareWarp;
     int currentTime;
     std::vector<int> dontFits (derivatives.hardwareWarpsPerSm);
-    for (int trailLoop; trailLoop < prop.numberOfTrialsPerform; trailLoop++) {
-        for (int resetLoop; resetLoop < collectionSize; resetLoop++) {
+    for (int trailLoop = 0; trailLoop < prop.numberOfTrialsPerform; trailLoop++) {
+        for (int resetLoop = 0; resetLoop < collectionSize; resetLoop++) {
             data.mulp[resetloop] = 0;
             data.warp[resetLoop] = 0;
             data.lane[resetLoop] = 0;
             data.time[resetLoop] = 0;
         }
-        if (collectionSize == large) {
+        if (collectionSize == prop.large) {
             data = performSmallL1Benchmark(info, prop, derivatives);
-        } else if (collectionSize == medium) {
+        } else if (collectionSize == prop.medium) {
             data = performSmallL1Benchmark(info, prop, derivatives);
-        } else (collectionSize == small) {
+        } else (collectionSize == prop.small) {
             data = performSmallL1Benchmark(info, prop, derivatives);
         }
         for (int blockLoop = 0; blockLoop < collectionSize; blockLoop = blockLoop + info.warpSize) {
