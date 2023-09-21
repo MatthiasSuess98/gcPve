@@ -38,7 +38,7 @@ void createBenchmarks(int gpuId) {
  * @return For stopping the program it returns the value zero.
  */
 int main(int argCount, char *argVariables[]) {
-
+    /*
     // Interpretation of the given parameters.
     // argVariables[0] is the command.
     if (argCount >= 2) {
@@ -56,7 +56,7 @@ int main(int argCount, char *argVariables[]) {
     } else {
         printf("[ERROR] Please select the GPU for which the benchmarks should be created.\n");
     }
-
+    */
     // Stopping the program.
     return 0;
 }
