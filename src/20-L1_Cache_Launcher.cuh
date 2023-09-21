@@ -61,7 +61,7 @@ SmallDataCollection performSmallL1Benchmark(GpuInformation info, BenchmarkProper
                                 finalCollection.time[(((mulpLoop * derivatives.smallNumberOfBlocksPerMulp) + freeLoop) * info.warpSize) + laneLoop] = (*ptr).time[(blockLoop * info.warpSize) + laneLoop];
                             }
                         }
-                        if (moveOn && (finalCollection.time[((mulpLoop + 1) * derivatives.smallNumberOfBlocksPerMulp) - 1] != 0)) {
+                        if (moveOn && (finalCollection.time[((mulpLoop + 1) * derivatives.smallNumberOfBlocksPerMulp) - info.warpSize] != 0)) {
                             printf("test");
                             moveOn = false;
                         }
