@@ -45,15 +45,13 @@ int main(int argCount, char *argVariables[]) {
         int deviceCount;
         cudaGetDeviceCount(&deviceCount);
             for (int i = 1; i < argCount; i++) {
-                /*
                 char *ptr;
                 int gpuId = strtol(argVariables[i], &ptr, 10);
                 if (*ptr || (gpuId >= deviceCount)) {
-                    printf("There is no GPU \"%s\".\n", argVariables[i]);
+                //    printf("There is no GPU \"%s\".\n", argVariables[i]);
                 } else {
-                    createBenchmarks(gpuId);
+                //    createBenchmarks(gpuId);
                 }
-                 */
             }
     } else {
         printf("[ERROR] Please select the GPU for which the benchmarks should be created.\n");
