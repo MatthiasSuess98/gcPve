@@ -40,7 +40,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, 
     }
     asm volatile ("mov.u32 %0, %%clock;" : "=r"(endTime));
     (*ptr).time[pos] = ((float) (endTime - startTime)) / ((float) prop.numberOfTrialsBenchmark);
-    printf("%d\n", endtime);
+    printf("%d\n", endTime);
 }
 
 /**
