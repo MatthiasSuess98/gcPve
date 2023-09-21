@@ -36,11 +36,11 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
 
     // Declare and initialize all core characteristics.
     std::vector<CoreCharacteristics> gpuCores;
-    CoreCharacteristics gpuCore;
+    CoreCharacteristics = CoreCharacteristics(0, 0, 0);
     for (int i = 0; i < info.multiProcessorCount; i++) {
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
             for (int k = 0; k < info.warpSize; k++) {
-                gpuCore = CoreCharacteristics(i, j ,k);
+                gpuCore = CoreCharacteristics(i, j, k);
                 gpuCores.push_back(gpuCore);
             }
         }
@@ -53,7 +53,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     int currentTime;
     std::vector<int> dontFits;
     int dontFit;
-    for (int warpLoop = 0; warpLoop < info.Warpsize; warpLoop++) {
+    for (int warpLoop = 0; warpLoop < info.warpSize; warpLoop++) {
         dontFit = 0;
         dontFits.push_back(dontFit);
     }
@@ -152,9 +152,6 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
             }
         }
     }
-    for (int warpLoop = 0; warpLoop < info.Warpsize; warpLoop++) {
-        delete dontFits[warpLoop];
-    }
 
     // Create file with all benchmark data.
     char output[] = "Benchmark1_L1.csv";
@@ -163,7 +160,6 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
             for (int k = 0; k < info.warpSize; k++) {
                 fprintf(csv, "\"%f\" ; ", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time());
-                delete gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k];
             }
             fprintf(csv, "\b\b\b\n");
         }
