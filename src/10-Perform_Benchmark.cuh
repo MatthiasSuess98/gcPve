@@ -34,9 +34,6 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     SmallDataCollection data;
     collectionSize = prop.small;
 
-
-
-
     // Declare and initialize all core characteristics.
     std::vector<CoreCharacteristics> gpuCores;
     for (int i = 0; i < info.multiProcessorCount; i++) {
