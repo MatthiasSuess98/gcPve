@@ -127,6 +127,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
                     for (int hardwareWarpLoop = 0; hardwareWarpLoop < hardwareWarpScore; hardwareWarpLoop++) {
                         if (hardwareWarpLoop == 0) {
                             smallestNumber = dontFits[hardwareWarpLoop];
+                            printf("test");
                         } else {
                             if (smallestNumber > dontFits[hardwareWarpLoop]) {
                                 smallestNumber = dontFits[hardwareWarpLoop];
