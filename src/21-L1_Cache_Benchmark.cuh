@@ -32,13 +32,13 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, uns
         unsigned int value;
         value = 0;
         for (int preparationLoop = 0; preparationLoop < numberOfTrialsBenchmark; preparationLoop++) {
-            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load[preparationLoop]) : "memory");
+            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
             asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
         }
         value = 0;
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
         for (int measureLoop = 0; measureLoop < numberOfTrialsBenchmark; measureLoop++) {
-            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load[measureLoop]) : "memory");
+            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
             asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
         }
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
