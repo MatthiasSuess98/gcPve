@@ -57,6 +57,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, uns
 void launchSmallL1Benchmarks(SmallDataCollection *ptr, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
     for (int laneLoop = 0; laneLoop > info.warpSize; laneLoop++) {
+        printf("test");
         unsigned int *hostLoad;
         hostLoad = (unsigned int *) malloc(sizeof(unsigned int) * prop.numberOfTrialsBenchmark);
         unsigned int *deviceLoad;
@@ -67,7 +68,6 @@ void launchSmallL1Benchmarks(SmallDataCollection *ptr, GpuInformation info, Benc
         }
         cudaMemcpy(deviceLoad, hostLoad, (sizeof(unsigned int) * prop.numberOfTrialsBenchmark), cudaMemcpyHostToDevice);
         cudaDeviceSynchronize();
-        printf("test");
         smallL1Benchmark<<<derivatives.smallNumberOfBlocks, info.warpSize>>>(ptr, laneLoop, deviceLoad, info.warpSize, prop.numberOfTrialsBenchmark);
         cudaDeviceSynchronize();
         cudaFree(deviceLoad);
