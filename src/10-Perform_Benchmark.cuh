@@ -84,6 +84,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
                 }
                 if (hardwareWarpScore == 0) {
                     for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
+                        printf("test");
                         gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + laneLoop].setTypicalL1Time(data.time[blockLoop + laneLoop]);
                     }
                 } else if (hardwareWarpScore == derivatives.hardwareWarpsPerSm) {
