@@ -67,6 +67,7 @@ void launchSmallL1Benchmarks(SmallDataCollection *ptr, GpuInformation info, Benc
         }
         cudaMemcpy(deviceLoad, hostLoad, (sizeof(unsigned int) * prop.numberOfTrialsBenchmark), cudaMemcpyHostToDevice);
         cudaDeviceSynchronize();
+        printf("test");
         smallL1Benchmark<<<derivatives.smallNumberOfBlocks, info.warpSize>>>(ptr, laneLoop, deviceLoad, info.warpSize, prop.numberOfTrialsBenchmark);
         cudaDeviceSynchronize();
         cudaFree(deviceLoad);
