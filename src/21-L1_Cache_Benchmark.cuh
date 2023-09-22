@@ -24,6 +24,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, uns
     asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
     asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
     if (lane == requiredLane && ((warp == 0) || (warp == 1) || (warp == 2) || (warp == 3))) {
+        printf("test");
         (*ptr).mulp[pos] = mulp;
         (*ptr).warp[pos] = warp;
         (*ptr).lane[pos] = lane;

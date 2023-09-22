@@ -164,7 +164,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
                     fprintf(csv, " ; ");
                 }
             }
-            if ((j + 1) < derivatives.hardwareWarpsPerSm) {
+            if ((i + 1) < info.multiProcessorCount) {
                 fprintf(csv, "\n");
             }
         }
