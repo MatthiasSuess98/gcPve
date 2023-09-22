@@ -43,7 +43,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, uns
         }
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
         (*ptr).time[pos] = ((float) (endTime - startTime)) / ((float) numberOfTrialsBenchmark);
-        printf("%.12f ", (((float) (endTime - startTime)) / ((float) numberOfTrialsBenchmark)));
+        printf("%lld ", (endTime - startTime));
     }
 }
 
