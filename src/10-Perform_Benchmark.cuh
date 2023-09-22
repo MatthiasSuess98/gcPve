@@ -84,10 +84,10 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
                 }
                 if (hardwareWarpScore == 0) {
                     for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
-                        printf("test");
                         gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + laneLoop].setTypicalL1Time(data.time[blockLoop + laneLoop]);
                     }
                 } else if (hardwareWarpScore == derivatives.hardwareWarpsPerSm) {
+                    printf("test");
                     for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
                         for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
                             if (std::abs(gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * info.warpSize) + laneLoop].getTypicalL1Time() - data.time[blockLoop]) > prop.maxDelta) {
