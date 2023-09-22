@@ -139,6 +139,8 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
                         }
                     }
                     if (dontFits[bestHardwareWarp] > prop.maxDontFit) {
+                        printf("%d  ", dontFits[bestHardwareWarp]);
+                        printf("%d\n", bestHardwareWarp);
                         for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
                             gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpScore * info.warpSize) + laneLoop].setTypicalL1Time(data.time[blockLoop + laneLoop]);
                         }
