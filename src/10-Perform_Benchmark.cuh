@@ -159,7 +159,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     for (int i = 0; i < info.multiProcessorCount; i++) {
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
             for (int k = 0; k < info.warpSize; k++) {
-                fprintf(csv, "%.12f ; ", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time());
+                fprintf(csv, "%.f ; ", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time());
             }
             fprintf(csv, "\b\b\b\n");
         }
