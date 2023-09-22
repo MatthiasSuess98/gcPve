@@ -138,6 +138,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
                             bestHardwareWarp = hardwareWarpLoop;
                         }
                     }
+                    printf("test");
                     if (dontFits[bestHardwareWarp] > prop.maxDontFit) {
                         printf("%d", dontFits[bestHardwareWarp]);
                         for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
