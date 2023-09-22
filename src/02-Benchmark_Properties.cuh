@@ -34,7 +34,7 @@ BenchmarkProperties getBenchmarkProperties() {
     prop.numberOfTrialsLaunch = 256;
     prop.numberOfTrialsBenchmark = 1;
     prop.memoryOverlap = 2;
-    prop.maxDelta = 1;
+    prop.maxDelta = 0;
     prop.maxDontFit = 3;
     prop.load = 4096;
     // Size of the data collections.
