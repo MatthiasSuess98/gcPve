@@ -14,36 +14,36 @@
  * @param prop All properties of the benchmarks.
  * @param derivatives All derivatives of info and prop.
  */
-__global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
+__global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, unsigned int * load, int warpSize, int numberOfTrialsBenchmark) {
 
-    int pos = (blockIdx.x * info.warpSize) + threadIdx.x;
+    int pos = (blockIdx.x * warpSize) + threadIdx.x;
     int mulp;
     int warp;
     int lane;
     asm volatile ("mov.u32 %0, %%smid;" : "=r"(mulp));
     asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
     asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
-    (*ptr).mulp[pos] = mulp;
-    (*ptr).warp[pos] = warp;
-    (*ptr).lane[pos] = lane;
-    long long int startTime;
-    long long int endTime;
-    unsigned int value = 0;
-    unsigned int* load;
-    load = &value;
-    unsigned int zero = 0;
-    for (int preparationLoop = 0; preparationLoop < prop.numberOfTrialsBenchmark; preparationLoop++) {
-        value = preparationLoop;
-        asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
+    if (lane == requiredLane && ((warp == 0) || (warp == 1) || (warp == 2) || (warp == 3))) {
+        (*ptr).mulp[pos] = mulp;
+        (*ptr).warp[pos] = warp;
+        (*ptr).lane[pos] = lane;
+        long long int startTime;
+        long long int endTime;
+        unsigned int value;
+        value = 0;
+        for (int preparationLoop = 0; preparationLoop < numberOfTrialsBenchmark; preparationLoop++) {
+            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load[preparationLoop]) : "memory");
+            asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
+        }
+        value = 0;
+        asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
+        for (int measureLoop = 0; measureLoop < numberOfTrialsBenchmark; measureLoop++) {
+            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load[measureLoop]) : "memory");
+            asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
+        }
+        asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
+        (*ptr).time[pos] = ((float) (endTime - startTime)) / ((float) numberOfTrialsBenchmark);
     }
-    value = 0;
-    startTime = clock64();
-    for (int measureLoop = 0; measureLoop < prop.numberOfTrialsBenchmark; measureLoop++) {
-        value = measureLoop;
-        asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(zero) : "l"(load) : "memory");
-    }
-    endTime = clock64();
-    (*ptr).time[pos] = ((float) (endTime - startTime)) / ((float) prop.numberOfTrialsBenchmark);
 }
 
 /**
@@ -55,8 +55,22 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, GpuInformation info, 
  */
 void launchSmallL1Benchmarks(SmallDataCollection *ptr, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
-    smallL1Benchmark<<<derivatives.smallNumberOfBlocks, info.warpSize>>>(ptr, info, prop, derivatives);
-    cudaDeviceSynchronize();
+    for (int laneLoop = 0; laneLoop > info.warpSize; laneLoop++) {
+        unsigned int *hostLoad;
+        hostLoad = (unsigned int *) malloc(sizeof(unsigned int) * prop.numberOfTrialsBenchmark);
+        unsigned int *deviceLoad;
+        cudaMalloc(&deviceLoad, (sizeof(unsigned int) * prop.numberOfTrialsBenchmark));
+
+        for (int initializeLoop = 0; initializeLoop < prop.numberOfTrialsBenchmark; initializeLoop++) {
+            hostLoad[initializeLoop] = initializeLoop;
+        }
+        cudaMemcpy(deviceLoad, hostLoad, (sizeof(unsigned int) * prop.numberOfTrialsBenchmark), cudaMemcpyHostToDevice);
+        cudaDeviceSynchronize();
+        smallL1Benchmark<<<derivatives.smallNumberOfBlocks, info.warpSize>>>(ptr, laneLoop, deviceLoad, info.warpSize, prop.numberOfTrialsBenchmark);
+        cudaDeviceSynchronize();
+        cudaFree(deviceLoad);
+        free(hostLoad);
+    }
 }
 
 #endif //GCPVE_21_L1_CACHE_BENCHMARK_CUH
