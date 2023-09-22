@@ -23,7 +23,6 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, uns
     asm volatile ("mov.u32 %0, %%smid;" : "=r"(mulp));
     asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
     asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
-    printf("%d", lane);
     if ((lane == requiredLane) && ((warp == 0) || (warp == 1) || (warp == 2) || (warp == 3))) {
         (*ptr).mulp[pos] = mulp;
         (*ptr).warp[pos] = warp;
@@ -56,13 +55,11 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, uns
  */
 void launchSmallL1Benchmarks(SmallDataCollection *ptr, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
-    for (int laneLoop = 0; laneLoop > info.warpSize; laneLoop++) {
-        printf("test");
+    for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
         unsigned int *hostLoad;
         hostLoad = (unsigned int *) malloc(sizeof(unsigned int) * prop.numberOfTrialsBenchmark);
         unsigned int *deviceLoad;
         cudaMalloc(&deviceLoad, (sizeof(unsigned int) * prop.numberOfTrialsBenchmark));
-
         for (int initializeLoop = 0; initializeLoop < prop.numberOfTrialsBenchmark; initializeLoop++) {
             hostLoad[initializeLoop] = initializeLoop;
         }
