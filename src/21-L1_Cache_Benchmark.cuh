@@ -16,17 +16,17 @@
  */
 __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, unsigned int * load, int warpSize, int numberOfTrialsBenchmark) {
 
-    int pos = (blockIdx.x * warpSize) + threadIdx.x;
-    int mulp;
-    int warp;
-    int lane;
-    asm volatile ("mov.u32 %0, %%smid;" : "=r"(mulp));
-    asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
-    asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
-    if ((lane == requiredLane) && ((warp == 0) || (warp == 1) || (warp == 2) || (warp == 3))) {
-        (*ptr).mulp[pos] = mulp;
-        (*ptr).warp[pos] = warp;
-        (*ptr).lane[pos] = lane;
+    //int pos = (blockIdx.x * warpSize) + threadIdx.x;
+    //int mulp;
+    //int warp;
+    //int lane;
+    //asm volatile ("mov.u32 %0, %%smid;" : "=r"(mulp));
+    //asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
+    //asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
+    //if ((lane == requiredLane) && ((warp == 0) || (warp == 1) || (warp == 2) || (warp == 3))) {
+        //(*ptr).mulp[pos] = mulp;
+        //(*ptr).warp[pos] = warp;
+        //(*ptr).lane[pos] = lane;
         long long int startTime;
         long long int endTime;
         unsigned int value;
@@ -42,9 +42,9 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, uns
             asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
         }
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
-        (*ptr).time[pos] = ((float) (endTime - startTime)) / ((float) numberOfTrialsBenchmark);
+        //(*ptr).time[pos] = ((float) (endTime - startTime)) / ((float) numberOfTrialsBenchmark);
         printf("%lld ", (endTime - startTime));
-    }
+    //}
 }
 
 /**
