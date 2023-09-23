@@ -3,6 +3,7 @@
 
 #include "01-Gpu_Information.cuh"
 #include "02-Benchmark_Properties.cuh"
+#include "05-Data_Collection.cuh"
 
 /**
  * Data structure for all derivatives.
@@ -14,15 +15,10 @@ typedef struct InfoPropDerivatives {
     int maxNumberOfWarpsPerSm;
     int numberOfCoresPerSm;
     int totalNumberOfCores;
-    int smallNumberOfBlocks;
-    int smallNumberOfBlocksPerMulp;
-    int smallTotalNumberOfBlocks;
-    int mediumNumberOfBlocks;
-    int mediumNumberOfBlocksPerMulp;
-    int mediumTotalNumberOfBlocks;
-    int largeNumberOfBlocks;
-    int largeNumberOfBlocksPerMulp;
-    int largeTotalNumberOfBlocks;
+    int collectionSize;
+    int numberOfBlocks;
+    int numberOfBlocksPerMulp;
+    int totalNumberOfBlocks;
     int hardwareWarpsPerSm;
 } InfoPropDerivatives;
 
@@ -80,15 +76,19 @@ InfoPropDerivatives getInfoPropDerivatives(GpuInformation info, BenchmarkPropert
         derivatives.numberOfCoresPerSm = 0;
     }
     derivatives.totalNumberOfCores = derivatives.numberOfCoresPerSm * info.multiProcessorCount;
-    derivatives.smallNumberOfBlocks = prop.small / info.warpSize;
-    derivatives.smallNumberOfBlocksPerMulp = (prop.small / info.warpSize) / info.multiProcessorCount;
-    derivatives.smallTotalNumberOfBlocks = derivatives.smallNumberOfBlocksPerMulp * info.multiProcessorCount;
-    derivatives.mediumNumberOfBlocks = prop.medium / info.warpSize;
-    derivatives.mediumNumberOfBlocksPerMulp = (prop.medium / info.warpSize) / info.multiProcessorCount;
-    derivatives.mediumTotalNumberOfBlocks = derivatives.mediumNumberOfBlocksPerMulp * info.multiProcessorCount;
-    derivatives.largeNumberOfBlocks = prop.large / info.warpSize;
-    derivatives.largeNumberOfBlocksPerMulp = (prop.large / info.warpSize) / info.multiProcessorCount;
-    derivatives.largeTotalNumberOfBlocks = derivatives.largeNumberOfBlocksPerMulp * info.multiProcessorCount;
+    DataCollection data;
+    int iniMulp = 0;
+    data.mulp.push_back(iniMulp);
+    int iniWarp = 0;
+    data.warp.push_back(iniWarp);
+    int iniLane = 0;
+    data.lane.push_back(iniLane);
+    long long int iniTime = 0;
+    data.time.push_back(iniTime);
+    derivatives.collectionSize = info.totalGlobalMem / (sizeof(data) * prop.memoryOverlap);
+    derivatives.numberOfBlocks = derivatives.collectionSize / info.warpSize;
+    derivatives.numberOfBlocksPerMulp = (derivatives.collectionSize / info.warpSize) / info.multiProcessorCount;
+    derivatives.totalNumberOfBlocks = derivatives.numberOfBlocksPerMulp * info.multiProcessorCount;
     derivatives.hardwareWarpsPerSm = derivatives.numberOfCoresPerSm / info.warpSize;
 
     // Return the final data structure.
@@ -111,16 +111,15 @@ void createInfoPropDerivatives(InfoPropDerivatives derivatives) {
     fprintf(csv, "maxNumberOfWarpsPerSm; \"%d\"\n", derivatives.maxNumberOfWarpsPerSm);
     fprintf(csv, "numberOfCoresPerSm; \"%d\"\n", derivatives.numberOfCoresPerSm);
     fprintf(csv, "totalNumberOfCores; \"%d\"\n", derivatives.totalNumberOfCores);
-    fprintf(csv, "smallNumberOfBlocks; \"%d\"\n", derivatives.smallNumberOfBlocks);
-    fprintf(csv, "smallNumberOfBlocksPerMulp; \"%d\"\n", derivatives.smallNumberOfBlocksPerMulp);
-    fprintf(csv, "mediumNumberOfBlocks; \"%d\"\n", derivatives.mediumNumberOfBlocks);
-    fprintf(csv, "mediumNumberOfBlocksPerMulp; \"%d\"\n", derivatives.mediumNumberOfBlocksPerMulp);
-    fprintf(csv, "largeNumberOfBlocks; \"%d\"\n", derivatives.largeNumberOfBlocks);
-    fprintf(csv, "largeNumberOfBlocksPerMulp; \"%d\"\n", derivatives.largeNumberOfBlocksPerMulp);
+    fprintf(csv, "numberOfBlocks; \"%d\"\n", derivatives.numberOfBlocks);
+    fprintf(csv, "numberOfBlocksPerMulp; \"%d\"\n", derivatives.numberOfBlocksPerMulp);
+    fprintf(csv, "totalNumberOfBlocks; \"%d\"\n", derivatives.totalNumberOfBlocks);
+    fprintf(csv, "collectionSize; \"%d\"\n", derivatives.collectionSize);
     fprintf(csv, "hardwareWarpsPerSm; \"%d\"\n", derivatives.hardwareWarpsPerSm);
 
     // Close the csv file.
     fclose(csv);
+    printf("[INFO] GPU information and Benchmark properties derivatives file created.\n");
 }
 
 #endif //GCPVE_03_INFO_PROP_DERIVATIVES_CUH
