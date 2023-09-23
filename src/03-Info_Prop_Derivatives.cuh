@@ -76,7 +76,7 @@ InfoPropDerivatives getInfoPropDerivatives(GpuInformation info, BenchmarkPropert
         derivatives.numberOfCoresPerSm = 0;
     }
     derivatives.totalNumberOfCores = derivatives.numberOfCoresPerSm * info.multiProcessorCount;
-    dataCollection data;
+    DataCollection data;
     int iniMulp = 0;
     data.mulp.push_back(iniMulp);
     int iniWarp = 0;

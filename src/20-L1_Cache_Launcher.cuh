@@ -16,11 +16,11 @@
  * @param derivatives All derivatives of info and prop.
  * @return A complete fully sorted data collection for the L1 cache.
  */
-dataCollection performL1Benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
+DataCollection performL1Benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
     // Collection A: For host use only.
-    dataCollection finalCollection;
-    for (int i = 0; i < prop.collectionSize; i++) {
+    DataCollection finalCollection;
+    for (int i = 0; i < derivatives.collectionSize; i++) {
         int iniMulp = 0;
         finalCollection.mulp.push_back(iniMulp);
         int iniWarp = 0;
@@ -32,8 +32,8 @@ dataCollection performL1Benchmark(GpuInformation info, BenchmarkProperties prop,
     }
 
     // Collection B: For both host use and device use.
-    dataCollection benchCollection;
-    for (int i = 0; i < prop.collectionSize; i++) {
+    DataCollection benchCollection;
+    for (int i = 0; i < derivatives.collectionSize; i++) {
         int iniMulp = 0;
         benchCollection.mulp.push_back(iniMulp);
         int iniWarp = 0;
@@ -54,7 +54,7 @@ dataCollection performL1Benchmark(GpuInformation info, BenchmarkProperties prop,
     for (int mulpLoop = 0; mulpLoop < info.multiProcessorCount; mulpLoop++) {
         moveOn = true;
         for (int trailLoop = 0; moveOn && (trailLoop < prop.numberOfTrialsLaunch); trailLoop++) {
-            for (int resetLoop = 0; resetLoop < prop.collectionSize; resetLoop++) {
+            for (int resetLoop = 0; resetLoop < derivatives.collectionSize; resetLoop++) {
                 (*ptr).mulp[resetLoop] = 0;
                 (*ptr).warp[resetLoop] = 0;
                 (*ptr).lane[resetLoop] = 0;

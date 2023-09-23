@@ -75,7 +75,7 @@ void launchL1Benchmarks(DataCollection *ptr, GpuInformation info, BenchmarkPrope
         }
         cudaMemcpy(deviceLoad, hostLoad, (sizeof(unsigned int) * prop.numberOfTrialsBenchmark), cudaMemcpyHostToDevice);
         cudaDeviceSynchronize();
-        l1Benchmark<<<derivatives.NumberOfBlocksPerMulp, info.warpSize>>>(ptr, laneLoop, deviceLoad, info.warpSize, derivatives.NumberOfBlocksPerMulp, prop.numberOfTrialsBenchmark);
+        l1Benchmark<<<derivatives.numberOfBlocksPerMulp, info.warpSize>>>(ptr, laneLoop, deviceLoad, info.warpSize, derivatives.numberOfBlocksPerMulp, prop.numberOfTrialsBenchmark);
         cudaDeviceSynchronize();
         cudaFree(deviceLoad);
         free(hostLoad);
