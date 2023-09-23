@@ -38,7 +38,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, uns
         startTime = clock64();
         for (int measureLoop = 0; measureLoop < numberOfTrialsBenchmark; measureLoop++) {
             value = 0;
-            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
+            asm volatile ("ld.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
             asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
         }
         endTime = clock64();
