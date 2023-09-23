@@ -42,7 +42,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, uns
             asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
         }
         endTime = clock64();
-        (*ptr).time[pos] = ((float) (endTime - startTime)) / ((float) numberOfTrialsBenchmark);
+        (*ptr).time[pos] = (float) (endTime - startTime);
     }
 }
 
