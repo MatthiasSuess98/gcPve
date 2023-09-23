@@ -27,24 +27,46 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, uns
         //(*ptr).mulp[pos] = mulp;
         //(*ptr).warp[pos] = warp;
         //(*ptr).lane[pos] = lane;
-        long long int startTime;
-        long long int endTime;
-        unsigned int value;
-        value = 0;
-        for (int preparationLoop = 0; preparationLoop < numberOfTrialsBenchmark; preparationLoop++) {
-            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
-            asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
-        }
-        value = 0;
-        asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
-        for (int measureLoop = 0; measureLoop < numberOfTrialsBenchmark; measureLoop++) {
-            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
-            asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
-        }
-        asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
+        //long long int startTime;
+        //long long int endTime;
+        //unsigned int value;
+        //value = 0;
+        //for (int preparationLoop = 0; preparationLoop < numberOfTrialsBenchmark; preparationLoop++) {
+        //    asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
+        //    asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
+        //}
+        //value = 0;
+        //asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
+        //for (int measureLoop = 0; measureLoop < numberOfTrialsBenchmark; measureLoop++) {
+        //    asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
+        //    asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
+        //}
+        //asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
         //(*ptr).time[pos] = ((float) (endTime - startTime)) / ((float) numberOfTrialsBenchmark);
-        printf("%lld ", (endTime - startTime));
     //}
+
+
+
+    int iter = 1024;
+    unsigned long long start_time, end_time;
+    unsigned int j = 0;
+    unsigned int* ptr;
+    for (int k = 0; k < 1024; k++) {
+        ptr = load + j;
+        asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(j) : "l"(ptr) : "memory");
+    }
+    asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(start_time));
+    for (int k = 0; k < iter; k++) {
+        ptr = load + j;
+        asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(j) : "l"(ptr) : "memory");
+    }
+    //s_index[0] = j;
+    asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(end_time));
+    unsigned int diff = (unsigned int) (end_time - start_time);
+    printf("%lld ", diff / iter);
+
+
+
 }
 
 /**
