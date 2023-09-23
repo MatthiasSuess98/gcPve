@@ -14,7 +14,7 @@
  * @param prop All properties of the benchmarks.
  * @param derivatives All derivatives of info and prop.
  */
-__global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, unsigned int * load, int warpSize, int numberOfTrialsBenchmark) {
+__global__ void smallL1Benchmark(SmallDataCollection *ptrtr, int requiredLane, unsigned int * load, int warpSize, int numberOfTrialsBenchmark) {
 
     //int pos = (blockIdx.x * warpSize) + threadIdx.x;
     //int mulp;
