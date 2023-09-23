@@ -1,6 +1,8 @@
 #ifndef GCPVE_20_L1_CACHE_LAUNCHER_CUH
 #define GCPVE_20_L1_CACHE_LAUNCHER_CUH
 
+#include <vector>
+
 #include "01-Gpu_Information.cuh"
 #include "02-Benchmark_Properties.cuh"
 #include "03-Info_Prop_Derivatives.cuh"

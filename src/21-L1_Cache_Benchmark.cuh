@@ -1,6 +1,8 @@
 #ifndef GCPVE_21_L1_CACHE_BENCHMARK_CUH
 #define GCPVE_21_L1_CACHE_BENCHMARK_CUH
 
+#include <vector>
+
 #include "01-Gpu_Information.cuh"
 #include "02-Benchmark_Properties.cuh"
 #include "03-Info_Prop_Derivatives.cuh"
@@ -14,7 +16,7 @@
  * @param prop All properties of the benchmarks.
  * @param derivatives All derivatives of info and prop.
  */
-__global__ void l1Benchmark(DataCollection * ptr, int requiredLane, unsigned int * load, int warpSize, int numberOfBlocksPerMulp, int numberOfTrialsBenchmark) {
+__global__ void l1Benchmark(DataCollection *ptr, int requiredLane, unsigned int * load, int warpSize, int numberOfBlocksPerMulp, int numberOfTrialsBenchmark) {
 
     int mulp;
     int warp;
@@ -33,7 +35,6 @@ __global__ void l1Benchmark(DataCollection * ptr, int requiredLane, unsigned int
         for (int preparationLoop = 0; preparationLoop < 1024; preparationLoop++) {
             //value = 0;
             asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
-            //asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
         }
         unsigned int counter = 0;
         unsigned int final = 0;
