@@ -159,6 +159,7 @@ void createInfoFile(GpuInformation info) {
 
     // Close the csv file.
     fclose(csv);
+    printf("[INFO] GPU information file created.\n");
 }
 
 #endif //GCPVE_C_C_1_GPU_INFORMATION_CUH
