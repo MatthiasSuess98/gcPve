@@ -16,12 +16,12 @@ typedef struct DataCollection {
 /**
  * Data structure for data collections.
  */
-__device__ typedef struct DataCollection {
+__device__ typedef struct DeviceCollection {
     std::vector<int> mulp;
     std::vector<int> warp;
     std::vector<int> lane;
     std::vector<long long int> time;
-} DataCollection;
+} DeviceCollection;
 
 #endif //GCPVE_04_DATA_COLLECTION_CUH
 

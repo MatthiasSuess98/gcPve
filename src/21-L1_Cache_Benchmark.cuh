@@ -16,7 +16,7 @@
  * @param prop All properties of the benchmarks.
  * @param derivatives All derivatives of info and prop.
  */
-__global__ void l1Benchmark(DataCollection * ptr, int requiredLane, unsigned int * load, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
+__global__ void l1Benchmark(DeviceCollection * ptr, int requiredLane, unsigned int * load, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
     int mulp;
     int warp;
