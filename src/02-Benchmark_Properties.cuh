@@ -11,7 +11,7 @@ typedef struct BenchmarkProperties {
     int medium;
     long large;
     int numberOfTrialsPerform;
-    //int numberOfTrialsLaunch;
+    int numberOfTrialsLaunch;
     int numberOfTrialsBenchmark;
     int memoryOverlap;
     int load;
@@ -31,7 +31,7 @@ BenchmarkProperties getBenchmarkProperties() {
 
     // Initialize the properties and writes them into the final data structure.
     prop.numberOfTrialsPerform = 1;
-    //prop.numberOfTrialsLaunch = 1;
+    prop.numberOfTrialsLaunch = 1;
     prop.numberOfTrialsBenchmark = 1024;
     prop.memoryOverlap = 2;
     prop.maxDelta = 0;
@@ -63,7 +63,7 @@ void createPropFile(BenchmarkProperties prop) {
     fprintf(csv, "medium; \"%d\"\n", prop.medium);
     fprintf(csv, "large; \"%ld\"\n", prop.large);
     fprintf(csv, "numberOfTrialsPerform; \"%d\"\n", prop.numberOfTrialsPerform);
-    //fprintf(csv, "numberOfTrialsLaunch; \"%d\"\n", prop.numberOfTrialsLaunch);
+    fprintf(csv, "numberOfTrialsLaunch; \"%d\"\n", prop.numberOfTrialsLaunch);
     fprintf(csv, "numberOfTrialsBenchmark; \"%d\"\n", prop.numberOfTrialsBenchmark);
     fprintf(csv, "memoryOverlap; \"%d\"\n", prop.memoryOverlap);
     fprintf(csv, "maxDelta; \"%d\"\n", prop.maxDelta);
