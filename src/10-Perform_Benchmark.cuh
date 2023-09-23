@@ -20,7 +20,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
 
     // Declare and initialize collection.
     DataCollection data;
-    for (int i = 0; i < prop.collectionSize; i++) {
+    for (int i = 0; i < derivatives.collectionSize; i++) {
         int iniMulp = 0;
         data.mulp.push_back(iniMulp);
         int iniWarp = 0;
@@ -55,14 +55,14 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
         dontFits.push_back(dontFit);
     }
     for (int trailLoop = 0; trailLoop < prop.numberOfTrialsPerform; trailLoop++) {
-        for (int resetLoop = 0; resetLoop < prop.collectionSize; resetLoop++) {
+        for (int resetLoop = 0; resetLoop < derivatives.collectionSize; resetLoop++) {
             data.mulp[resetLoop] = 0;
             data.warp[resetLoop] = 0;
             data.lane[resetLoop] = 0;
             data.time[resetLoop] = 0;
         }
         data = performL1Benchmark(info, prop, derivatives);
-        for (int blockLoop = 0; blockLoop < prop.collectionSize; blockLoop = blockLoop + info.warpSize) {
+        for (int blockLoop = 0; blockLoop < derivatives.collectionSize; blockLoop = blockLoop + info.warpSize) {
             if (data.time[blockLoop] != 0) {
                 hardwareWarpScore = 0;
                 for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
