@@ -31,8 +31,8 @@ BenchmarkProperties getBenchmarkProperties() {
 
     // Initialize the properties and writes them into the final data structure.
     prop.numberOfTrialsPerform = 1;
-    prop.numberOfTrialsLaunch = 1;
-    prop.numberOfTrialsBenchmark = 1000;
+    prop.numberOfTrialsLaunch = 10;
+    prop.numberOfTrialsBenchmark = 100000;
     prop.memoryOverlap = 2;
     prop.maxDelta = 0;
     prop.maxDontFit = 3;
