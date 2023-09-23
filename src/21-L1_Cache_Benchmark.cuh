@@ -25,7 +25,7 @@ __global__ void l1Benchmark(DataCollection * ptr, int requiredLane, unsigned int
     asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
     asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
     if ((lane == requiredLane) && ((warp == 0) || (warp == 1) || (warp == 2) || (warp == 3))) {
-        int pos = (((mulp * numberOfBlocksPerMulp) + blockIdx.x) * warpSize) + lane;
+        int pos = (((mulp * derivatives.numberOfBlocksPerMulp) + blockIdx.x) * info.warpSize) + lane;
         (*ptr).mulp[pos] = mulp;
         (*ptr).warp[pos] = warp;
         (*ptr).lane[pos] = lane;
@@ -80,9 +80,9 @@ DataCollection launchL1Benchmarks(GpuInformation info, BenchmarkProperties prop,
     DataCollection *hostPtr;
     //ptr = &data;
     //cudaMallocManaged(&ptr, sizeof(benchCollection));
-    hostPtr = (DataCollection) malloc(sizeof(data));
+    cudaHostAlloc(&hostPtr, sizeof(data));
     DataCollection *devicePtr;
-    cudaMalloc(&deviceLPtr, sizeof(data));
+    cudaMalloc(&devicePtr, sizeof(data));
     cudaMemcpy(devicePtr, hostPtr, sizeof(data), cudaMemcpyHostToDevice);
     cudaDeviceSynchronize();
     for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
@@ -109,7 +109,7 @@ DataCollection launchL1Benchmarks(GpuInformation info, BenchmarkProperties prop,
         data.lane[i] = (*hostPtr).lane[i];
         data.time[i] = (*hostPtr).time[i];
     }
-    free(hostPtr);
+    cudaFreeHost(hostPtr);
     return data;
 }
 

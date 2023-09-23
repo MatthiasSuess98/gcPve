@@ -57,7 +57,7 @@ DataCollection performL1Benchmark(GpuInformation info, BenchmarkProperties prop,
                 benchCollection.lane[resetLoop] = 0;
                 benchCollection.time[resetLoop] = 0;
             }
-            benchCollection = launchL1Benchmarks(ptr, info, prop, derivatives);
+            benchCollection = launchL1Benchmarks(info, prop, derivatives);
             for (int blockLoop = 0; moveOn && (blockLoop < derivatives.numberOfBlocks); blockLoop++) {
                 if (moveOn && (benchCollection.mulp[blockLoop * info.warpSize] == mulpLoop) && (benchCollection.time[blockLoop * info.warpSize] != 0)) {
                     for (int freeLoop = 0; moveOn && (freeLoop < derivatives.numberOfBlocksPerMulp); freeLoop++) {
@@ -81,9 +81,6 @@ DataCollection performL1Benchmark(GpuInformation info, BenchmarkProperties prop,
             printf("[ERROR] Failed to get full l1 data for streaming multiprocessor %d in benchmark.\n", mulpLoop);
         }
     }
-
-    // Free the allocated global device memory of collection B.
-    cudaFree(ptr);
 
     //Return the data collection A with the final benchmark data.
     return finalCollection;
