@@ -27,32 +27,26 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, uns
         (*ptr).mulp[pos] = mulp;
         (*ptr).warp[pos] = warp;
         (*ptr).lane[pos] = lane;
-        long long int startTime;
-        long long int endTime;
-        unsigned int value;
+        long long int startTime[1024];
+        long long int endTime[1024];
+        unsigned int value = 0;
         for (int preparationLoop = 0; preparationLoop < numberOfTrialsBenchmark; preparationLoop++) {
-            value = 0;
+            //value = 0;
             asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
-            asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
+            //asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
         }
-        startTime = clock64();
-        for (int measureLoop1 = 0; measureLoop1 < numberOfTrialsBenchmark; measureLoop1++) {
-            for (int measureLoop2 = 0; measureLoop2 < numberOfTrialsBenchmark; measureLoop2++) {
-                for (int measureLoop3 = 0; measureLoop3 < numberOfTrialsBenchmark; measureLoop3++) {
-                    for (int measureLoop4 = 0; measureLoop4 < numberOfTrialsBenchmark; measureLoop4++) {
-                        for (int measureLoop5 = 0; measureLoop5 < numberOfTrialsBenchmark; measureLoop5++) {
-                            for (int measureLoop = 0; measureLoop < numberOfTrialsBenchmark; measureLoop++) {
-                                value = 0;
-                                asm volatile ("ld.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
-                                asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
-                            }
-                        }
-                    }
-                }
-            }
+        for (int measureLoop = 0; measureLoop < numberOfTrialsBenchmark; measureLoop++) {
+            //value = 0;
+            startTime[measureLoop] = clock64();
+            asm volatile ("ld.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
+            endTime[measureLoop] = clock64();
+            //asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
         }
-        endTime = clock64();
-        (*ptr).time[pos] = (float) (endTime - startTime);
+        value = 0;
+        for (int i = 0; i < 1024; i++) {
+            value = value + (endTime - startTime);
+        }
+        (*ptr).time[pos] = ((float) value) / ((float) 1024);
     }
 }
 
