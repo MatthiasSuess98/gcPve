@@ -35,18 +35,23 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, uns
             asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
             //asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
         }
-        for (int measureLoop = 0; measureLoop < 1024; measureLoop++) {
-            //value = 0;
-            asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime[measureLoop]));
-            asm volatile ("ld.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
-            asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime[measureLoop]));
-            //asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
+        unsigned int counter = 0;
+        unsigned int final = 0;
+        for (int mainLoop = 0; mainLoop < 1024; mainLoop++) {
+            for (int measureLoop = 0; measureLoop < 1024; measureLoop++) {
+                value = 0;
+                asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime[measureLoop]));
+                asm volatile ("ld.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
+                asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime[measureLoop]));
+                //asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
+            }
+            counter = 0;
+            for (int i = 0; i < 1024; i++) {
+                counter = counter + (endTime[i] - startTime[i]);
+            }
+            final = final + counter;
         }
-        value = 0;
-        for (int i = 0; i < 1024; i++) {
-            value = value + (endTime[i] - startTime[i]);
-        }
-        (*ptr).time[pos] = ((float) value) / ((float) 1024);
+        (*ptr).time[pos] = ((float) final) / ((float) (1024 * 1024));
     }
 }
 
