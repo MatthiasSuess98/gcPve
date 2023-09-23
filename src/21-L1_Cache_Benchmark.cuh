@@ -14,7 +14,7 @@
  * @param prop All properties of the benchmarks.
  * @param derivatives All derivatives of info and prop.
  */
-__global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, unsigned int * load, int smallNumberOfBlocksPerMulp, int numberOfTrialsBenchmark) {
+__global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, unsigned int * load, int warpSize, int smallNumberOfBlocksPerMulp, int numberOfTrialsBenchmark) {
 
     int mulp;
     int warp;
@@ -23,7 +23,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, uns
     asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
     asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
     if ((lane == requiredLane) && ((warp == 0) || (warp == 1) || (warp == 2) || (warp == 3))) {
-        int pos = (lane * smallNumberOfBlocksPerMulp) + blockIdx.x;
+        int pos = (((mulp * smallNumberOfBlocksPerMulp) + blockIdx.x) * warpSize) + lane;
         (*ptr).mulp[pos] = mulp;
         (*ptr).warp[pos] = warp;
         (*ptr).lane[pos] = lane;
@@ -66,7 +66,7 @@ void launchSmallL1Benchmarks(SmallDataCollection *ptr, GpuInformation info, Benc
         }
         cudaMemcpy(deviceLoad, hostLoad, (sizeof(unsigned int) * prop.numberOfTrialsBenchmark), cudaMemcpyHostToDevice);
         cudaDeviceSynchronize();
-        smallL1Benchmark<<<derivatives.smallNumberOfBlocksPerMulp, info.warpSize>>>(ptr, laneLoop, deviceLoad, derivatives.smallNumberOfBlocksPerMulp, prop.numberOfTrialsBenchmark);
+        smallL1Benchmark<<<derivatives.smallNumberOfBlocksPerMulp, info.warpSize>>>(ptr, laneLoop, deviceLoad, info.warpSize, derivatives.smallNumberOfBlocksPerMulp, prop.numberOfTrialsBenchmark);
         cudaDeviceSynchronize();
         cudaFree(deviceLoad);
         free(hostLoad);
