@@ -50,6 +50,7 @@ int main(int argCount, char *argVariables[]) {
                     printf("[ERROR] There is no GPU \"%s\".\n", argVariables[i]);
                 } else {
                     createBenchmarks(gpuId);
+                    printf("[INFO] The Benchmark started.");
                 }
             }
     } else {
