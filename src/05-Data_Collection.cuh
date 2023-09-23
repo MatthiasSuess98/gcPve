@@ -1,6 +1,8 @@
 #ifndef GCPVE_04_DATA_COLLECTION_CUH
 #define GCPVE_04_DATA_COLLECTION_CUH
 
+#include <vector>
+
 /**
  * Data structure for small data collections.
  */
