@@ -48,24 +48,24 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptrtr, int requiredLane, u
 
 
     int iter = 1;
-    unsigned long long start_time, end_time;
+    unsigned int start_time, end_time;
     unsigned int j = 0;
     unsigned int* ptr;
     for (int k = 0; k < 1; k++) {
         ptr = load + j;
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(j) : "l"(ptr) : "memory");
     }
-    //asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(start_time));
-    start_time = clock();
+    asm volatile("mov.u32 %0, %%clock;" : "=l"(start_time));
+    //start_time = clock();
     for (int k = 0; k < iter; k++) {
         ptr = load + j;
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(j) : "l"(ptr) : "memory");
     }
     //s_index[0] = j;
-    //asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(end_time));
-    end_time = clock();
+    asm volatile("mov.u32 %0, %%clock;" : "=l"(end_time));
+    //end_time = clock();
     unsigned int diff = (unsigned int) (end_time - start_time);
-    printf("%lld ", (end_time - start_time));
+    printf("%d ", (end_time - start_time));
 
 
 
