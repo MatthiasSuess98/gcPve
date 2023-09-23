@@ -46,32 +46,27 @@ DataCollection performL1Benchmark(GpuInformation info, BenchmarkProperties prop,
         benchCollection.time.push_back(iniTime);
     }
 
-    // Allocation of collection B to the global device memory.
-    DataCollection *ptr;
-    ptr = &benchCollection;
-    cudaMallocManaged(&ptr, sizeof(benchCollection));
-
     // Getting and sorting the data.
     bool moveOn;
     for (int mulpLoop = 0; mulpLoop < info.multiProcessorCount; mulpLoop++) {
         moveOn = true;
         for (int trailLoop = 0; moveOn && (trailLoop < prop.numberOfTrialsLaunch); trailLoop++) {
             for (int resetLoop = 0; resetLoop < derivatives.collectionSize; resetLoop++) {
-                (*ptr).mulp[resetLoop] = 0;
-                (*ptr).warp[resetLoop] = 0;
-                (*ptr).lane[resetLoop] = 0;
-                (*ptr).time[resetLoop] = 0;
+                benchCollection.mulp[resetLoop] = 0;
+                benchCollection.warp[resetLoop] = 0;
+                benchCollection.lane[resetLoop] = 0;
+                benchCollection.time[resetLoop] = 0;
             }
-            launchL1Benchmarks(ptr, info, prop, derivatives);
+            benchCollection = launchL1Benchmarks(ptr, info, prop, derivatives);
             for (int blockLoop = 0; moveOn && (blockLoop < derivatives.numberOfBlocks); blockLoop++) {
-                if (moveOn && ((*ptr).mulp[blockLoop * info.warpSize] == mulpLoop) && ((*ptr).time[blockLoop * info.warpSize] != 0)) {
+                if (moveOn && (benchCollection.mulp[blockLoop * info.warpSize] == mulpLoop) && (benchCollection.time[blockLoop * info.warpSize] != 0)) {
                     for (int freeLoop = 0; moveOn && (freeLoop < derivatives.numberOfBlocksPerMulp); freeLoop++) {
                         if (moveOn && (finalCollection.time[((mulpLoop * derivatives.numberOfBlocksPerMulp) + freeLoop) * info.warpSize] == 0)) {
                             for (int laneLoop = 0; moveOn && (laneLoop < info.warpSize); laneLoop++) {
-                                finalCollection.mulp[(((mulpLoop * derivatives.numberOfBlocksPerMulp) + freeLoop) * info.warpSize) + laneLoop] = (*ptr).mulp[(blockLoop * info.warpSize) + laneLoop];
-                                finalCollection.warp[(((mulpLoop * derivatives.numberOfBlocksPerMulp) + freeLoop) * info.warpSize) + laneLoop] = (*ptr).warp[(blockLoop * info.warpSize) + laneLoop];
-                                finalCollection.lane[(((mulpLoop * derivatives.numberOfBlocksPerMulp) + freeLoop) * info.warpSize) + laneLoop] = (*ptr).lane[(blockLoop * info.warpSize) + laneLoop];
-                                finalCollection.time[(((mulpLoop * derivatives.numberOfBlocksPerMulp) + freeLoop) * info.warpSize) + laneLoop] = (*ptr).time[(blockLoop * info.warpSize) + laneLoop];
+                                finalCollection.mulp[(((mulpLoop * derivatives.numberOfBlocksPerMulp) + freeLoop) * info.warpSize) + laneLoop] = benchCollection.mulp[(blockLoop * info.warpSize) + laneLoop];
+                                finalCollection.warp[(((mulpLoop * derivatives.numberOfBlocksPerMulp) + freeLoop) * info.warpSize) + laneLoop] = benchCollection.warp[(blockLoop * info.warpSize) + laneLoop];
+                                finalCollection.lane[(((mulpLoop * derivatives.numberOfBlocksPerMulp) + freeLoop) * info.warpSize) + laneLoop] = benchCollection.lane[(blockLoop * info.warpSize) + laneLoop];
+                                finalCollection.time[(((mulpLoop * derivatives.numberOfBlocksPerMulp) + freeLoop) * info.warpSize) + laneLoop] = benchCollection.time[(blockLoop * info.warpSize) + laneLoop];
                             }
                         }
                         if (moveOn && (finalCollection.time[((mulpLoop + 1) * derivatives.numberOfBlocksPerMulp * info.warpSize) - 1] != 0)) {

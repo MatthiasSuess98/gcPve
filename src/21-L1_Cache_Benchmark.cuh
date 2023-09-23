@@ -16,7 +16,7 @@
  * @param prop All properties of the benchmarks.
  * @param derivatives All derivatives of info and prop.
  */
-__global__ void l1Benchmark(DataCollection *ptr, int requiredLane, unsigned int * load, int warpSize, int numberOfBlocksPerMulp, int numberOfTrialsBenchmark) {
+__global__ void l1Benchmark(DataCollection * ptr, int requiredLane, unsigned int * load, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
     int mulp;
     int warp;
@@ -64,8 +64,27 @@ __global__ void l1Benchmark(DataCollection *ptr, int requiredLane, unsigned int 
  * @param prop All properties of the benchmarks.
  * @param derivatives All derivatives of info and prop.
  */
-void launchL1Benchmarks(DataCollection *ptr, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
+DataCollection launchL1Benchmarks(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
+    DataCollection data;
+    for (int i = 0; i < derivatives.collectionSize; i++) {
+        int iniMulp = 0;
+        data.mulp.push_back(iniMulp);
+        int iniWarp = 0;
+        data.warp.push_back(iniWarp);
+        int iniLane = 0;
+        data.lane.push_back(iniLane);
+        long long int iniTime = 0;
+        data.time.push_back(iniTime);
+    }
+    DataCollection *hostPtr;
+    //ptr = &data;
+    //cudaMallocManaged(&ptr, sizeof(benchCollection));
+    hostPtr = (DataCollection) malloc(sizeof(data));
+    DataCollection *devicePtr;
+    cudaMalloc(&deviceLPtr, sizeof(data));
+    cudaMemcpy(devicePtr, hostPtr, sizeof(data), cudaMemcpyHostToDevice);
+    cudaDeviceSynchronize();
     for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
         unsigned int *hostLoad;
         hostLoad = (unsigned int *) malloc(sizeof(unsigned int) * prop.numberOfTrialsBenchmark);
@@ -76,11 +95,22 @@ void launchL1Benchmarks(DataCollection *ptr, GpuInformation info, BenchmarkPrope
         }
         cudaMemcpy(deviceLoad, hostLoad, (sizeof(unsigned int) * prop.numberOfTrialsBenchmark), cudaMemcpyHostToDevice);
         cudaDeviceSynchronize();
-        l1Benchmark<<<derivatives.numberOfBlocksPerMulp, info.warpSize>>>(ptr, laneLoop, deviceLoad, info.warpSize, derivatives.numberOfBlocksPerMulp, prop.numberOfTrialsBenchmark);
+        l1Benchmark<<<derivatives.numberOfBlocksPerMulp, info.warpSize>>>(devicePtr, laneLoop, deviceLoad, info, prop, derivatives);
         cudaDeviceSynchronize();
         cudaFree(deviceLoad);
         free(hostLoad);
     }
+    cudaMemcpy(hostPtr, devicePtr, sizeof(data), cudaMemcpyDeviceToHost);
+    cudaDeviceSynchronize();
+    cudaFree(devicePtr);
+    for (int i = 0; i < derivatives.collectionSize; i++) {
+        data.mulp[i] = (*hostPtr).mulp[i];
+        data.warp[i] = (*hostPtr).warp[i];
+        data.lane[i] = (*hostPtr).lane[i];
+        data.time[i] = (*hostPtr).time[i];
+    }
+    free(hostPtr);
+    return data;
 }
 
 #endif //GCPVE_21_L1_CACHE_BENCHMARK_CUH
