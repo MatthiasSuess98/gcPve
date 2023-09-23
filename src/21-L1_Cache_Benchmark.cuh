@@ -81,7 +81,7 @@ DataCollection launchL1Benchmarks(GpuInformation info, BenchmarkProperties prop,
     //ptr = &data;
     //cudaMallocManaged(&ptr, sizeof(benchCollection));
     cudaMallocHost(&hostPtr, sizeof(data));
-    DataCollection *devicePtr;
+    DeviceCollection *devicePtr;
     cudaMalloc(&devicePtr, sizeof(data));
     cudaMemcpy(devicePtr, hostPtr, sizeof(data), cudaMemcpyHostToDevice);
     cudaDeviceSynchronize();
