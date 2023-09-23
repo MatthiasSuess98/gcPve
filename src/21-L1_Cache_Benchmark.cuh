@@ -63,7 +63,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptrtr, int requiredLane, u
     //s_index[0] = j;
     asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(end_time));
     unsigned int diff = (unsigned int) (end_time - start_time);
-    printf("%lld ", diff / iter);
+    printf("%lld ", (end_time - start_time));
 
 
 
