@@ -53,7 +53,6 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, uns
         }
         endTime = clock64();
         (*ptr).time[pos] = (float) (endTime - startTime);
-        printf("%d", numberOfTrialsBenchmark);
     }
 }
 
