@@ -86,9 +86,9 @@ InfoPropDerivatives getInfoPropDerivatives(GpuInformation info, BenchmarkPropert
     long long int iniTime = 0;
     data.time.push_back(iniTime);
     derivatives.collectionSize = info.totalGlobalMem / (sizeof(data) * prop.memoryOverlap);
-    derivatives.NumberOfBlocks = derivatives.collectionSize / info.warpSize;
-    derivatives.NumberOfBlocksPerMulp = (derivatives.collectionSize / info.warpSize) / info.multiProcessorCount;
-    derivatives.totalNumberOfBlocks = derivatives.smallNumberOfBlocksPerMulp * info.multiProcessorCount;
+    derivatives.numberOfBlocks = derivatives.collectionSize / info.warpSize;
+    derivatives.numberOfBlocksPerMulp = (derivatives.collectionSize / info.warpSize) / info.multiProcessorCount;
+    derivatives.totalNumberOfBlocks = derivatives.numberOfBlocksPerMulp * info.multiProcessorCount;
     derivatives.hardwareWarpsPerSm = derivatives.numberOfCoresPerSm / info.warpSize;
 
     // Return the final data structure.
@@ -111,9 +111,9 @@ void createInfoPropDerivatives(InfoPropDerivatives derivatives) {
     fprintf(csv, "maxNumberOfWarpsPerSm; \"%d\"\n", derivatives.maxNumberOfWarpsPerSm);
     fprintf(csv, "numberOfCoresPerSm; \"%d\"\n", derivatives.numberOfCoresPerSm);
     fprintf(csv, "totalNumberOfCores; \"%d\"\n", derivatives.totalNumberOfCores);
-    fprintf(csv, "NumberOfBlocks; \"%d\"\n", derivatives.NumberOfBlocks);
-    fprintf(csv, "NumberOfBlocksPerMulp; \"%d\"\n", derivatives.NumberOfBlocksPerMulp);
-    fprintf(csv, "TotalNumberOfBlocks; \"%d\"\n", derivatives.totalNumberOfBlocks);
+    fprintf(csv, "numberOfBlocks; \"%d\"\n", derivatives.numberOfBlocks);
+    fprintf(csv, "numberOfBlocksPerMulp; \"%d\"\n", derivatives.numberOfBlocksPerMulp);
+    fprintf(csv, "totalNumberOfBlocks; \"%d\"\n", derivatives.totalNumberOfBlocks);
     fprintf(csv, "collectionSize; \"%d\"\n", derivatives.collectionSize);
     fprintf(csv, "hardwareWarpsPerSm; \"%d\"\n", derivatives.hardwareWarpsPerSm);
 

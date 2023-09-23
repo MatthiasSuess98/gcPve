@@ -19,7 +19,7 @@
 void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
     // Declare and initialize collection.
-    dataCollection data;
+    DataCollection data;
     for (int i = 0; i < prop.collectionSize; i++) {
         int iniMulp = 0;
         data.mulp.push_back(iniMulp);
