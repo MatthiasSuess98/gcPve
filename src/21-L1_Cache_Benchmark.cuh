@@ -44,7 +44,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, uns
         }
         value = 0;
         for (int i = 0; i < 1024; i++) {
-            value = value + (endTime - startTime);
+            value = value + (endTime[i] - startTime[i]);
         }
         (*ptr).time[pos] = ((float) value) / ((float) 1024);
     }
