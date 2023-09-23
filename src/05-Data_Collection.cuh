@@ -36,6 +36,12 @@ typedef struct LargeDataCollection {
     float time[4294967296];
 } LargeDataCollection;
 
+
+typedef struct collection {
+    std::vector<int> mulp;
+} collection;
+
+
 #endif //GCPVE_04_DATA_COLLECTION_CUH
 
 //FINISHED
