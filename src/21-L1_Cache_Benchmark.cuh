@@ -55,14 +55,14 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptrtr, int requiredLane, u
         ptr = load + j;
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(j) : "l"(ptr) : "memory");
     }
-    asm volatile("mov.u32 %0, %%clock;" : "=l"(start_time));
+    asm volatile("mov.u32 %0, %%clock;" : "=r"(start_time));
     //start_time = clock();
     for (int k = 0; k < iter; k++) {
         ptr = load + j;
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(j) : "l"(ptr) : "memory");
     }
     //s_index[0] = j;
-    asm volatile("mov.u32 %0, %%clock;" : "=l"(end_time));
+    asm volatile("mov.u32 %0, %%clock;" : "=r"(end_time));
     //end_time = clock();
     unsigned int diff = (unsigned int) (end_time - start_time);
     printf("%d ", (end_time - start_time));
