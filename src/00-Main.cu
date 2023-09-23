@@ -9,7 +9,6 @@
 #include "03-Info_Prop_Derivatives.cuh"
 #include "04-Core_Characteristics.cuh"
 #include "05-Data_Collection.cuh"
-
 #include "10-Perform_Benchmark.cuh"
 
 /**
@@ -48,7 +47,7 @@ int main(int argCount, char *argVariables[]) {
                 char *ptr;
                 int gpuId = strtol(argVariables[i], &ptr, 10);
                 if (*ptr || (gpuId >= deviceCount)) {
-                    printf("There is no GPU \"%s\".\n", argVariables[i]);
+                    printf("[ERROR] There is no GPU \"%s\".\n", argVariables[i]);
                 } else {
                     createBenchmarks(gpuId);
                 }
