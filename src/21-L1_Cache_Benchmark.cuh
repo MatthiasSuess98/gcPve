@@ -47,11 +47,11 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptrtr, int requiredLane, u
 
 
 
-    int iter = 1024;
+    int iter = 1;
     unsigned long long start_time, end_time;
     unsigned int j = 0;
     unsigned int* ptr;
-    for (int k = 0; k < 1024; k++) {
+    for (int k = 0; k < 1; k++) {
         ptr = load + j;
         asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(j) : "l"(ptr) : "memory");
     }
