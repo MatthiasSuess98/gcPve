@@ -14,62 +14,38 @@
  * @param prop All properties of the benchmarks.
  * @param derivatives All derivatives of info and prop.
  */
-__global__ void smallL1Benchmark(SmallDataCollection *ptrtr, int requiredLane, unsigned int * load, int warpSize, int numberOfTrialsBenchmark) {
+__global__ void smallL1Benchmark(SmallDataCollection *ptr, int requiredLane, unsigned int * load, int smallNumberOfBlocksPerMulp, int numberOfTrialsBenchmark) {
 
-    //int pos = (blockIdx.x * warpSize) + threadIdx.x;
-    //int mulp;
-    //int warp;
-    //int lane;
-    //asm volatile ("mov.u32 %0, %%smid;" : "=r"(mulp));
-    //asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
-    //asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
-    //if ((lane == requiredLane) && ((warp == 0) || (warp == 1) || (warp == 2) || (warp == 3))) {
-        //(*ptr).mulp[pos] = mulp;
-        //(*ptr).warp[pos] = warp;
-        //(*ptr).lane[pos] = lane;
-        //long long int startTime;
-        //long long int endTime;
-        //unsigned int value;
-        //value = 0;
-        //for (int preparationLoop = 0; preparationLoop < numberOfTrialsBenchmark; preparationLoop++) {
-        //    asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
-        //    asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
-        //}
-        //value = 0;
-        //asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
-        //for (int measureLoop = 0; measureLoop < numberOfTrialsBenchmark; measureLoop++) {
-        //    asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
-        //    asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
-        //}
-        //asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
-        //(*ptr).time[pos] = ((float) (endTime - startTime)) / ((float) numberOfTrialsBenchmark);
-    //}
-
-
-
-    int iter = 1;
-    unsigned int start_time, end_time;
-    unsigned int j = 0;
-    unsigned int* ptr;
-    for (int k = 0; k < 1; k++) {
-        ptr = load + j;
-        asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(j) : "l"(ptr) : "memory");
+    int mulp;
+    int warp;
+    int lane;
+    asm volatile ("mov.u32 %0, %%smid;" : "=r"(mulp));
+    asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
+    asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
+    if ((lane == requiredLane) && ((warp == 0) || (warp == 1) || (warp == 2) || (warp == 3))) {
+        int pos = (mulp * smallNumberOfBlocksPerMulp) + blockIdx.x;
+        (*ptr).mulp[pos] = mulp;
+        (*ptr).warp[pos] = warp;
+        (*ptr).lane[pos] = lane;
+        long long int startTime;
+        long long int endTime;
+        unsigned int value;
+        for (int preparationLoop = 0; preparationLoop < numberOfTrialsBenchmark; preparationLoop++) {
+            value = 0;
+            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
+            asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
+        }
+        startTime = clock64();
+        for (int measureLoop = 0; measureLoop < numberOfTrialsBenchmark; measureLoop++) {
+            value = 0;
+            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
+            asm volatile ("add.u32 %0, %1, %2;" : "=r"(value) : "r"(value), "r"(2));
+        }
+        endTime = clock64();
+        (*ptr).time[pos] = ((float) (endTime - startTime)) / ((float) numberOfTrialsBenchmark);
     }
-    asm volatile("mov.u32 %0, %%clock;" : "=r"(start_time));
-    //start_time = clock();
-    for (int k = 0; k < iter; k++) {
-        ptr = load + j;
-        asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(j) : "l"(ptr) : "memory");
-    }
-    //s_index[0] = j;
-    asm volatile("mov.u32 %0, %%clock;" : "=r"(end_time));
-    //end_time = clock();
-    unsigned int diff = (unsigned int) (end_time - start_time);
-    printf("%d ", (end_time - start_time));
-
-
-
 }
+
 
 /**
  * Launches the L1 benchmarks with small data collection.
@@ -90,7 +66,7 @@ void launchSmallL1Benchmarks(SmallDataCollection *ptr, GpuInformation info, Benc
         }
         cudaMemcpy(deviceLoad, hostLoad, (sizeof(unsigned int) * prop.numberOfTrialsBenchmark), cudaMemcpyHostToDevice);
         cudaDeviceSynchronize();
-        smallL1Benchmark<<<derivatives.smallNumberOfBlocks, info.warpSize>>>(ptr, laneLoop, deviceLoad, info.warpSize, prop.numberOfTrialsBenchmark);
+        smallL1Benchmark<<<derivatives.smallNumberOfBlocksPerMulp, info.warpSize>>>(ptr, laneLoop, deviceLoad, derivatives.smallNumberOfBlocksPerMulp, prop.numberOfTrialsBenchmark);
         cudaDeviceSynchronize();
         cudaFree(deviceLoad);
         free(hostLoad);
