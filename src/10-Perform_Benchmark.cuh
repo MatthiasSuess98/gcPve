@@ -187,12 +187,8 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
             data.time[resetLoop] = 0;
         }
         data = performSmallL1Benchmark(info, prop, derivatives);
-
-        for (int resetLoop = 0; resetLoop < prop.small; resetLoop++) {
-            printf("%d ", data.warp[resetLoop]);
-        }
-
         for (int blockLoop = 0; blockLoop < prop.small; blockLoop = blockLoop + info.warpSize) {
+            printf("%d ", data.warp[blockLoop]);
             if (data.time[blockLoop] != 0) {
                 if (gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (data.warp[blockLoop] * info.warpSize)].getTypicalL1Time() == 0.0) {
                     for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
