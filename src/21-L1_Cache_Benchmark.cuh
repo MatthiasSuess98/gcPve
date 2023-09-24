@@ -39,18 +39,18 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, 
         unsigned int preValue = 0;
         unsigned int postValue = 0;
         unsigned int summand = 1;
-        for (int preparationLoop = 0; preparationLoop < smallNumberOfTrialsDivisor; preparationLoop++) {
+        for (int preparationLoop = 0; preparationLoop < derivatives.smallNumberOfTrialsDivisor; preparationLoop++) {
             asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(preValue) : "l"(load) : "memory");
             asm volatile ("add.u32 %0, %1, %2;" : "=r"(postValue) : "r"(preValue), "r"(summand));
         }
-        for (int mainLoop = 0; mainLoop < smallNumberOfTrialsDivisor; mainLoop++) {
+        for (int mainLoop = 0; mainLoop < derivatives.smallNumberOfTrialsDivisor; mainLoop++) {
             preValue = 0;
             postValue = 0;
-            for (int measureLoop = 0; measureLoop < smallNumberOfTrialsDivisor; measureLoop++) {
-                asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime[measureLoop]));
+            for (int measureLoop = 0; measureLoop < derivatives.smallNumberOfTrialsDivisor; measureLoop++) {
+                asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
                 asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(preValue) : "l"(load) : "memory");
                 asm volatile ("add.u32 %0, %1, %2;" : "=r"(postValue) : "r"(preValue), "r"(summand));
-                asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime[measureLoop]));
+                asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
                 finalTime = finalTime + (endTime - startTime);
             }
         }
@@ -70,13 +70,13 @@ void launchSmallL1Benchmarks(SmallDataCollection *ptr, GpuInformation info, Benc
 
     for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
         unsigned int *hostLoad;
-        hostLoad = (unsigned int *) malloc(sizeof(unsigned int) * prop.numberOfTrialsBenchmark);
+        hostLoad = (unsigned int *) malloc(sizeof(unsigned int) * derivatives.smallNumberOfTrialsDivisor);
         unsigned int *deviceLoad;
-        cudaMalloc(&deviceLoad, (sizeof(unsigned int) * prop.numberOfTrialsBenchmark));
-        for (int initializeLoop = 0; initializeLoop < prop.numberOfTrialsBenchmark; initializeLoop++) {
+        cudaMalloc(&deviceLoad, (sizeof(unsigned int) * derivatives.smallNumberOfTrialsDivisor));
+        for (int initializeLoop = 0; initializeLoop < derivatives.smallNumberOfTrialsDivisor; initializeLoop++) {
             hostLoad[initializeLoop] = initializeLoop;
         }
-        cudaMemcpy(deviceLoad, hostLoad, (sizeof(unsigned int) * prop.numberOfTrialsBenchmark), cudaMemcpyHostToDevice);
+        cudaMemcpy(deviceLoad, hostLoad, (sizeof(unsigned int) * derivatives.smallNumberOfTrialsDivisor), cudaMemcpyHostToDevice);
         cudaDeviceSynchronize();
         smallL1Benchmark<<<derivatives.smallNumberOfBlocksPerMulp, info.warpSize>>>(ptr, deviceLoad, laneLoop, info, prop, derivatives);
         cudaDeviceSynchronize();
