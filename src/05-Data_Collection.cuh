@@ -11,7 +11,7 @@ typedef struct SmallDataCollection {
     int mulp[65536];
     int warp[65536];
     int lane[65536];
-    float time[65536];
+    long long int time[65536];
 } SmallDataCollection;
 
 
@@ -23,7 +23,7 @@ typedef struct MediumDataCollection {
     int mulp[16777216];
     int warp[16777216];
     int lane[16777216];
-    float time[16777216];
+    long long int time[16777216];
 } MediumDataCollection;
 
 
@@ -35,14 +35,8 @@ typedef struct LargeDataCollection {
     int mulp[4294967296];
     int warp[4294967296];
     int lane[4294967296];
-    float time[4294967296];
+    long long int time[4294967296];
 } LargeDataCollection;
-
-
-typedef struct collection {
-    std::vector<int> mulp;
-} collection;
-
 
 #endif //GCPVE_04_DATA_COLLECTION_CUH
 

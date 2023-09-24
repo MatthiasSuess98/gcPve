@@ -17,12 +17,15 @@ typedef struct InfoPropDerivatives {
     int smallNumberOfBlocks;
     int smallNumberOfBlocksPerMulp;
     int smallTotalNumberOfBlocks;
+    int smallNumberOfTrialsDivisor;
     int mediumNumberOfBlocks;
     int mediumNumberOfBlocksPerMulp;
     int mediumTotalNumberOfBlocks;
+    int mediumNumberOfTrialsDivisor;
     int largeNumberOfBlocks;
     int largeNumberOfBlocksPerMulp;
     int largeTotalNumberOfBlocks;
+    int largeNumberOfTrialsDivisor;
     int hardwareWarpsPerSm;
 } InfoPropDerivatives;
 
@@ -83,12 +86,15 @@ InfoPropDerivatives getInfoPropDerivatives(GpuInformation info, BenchmarkPropert
     derivatives.smallNumberOfBlocks = prop.small / info.warpSize;
     derivatives.smallNumberOfBlocksPerMulp = (prop.small / info.warpSize) / info.multiProcessorCount;
     derivatives.smallTotalNumberOfBlocks = derivatives.smallNumberOfBlocksPerMulp * info.multiProcessorCount;
+    derivatives.smallNumberOfTrialsDivisor = prop.small / prop.numberOfTrialsDivisor;
     derivatives.mediumNumberOfBlocks = prop.medium / info.warpSize;
     derivatives.mediumNumberOfBlocksPerMulp = (prop.medium / info.warpSize) / info.multiProcessorCount;
     derivatives.mediumTotalNumberOfBlocks = derivatives.mediumNumberOfBlocksPerMulp * info.multiProcessorCount;
+    derivatives.mediumNumberOfTrialsDivisor = prop.medium / prop.numberOfTrialsDivisor;
     derivatives.largeNumberOfBlocks = prop.large / info.warpSize;
     derivatives.largeNumberOfBlocksPerMulp = (prop.large / info.warpSize) / info.multiProcessorCount;
     derivatives.largeTotalNumberOfBlocks = derivatives.largeNumberOfBlocksPerMulp * info.multiProcessorCount;
+    derivatives.largeNumberOfTrialsDivisor = prop.large / prop.numberOfTrialsDivisor;
     derivatives.hardwareWarpsPerSm = derivatives.numberOfCoresPerSm / info.warpSize;
 
     // Return the final data structure.
@@ -113,10 +119,16 @@ void createInfoPropDerivatives(InfoPropDerivatives derivatives) {
     fprintf(csv, "totalNumberOfCores; \"%d\"\n", derivatives.totalNumberOfCores);
     fprintf(csv, "smallNumberOfBlocks; \"%d\"\n", derivatives.smallNumberOfBlocks);
     fprintf(csv, "smallNumberOfBlocksPerMulp; \"%d\"\n", derivatives.smallNumberOfBlocksPerMulp);
+    fprintf(csv, "smallTotalNumberOfBlocks; \"%d\"\n", derivatives.smallTotalNumberOfBlocks);
+    fprintf(csv, "smallNumberOfTrialsDivisor; \"%d\"\n", derivatives.smallNumberOfTrialsDivisor);
     fprintf(csv, "mediumNumberOfBlocks; \"%d\"\n", derivatives.mediumNumberOfBlocks);
     fprintf(csv, "mediumNumberOfBlocksPerMulp; \"%d\"\n", derivatives.mediumNumberOfBlocksPerMulp);
+    fprintf(csv, "mediumTotalNumberOfBlocks; \"%d\"\n", derivatives.mediumTotalNumberOfBlocks);
+    fprintf(csv, "mediumNumberOfTrialsDivisor; \"%d\"\n", derivatives.mediumNumberOfTrialsDivisor);
     fprintf(csv, "largeNumberOfBlocks; \"%d\"\n", derivatives.largeNumberOfBlocks);
     fprintf(csv, "largeNumberOfBlocksPerMulp; \"%d\"\n", derivatives.largeNumberOfBlocksPerMulp);
+    fprintf(csv, "largeTotalNumberOfBlocks; \"%d\"\n", derivatives.largeTotalNumberOfBlocks);
+    fprintf(csv, "largeNumberOfTrialsDivisor; \"%d\"\n", derivatives.largeNumberOfTrialsDivisor);
     fprintf(csv, "hardwareWarpsPerSm; \"%d\"\n", derivatives.hardwareWarpsPerSm);
 
     // Close the csv file.
