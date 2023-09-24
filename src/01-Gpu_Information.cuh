@@ -114,7 +114,7 @@ GpuInformation getGpuInformation(int gpuId) {
 void createInfoFile(GpuInformation info) {
 
     // Creation and opening of the csv file.
-    char output[] = "raw/GPU_Info.csv";
+    char output[] = "GPU_Info.csv";
     FILE *csv = fopen(output, "w");
 
     // Writing all the information into the csv file.
