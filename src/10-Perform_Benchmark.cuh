@@ -10,10 +10,12 @@
 #include "05-Data_Collection.cuh"
 #include "20-L1_Cache_Launcher.cuh"
 
-
-
-
-/*
+/**
+ * Performs the small benchmark.
+ * @param info All available information of the current GPU.
+ * @param prop All properties of the benchmarks.
+ * @param derivatives All derivatives of info and prop.
+ */
 void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
     // Initialize data collection.
@@ -126,77 +128,6 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
                             currentTime = gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].getTypicalL1Time();
                             gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].setTypicalL1Time(((((long double) data.time[blockLoop + laneLoop]) / ((long double) (derivatives.smallNumberOfTrialsDivisor * derivatives.smallNumberOfTrialsDivisor))) + currentTime) / 2);
                         }
-                    }
-                }
-            }
-        }
-    }
-
-    // Create file with all benchmark data.
-    char output[] = "raw/Benchmark_L1.csv";
-    FILE *csv = fopen(output, "w");
-    for (int i = 0; i < info.multiProcessorCount; i++) {
-        for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
-            for (int k = 0; k < info.warpSize; k++) {
-                fprintf(csv, "%Lf", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time());
-                fprintf(csv, " ; ");
-            }
-            fprintf(csv, "\n");
-        }
-        fprintf(csv, "\n");
-    }
-    fclose(csv);
-    printf("[INFO] The L1 cache benchmark file was created.\n");
-}
-
-*/
-
-
-
-
-/**
- * Performs the small benchmark.
- * @param info All available information of the current GPU.
- * @param prop All properties of the benchmarks.
- * @param derivatives All derivatives of info and prop.
- */
-void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
-
-    // Initialize data collection.
-    SmallDataCollection data;
-
-    // Declare and initialize all core characteristics.
-    std::vector<CoreCharacteristics> gpuCores;
-    CoreCharacteristics gpuCore = CoreCharacteristics(0, 0, 0);
-    for (int i = 0; i < info.multiProcessorCount; i++) {
-        for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
-            for (int k = 0; k < info.warpSize; k++) {
-                gpuCore = CoreCharacteristics(i, j, k);
-                gpuCores.push_back(gpuCore);
-            }
-        }
-    }
-
-    // Perform the benchmark loop.
-    long double currentTime;
-    for (int trailLoop = 0; trailLoop < prop.numberOfTrialsPerform; trailLoop++) {
-        for (int resetLoop = 0; resetLoop < prop.small; resetLoop++) {
-            data.mulp[resetLoop] = 0;
-            data.warp[resetLoop] = 0;
-            data.lane[resetLoop] = 0;
-            data.time[resetLoop] = 0;
-        }
-        data = performSmallL1Benchmark(info, prop, derivatives);
-        for (int blockLoop = 0; blockLoop < prop.small; blockLoop = blockLoop + info.warpSize) {
-            if (data.time[blockLoop] != 0) {
-                if (gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (data.warp[blockLoop] * info.warpSize)].getTypicalL1Time() == 0.0) {
-                    for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
-                        gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (data.warp[blockLoop] * info.warpSize) + laneLoop].setTypicalL1Time(((long double) data.time[blockLoop + laneLoop]) / ((long double) (derivatives.smallNumberOfTrialsDivisor * derivatives.smallNumberOfTrialsDivisor)));
-                    }
-                } else {
-                    for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
-                        currentTime = gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (data.warp[blockLoop] * info.warpSize) + laneLoop].getTypicalL1Time();
-                        gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (data.warp[blockLoop] * info.warpSize) + laneLoop].setTypicalL1Time(((((long double) data.time[blockLoop + laneLoop]) / ((long double) (derivatives.smallNumberOfTrialsDivisor * derivatives.smallNumberOfTrialsDivisor))) + currentTime) / 2);
                     }
                 }
             }
