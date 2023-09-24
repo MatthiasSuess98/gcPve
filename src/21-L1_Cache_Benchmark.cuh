@@ -40,8 +40,6 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, 
         (*ptr).warp[pos] = warp;
         (*ptr).lane[pos] = lane;
 
-        printf("%d ", warp);
-
         // Warning: If these magical numbers get updated, update the variables in 02-Benchmark_Properties and in 04-Core_Characteristics also!
         long long int startTime[65536 / 1024];
         long long int endTime[65536 / 1024];
