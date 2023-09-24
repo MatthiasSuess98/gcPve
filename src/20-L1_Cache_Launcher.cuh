@@ -50,10 +50,13 @@ SmallDataCollection performSmallL1Benchmark(GpuInformation info, BenchmarkProper
             }
             launchSmallL1Benchmarks(ptr, info, prop, derivatives);
             for (int resetLoop = 0; resetLoop < prop.small; resetLoop++) {
-                printf("%d ", (*ptr).mulp[resetLoop]);
-                printf("%d ", (*ptr).warp[resetLoop]);
-                printf("%d ", (*ptr).lane[resetLoop]);
-                printf("%lld\n", (*ptr).time[resetLoop]);
+                if (((*ptr).mulp[resetLoop] == 0) && ((*ptr).warp[resetLoop] == 0) && ((*ptr).lane[resetLoop]) == 0) && ((*ptr).time[resetLoop] == 0)) {
+                } else {
+                    printf("%d ", (*ptr).mulp[resetLoop]);
+                    printf("%d ", (*ptr).warp[resetLoop]);
+                    printf("%d ", (*ptr).lane[resetLoop]);
+                    printf("%lld\n", (*ptr).time[resetLoop]);
+                }
             }
             for (int blockLoop = 0; moveOn && (blockLoop < derivatives.smallNumberOfBlocks); blockLoop++) {
                 if (moveOn && ((*ptr).mulp[blockLoop * info.warpSize] == mulpLoop) && ((*ptr).time[blockLoop * info.warpSize] != 0)) {
