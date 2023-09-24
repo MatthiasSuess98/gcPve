@@ -8,31 +8,18 @@
 #include "03-Info_Prop_Derivatives.cuh"
 #include "04-Core_Characteristics.cuh"
 #include "05-Data_Collection.cuh"
-
 #include "20-L1_Cache_Launcher.cuh"
 
 /**
- * Performs Benchmark 1.
+ * Performs the small benchmark.
  * @param info All available information of the current GPU.
  * @param prop All properties of the benchmarks.
  * @param derivatives All derivatives of info and prop.
  */
-void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
+void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
-    // Choose the collection size.
-    int collectionSize;
-    //if (info.totalGlobalMem >= (sizeof(LargeDataCollection) * prop.memoryOverlap)) {
-    //    SmallDataCollection data;
-    //    collectionSize = prop.small;
-    //} else if (info.totalGlobalMem >= (sizeof(MediumDataCollection) * prop.memoryOverlap)) {
-    //    SmallDataCollection data;
-    //    collectionSize = prop.small;
-    //} else {
-    //    SmallDataCollection data;
-    //    collectionSize = prop.small;
-    //}
+    // Initialize data collection.
     SmallDataCollection data;
-    collectionSize = prop.small;
 
     // Declare and initialize all core characteristics.
     std::vector<CoreCharacteristics> gpuCores;
@@ -50,7 +37,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     int hardwareWarpScore;
     int smallestNumber;
     int bestHardwareWarp;
-    int currentTime;
+    long long int currentTime;
     std::vector<int> dontFits;
     int dontFit;
     for (int warpLoop = 0; warpLoop < info.warpSize; warpLoop++) {
@@ -58,20 +45,14 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
         dontFits.push_back(dontFit);
     }
     for (int trailLoop = 0; trailLoop < prop.numberOfTrialsPerform; trailLoop++) {
-        for (int resetLoop = 0; resetLoop < collectionSize; resetLoop++) {
+        for (int resetLoop = 0; resetLoop < prop.small; resetLoop++) {
             data.mulp[resetLoop] = 0;
             data.warp[resetLoop] = 0;
             data.lane[resetLoop] = 0;
             data.time[resetLoop] = 0;
         }
-        if (collectionSize == prop.large) {
-            data = performSmallL1Benchmark(info, prop, derivatives);
-        } else if (collectionSize == prop.medium) {
-            data = performSmallL1Benchmark(info, prop, derivatives);
-        } else if (collectionSize == prop.small) {
-            data = performSmallL1Benchmark(info, prop, derivatives);
-        }
-        for (int blockLoop = 0; blockLoop < collectionSize; blockLoop = blockLoop + info.warpSize) {
+        data = performSmallL1Benchmark(info, prop, derivatives);
+        for (int blockLoop = 0; blockLoop < prop.small; blockLoop = blockLoop + info.warpSize) {
             if (data.time[blockLoop] != 0) {
                 hardwareWarpScore = 0;
                 for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
@@ -154,7 +135,7 @@ void performBenchmark1(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     }
 
     // Create file with all benchmark data.
-    char output[] = "Benchmark1_L1.csv";
+    char output[] = "Benchmark_L1.csv";
     FILE *csv = fopen(output, "w");
     for (int i = 0; i < info.multiProcessorCount; i++) {
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {

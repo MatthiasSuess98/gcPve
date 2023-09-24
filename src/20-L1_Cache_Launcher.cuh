@@ -6,7 +6,6 @@
 #include "03-Info_Prop_Derivatives.cuh"
 #include "04-Core_Characteristics.cuh"
 #include "05-Data_Collection.cuh"
-
 #include "21-L1_Cache_Benchmark.cuh"
 
 /**

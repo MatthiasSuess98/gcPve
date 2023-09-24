@@ -25,19 +25,19 @@ public:
         typicalGmTime = 0;
     }
 
-    void setTypicalL1Time(long long int  newTypicalL1Time) {
+    void setTypicalL1Time(long long int newTypicalL1Time) {
         typicalL1Time = newTypicalL1Time;
     }
 
-    void setTypicalSmTime(long long int  newTypicalSmTime) {
+    void setTypicalSmTime(long long int newTypicalSmTime) {
         typicalSmTime = newTypicalSmTime;
     }
 
-    void setTypicalL2Time(long long int  newTypicalL2Time) {
+    void setTypicalL2Time(long long int newTypicalL2Time) {
         typicalL2Time = newTypicalL2Time;
     }
 
-    void setTypicalGmTime(long long int  newTypicalGmTime) {
+    void setTypicalGmTime(long long int newTypicalGmTime) {
         typicalGmTime = newTypicalGmTime;
     }
 
@@ -53,19 +53,19 @@ public:
         return warpCoreId;
     }
 
-    long long int  getTypicalL1Time() {
+    long long int getTypicalL1Time() {
         return typicalL1Time;
     }
 
-    long long int  getTypicalSmTime() {
+    long long int getTypicalSmTime() {
         return typicalSmTime;
     }
 
-    long long int  getTypicalL2Time() {
+    long long int getTypicalL2Time() {
         return typicalL2Time;
     }
 
-    long long int  getTypicalGmTime() {
+    long long int getTypicalGmTime() {
         return typicalGmTime;
     }
 };

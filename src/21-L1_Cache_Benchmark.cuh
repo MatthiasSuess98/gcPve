@@ -10,6 +10,8 @@
 /**
  * The L1 benchmark which uses the small data collection.
  * @param ptr The small data collection where the data of the benchmark is stored.
+ * @param load The load which will be used in the benchmark calculation.
+ * @param requiredLane The lane id which is required for the thread.
  * @param info All available information of the current GPU.
  * @param prop All properties of the benchmarks.
  * @param derivatives All derivatives of info and prop.
@@ -19,30 +21,38 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, 
     int mulp;
     int warp;
     int lane;
+
     asm volatile ("mov.u32 %0, %%smid;" : "=r"(mulp));
     asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
     asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
+
     bool validWarp = false;
     for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
         if (warp == hardwareWarpLoop) {
             validWarp = true;
         }
     }
+
     if (validWarp && (lane == requiredLane)) {
         int pos = (((mulp * derivatives.smallNumberOfBlocksPerMulp) + blockIdx.x) * info.warpSize) + lane;
+
         (*ptr).mulp[pos] = mulp;
         (*ptr).warp[pos] = warp;
         (*ptr).lane[pos] = lane;
+
         long long int startTime;
         long long int endTime;
         long long int finalTime;
+
         unsigned int preValue = 0;
         unsigned int postValue = 0;
         unsigned int summand = 1;
+
         for (int preparationLoop = 0; preparationLoop < derivatives.smallNumberOfTrialsDivisor; preparationLoop++) {
             asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(preValue) : "l"(load) : "memory");
             asm volatile ("add.u32 %0, %1, %2;" : "=r"(postValue) : "r"(preValue), "r"(summand));
         }
+
         for (int mainLoop = 0; mainLoop < derivatives.smallNumberOfTrialsDivisor; mainLoop++) {
             preValue = 0;
             postValue = 0;
@@ -54,6 +64,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, 
                 finalTime = finalTime + (endTime - startTime);
             }
         }
+
         (*ptr).time[pos] = finalTime;
     }
 }
@@ -69,17 +80,23 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, 
 void launchSmallL1Benchmarks(SmallDataCollection *ptr, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
     for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
+
         unsigned int *hostLoad;
         hostLoad = (unsigned int *) malloc(sizeof(unsigned int) * derivatives.smallNumberOfTrialsDivisor);
+
         unsigned int *deviceLoad;
         cudaMalloc(&deviceLoad, (sizeof(unsigned int) * derivatives.smallNumberOfTrialsDivisor));
+
         for (int initializeLoop = 0; initializeLoop < derivatives.smallNumberOfTrialsDivisor; initializeLoop++) {
             hostLoad[initializeLoop] = initializeLoop;
         }
+
         cudaMemcpy(deviceLoad, hostLoad, (sizeof(unsigned int) * derivatives.smallNumberOfTrialsDivisor), cudaMemcpyHostToDevice);
         cudaDeviceSynchronize();
+
         smallL1Benchmark<<<derivatives.smallNumberOfBlocksPerMulp, info.warpSize>>>(ptr, deviceLoad, laneLoop, info, prop, derivatives);
         cudaDeviceSynchronize();
+
         cudaFree(deviceLoad);
         free(hostLoad);
     }

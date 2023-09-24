@@ -7,7 +7,7 @@
  * Data structure for small data collections.
  */
 typedef struct SmallDataCollection {
-    // small = 16 bit
+    // Warning: If the size of the arrays gets updated, update the variable in 02-Benchmark_Properties also!
     int mulp[65536];
     int warp[65536];
     int lane[65536];
@@ -19,7 +19,7 @@ typedef struct SmallDataCollection {
  * Data structure for medium data collections.
  */
 typedef struct MediumDataCollection {
-    // medium = 24 bit
+    // Warning: If the size of the arrays gets updated, update the variable in 02-Benchmark_Properties also!
     int mulp[16777216];
     int warp[16777216];
     int lane[16777216];
@@ -31,7 +31,7 @@ typedef struct MediumDataCollection {
  * Data structure for large data collections.
  */
 typedef struct LargeDataCollection {
-    // large = 32 bit
+    // Warning: If the size of the arrays gets updated, update the variable in 02-Benchmark_Properties also!
     int mulp[4294967296];
     int warp[4294967296];
     int lane[4294967296];
