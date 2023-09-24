@@ -37,7 +37,7 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
     int hardwareWarpScore;
     int smallestNumber;
     int bestHardwareWarp;
-    long long int currentTime;
+    long double currentTime;
     std::vector<int> dontFits;
     int dontFit;
     for (int warpLoop = 0; warpLoop < info.warpSize; warpLoop++) {
@@ -59,18 +59,18 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
                     dontFits[hardwareWarpLoop] = 0;
                 }
                 for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
-                    if (gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * info.warpSize)].getTypicalL1Time() != 0) {
+                    if (gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * info.warpSize)].getTypicalL1Time() != 0.0) {
                         hardwareWarpScore++;
                     }
                 }
                 if (hardwareWarpScore == 0) {
                     for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
-                        gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + laneLoop].setTypicalL1Time(data.time[blockLoop + laneLoop]);
+                        gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + laneLoop].setTypicalL1Time((long double) data.time[blockLoop + laneLoop]);
                     }
                 } else if (hardwareWarpScore == derivatives.hardwareWarpsPerSm) {
                     for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
                         for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
-                            if (std::abs(gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * info.warpSize) + laneLoop].getTypicalL1Time() - data.time[blockLoop]) >= prop.maxDelta) {
+                            if (std::abs(gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * info.warpSize) + laneLoop].getTypicalL1Time() - ((long double) data.time[blockLoop])) >= prop.maxDelta) {
                                 dontFits[hardwareWarpLoop]++;
                             }
                         }
@@ -93,12 +93,12 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
                     }
                     for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
                         currentTime = gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].getTypicalL1Time();
-                        gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].setTypicalL1Time((data.time[blockLoop + laneLoop] + currentTime) / 2);
+                        gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].setTypicalL1Time((((long double) data.time[blockLoop + laneLoop]) + currentTime) / 2);
                     }
                 } else {
                     for (int hardwareWarpLoop = 0; hardwareWarpLoop < hardwareWarpScore; hardwareWarpLoop++) {
                         for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
-                            if (std::abs(gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * info.warpSize) + laneLoop].getTypicalL1Time() - data.time[blockLoop]) >= prop.maxDelta) {
+                            if (std::abs(gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * info.warpSize) + laneLoop].getTypicalL1Time() - ((long double) data.time[blockLoop])) >= prop.maxDelta) {
                                 dontFits[hardwareWarpLoop]++;
                             }
                         }
@@ -121,12 +121,12 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
                     }
                     if (dontFits[bestHardwareWarp] > prop.maxDontFit) {
                         for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
-                            gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpScore * info.warpSize) + laneLoop].setTypicalL1Time(data.time[blockLoop + laneLoop]);
+                            gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpScore * info.warpSize) + laneLoop].setTypicalL1Time((long double) data.time[blockLoop + laneLoop]);
                         }
                     } else {
                         for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
                             currentTime = gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].getTypicalL1Time();
-                            gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].setTypicalL1Time((data.time[blockLoop + laneLoop] + currentTime) / 2);
+                            gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].setTypicalL1Time((((long double) data.time[blockLoop + laneLoop]) + currentTime) / 2);
                         }
                     }
                 }
@@ -140,7 +140,7 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
     for (int i = 0; i < info.multiProcessorCount; i++) {
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
             for (int k = 0; k < info.warpSize; k++) {
-                fprintf(csv, "%lld", (gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time() / (derivatives.smallNumberOfTrialsDivisor * derivatives.smallNumberOfTrialsDivisor)));
+                fprintf(csv, "%Lf", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time());
                 if ((k + 1) < info.warpSize) {
                     fprintf(csv, " ; ");
                 }
@@ -160,3 +160,4 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
 
 //FINISHED
 
+//(derivatives.smallNumberOfTrialsDivisor * derivatives.smallNumberOfTrialsDivisor)

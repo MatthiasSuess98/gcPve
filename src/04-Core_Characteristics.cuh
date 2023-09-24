@@ -9,35 +9,35 @@ private:
     int smId;
     int hardwareWarpId;
     int warpCoreId;
-    long long int typicalL1Time;
-    long long int typicalSmTime;
-    long long int typicalL2Time;
-    long long int typicalGmTime;
+    long double typicalL1Time;
+    long double typicalSmTime;
+    long double typicalL2Time;
+    long double typicalGmTime;
 
 public:
     CoreCharacteristics(int newSmId, int newHardwareWarpId, int newWarpCoreId) {
         smId = newSmId;
         hardwareWarpId = newHardwareWarpId;
         warpCoreId = newWarpCoreId;
-        typicalL1Time = 0;
-        typicalSmTime = 0;
-        typicalL2Time = 0;
-        typicalGmTime = 0;
+        typicalL1Time = 0.0;
+        typicalSmTime = 0.0;
+        typicalL2Time = 0.0;
+        typicalGmTime = 0.0;
     }
 
-    void setTypicalL1Time(long long int newTypicalL1Time) {
+    void setTypicalL1Time(long double newTypicalL1Time) {
         typicalL1Time = newTypicalL1Time;
     }
 
-    void setTypicalSmTime(long long int newTypicalSmTime) {
+    void setTypicalSmTime(long double newTypicalSmTime) {
         typicalSmTime = newTypicalSmTime;
     }
 
-    void setTypicalL2Time(long long int newTypicalL2Time) {
+    void setTypicalL2Time(long double newTypicalL2Time) {
         typicalL2Time = newTypicalL2Time;
     }
 
-    void setTypicalGmTime(long long int newTypicalGmTime) {
+    void setTypicalGmTime(long double newTypicalGmTime) {
         typicalGmTime = newTypicalGmTime;
     }
 
@@ -53,19 +53,19 @@ public:
         return warpCoreId;
     }
 
-    long long int getTypicalL1Time() {
+    long double getTypicalL1Time() {
         return typicalL1Time;
     }
 
-    long long int getTypicalSmTime() {
+    long double getTypicalSmTime() {
         return typicalSmTime;
     }
 
-    long long int getTypicalL2Time() {
+    long double getTypicalL2Time() {
         return typicalL2Time;
     }
 
-    long long int getTypicalGmTime() {
+    long double getTypicalGmTime() {
         return typicalGmTime;
     }
 };
