@@ -34,7 +34,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, 
     }
 
     if (validWarp && (lane == requiredLane)) {
-        int pos = (((mulp * derivatives.smallNumberOfBlocksPerMulp) + warp) * info.warpSize) + lane;
+        int pos = (((mulp * derivatives.smallNumberOfBlocksPerMulp) + blockIdx.x) * info.warpSize) + lane;
 
         (*ptr).mulp[pos] = mulp;
         (*ptr).warp[pos] = warp;
