@@ -40,9 +40,12 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, 
         (*ptr).warp[pos] = warp;
         (*ptr).lane[pos] = lane;
 
-        long long int startTime;
-        long long int endTime;
-        long long int finalTime;
+        // Warning: If these magical numbers get updated, update the variables in 02-Benchmark_Properties and in 04-Core_Characteristics also!
+        long long int startTime[65536 / 64];
+        long long int endTime[65536 / 64];
+        long long int finalTime[65536 / 64];
+
+        long long int returnTime;
 
         unsigned int preValue = 0;
         unsigned int postValue = 0;
@@ -54,18 +57,27 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, 
         }
 
         for (int mainLoop = 0; mainLoop < derivatives.smallNumberOfTrialsDivisor; mainLoop++) {
+
             preValue = 0;
             postValue = 0;
+
             for (int measureLoop = 0; measureLoop < derivatives.smallNumberOfTrialsDivisor; measureLoop++) {
-                asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
+                asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime[measureLoop]));
                 asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(preValue) : "l"(load) : "memory");
                 asm volatile ("add.u32 %0, %1, %2;" : "=r"(postValue) : "r"(preValue), "r"(summand));
-                asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
-                finalTime = finalTime + (endTime - startTime);
+                asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime[measureLoop]));
+            }
+
+            for (int addLoop = 0; addLoop < derivatives.smallNumberOfTrialsDivisor; addLoop++) {
+                finalTime[mainLoop] = finalTime[mainLoop] + (endTime[addLoop] - startTime[addLoop]);
             }
         }
 
-        (*ptr).time[pos] = finalTime;
+        for (int addLoop = 0; addLoop < derivatives.smallNumberOfTrialsDivisor; addLoop++) {
+            returnTime = returnTime + finalTime[addLoop];
+        }
+
+        (*ptr).time[pos] = returnTime;
     }
 }
 
