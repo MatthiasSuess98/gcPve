@@ -53,7 +53,7 @@ SmallDataCollection performSmallL1Benchmark(GpuInformation info, BenchmarkProper
                 printf("%d ", (*ptr).mulp[resetLoop]);
                 printf("%d ", (*ptr).warp[resetLoop]);
                 printf("%d ", (*ptr).lane[resetLoop]);
-                printf("%d\n", (*ptr).time[resetLoop]);
+                printf("%lld\n", (*ptr).time[resetLoop]);
             }
             for (int blockLoop = 0; moveOn && (blockLoop < derivatives.smallNumberOfBlocks); blockLoop++) {
                 if (moveOn && ((*ptr).mulp[blockLoop * info.warpSize] == mulpLoop) && ((*ptr).time[blockLoop * info.warpSize] != 0)) {
