@@ -3,6 +3,11 @@
 
 #include <cstdio>
 #include <cuda.h>
+#include <cstdlib>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+namespace fs = std::filesystem;
 
 #include "01-Gpu_Information.cuh"
 #include "02-Benchmark_Properties.cuh"
@@ -16,6 +21,10 @@
  * @param gpuId The selected GPU.
  */
 void createBenchmarks(int gpuId) {
+
+
+    fs::create_directory("raw");
+
 
     // Determine all information, properties and derivatives for the selected GPU.
     GpuInformation info = getGpuInformation(gpuId);
