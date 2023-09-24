@@ -7,6 +7,6 @@ else
 LIBS = -lcuda
 endif
 
-all: analyze.cu
-	nvcc $(CXXARGS) $(INCLUDES) $(LIBS) analyze.cu -o all
+all: 00-Main.cu
+	nvcc $(CXXARGS) $(INCLUDES) $(LIBS) 00-Main.cu -o all
 

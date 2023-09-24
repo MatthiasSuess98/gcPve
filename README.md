@@ -7,16 +7,20 @@ specific GPU and analyze them. Please take into account, that this project only 
 - nvcc 11.0 or higher
 
 ## Compatibility
-- The app was tested on the following four GPUs: NVIDIA Tesla A100, NVIDIA T1000, NVIDIA Quadro P6000, NVIDIA Tesla K20.
-- The app was only tested on Linux machines, but should also work on Windows machines.
+- The app was tested on the following GPU: NVIDIA Quadro P6000.
+- The app was developed and tested only for Linux machines.
 
 ## Installation
 The installation of gcPve is primary done via Cmake:
-- Pull the latest version of the cuda-samples with git submodule:
+- Create a new directory for the gcPve files and move into it:
 ```bash
-git submodule update --init
+mkdir gcPve && cd gcPve
 ```
-- Create a specific directory for the benchmarking executable:
+- Clone the gcPve files from the repository and move into it:
+```bash
+git clone https://github.com/MatthiasSuess98/gcPve && cd gcPve
+```
+- Create a specific directory for the installation and move into it:
 ```bash
 mkdir build && cd build
 ```
@@ -31,22 +35,22 @@ make all install
 
 ## Running the Benchmarks
 Run the benchmarking executable in the specific directory with the following command:
+```bash
+cd .. && ./bin/gcPve 0
 ```
-./gcPve
+In this command, the GPU id of the GPU for which the benchmarks will be created is given as a parameter with the syntax above, here for GPU 0). To get a list of all available GPUs use the following command:
+```bash
+nvidia-smi -L
 ```
-Options:
-- "-adv": The final file will provide advanced GPU information.
-- "-fas": The benchmarks will be executed faster than normal.
-When the benchmarks are finished, the final data will be stored in a csv-file named "Output.csv".
--
-      printf("[ERROR] To do so, use the following syntax (here for GPU 0): \"gcPve 0\"");
-      printf("To get a list of all available GPUs use the command \"nvidia-smi -L\".\n");
-      printf("It is also possible to select multiple GPUs by appending multiple numbers.\n");
-
-## Known issues
-- No issues so far.
+It is also possible to select multiple GPUs by appending multiple numbers, but at least one number must be given in total. When the benchmarks are finished, the raw benchmark results will be stored in csv-files and can be accessed with the following command:
+```bash
+cd raw
+```
+The program also creates graphical visualizations of the benchmark results which can be accessed with the following command:
+```bash
+cd out
+```
 
 ## About
-gcPve was created by Matthias Suess (e-mail@matthias-suess.com) as part of his bachelor's thesis. gcPve is available 
-under the Apache-2.0 license (see LICENCE-file).
+gcPve was created by Matthias Suess (e-mail@matthias-suess.com) as part of his bachelor's thesis in informatics. gcPve is available under the Apache-2.0 license (see LICENCE-file).
 

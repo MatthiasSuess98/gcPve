@@ -125,7 +125,7 @@ InfoPropDerivatives getInfoPropDerivatives(GpuInformation info, BenchmarkPropert
 void createInfoPropDerivatives(InfoPropDerivatives derivatives) {
 
     // Creation and opening of the csv file.
-    char output[] = "raw/InfoPropDerivatives.csv";
+    char output[] = "raw/InfoProp_Derivatives.csv";
     FILE *csv = fopen(output, "w");
 
     // Writing the full cuda version into the csv file.

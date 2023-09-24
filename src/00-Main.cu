@@ -58,7 +58,7 @@ int main(int argCount, char *argVariables[]) {
                 if (*ptr || (gpuId >= deviceCount)) {
                     printf("[ERROR] There is no GPU \"%s\".\n", argVariables[i]);
                 } else {
-                    printf("[INFO] The Benchmark started.\n");
+                    printf("[INFO] The benchmark started.\n");
                     createBenchmarks(gpuId);
                 }
             }

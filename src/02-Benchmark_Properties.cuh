@@ -53,7 +53,7 @@ BenchmarkProperties getBenchmarkProperties() {
 void createPropFile(BenchmarkProperties prop) {
 
     // Creation and opening of the csv file.
-    char output[] = "raw/BenchProp.csv";
+    char output[] = "raw/Bench_Prop.csv";
     FILE *csv = fopen(output, "w");
 
     // Writing all the information into the csv file.
