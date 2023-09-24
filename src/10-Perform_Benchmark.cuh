@@ -189,12 +189,11 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
         data = performSmallL1Benchmark(info, prop, derivatives);
         for (int blockLoop = 0; blockLoop < prop.small; blockLoop = blockLoop + info.warpSize) {
             if (data.time[blockLoop] != 0) {
-                if (gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (data.warp[blockLoop] * info.warpSize) + data.lane[blockLoop]].getTypicalL1Time() != 0) {
+                if (gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (data.warp[blockLoop] * info.warpSize) + data.lane[blockLoop]].getTypicalL1Time() == 0) {
                     for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
                         gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (data.warp[blockLoop] * info.warpSize) + laneLoop].setTypicalL1Time(((long double) data.time[blockLoop + laneLoop]) / ((long double) (derivatives.smallNumberOfTrialsDivisor * derivatives.smallNumberOfTrialsDivisor)));
                     }
                 } else {
-                    printf("Test");
                     for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
                         currentTime = gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (data.warp[blockLoop] * info.warpSize) + laneLoop].getTypicalL1Time();
                         gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (data.warp[blockLoop] * info.warpSize) + laneLoop].setTypicalL1Time(((((long double) data.time[blockLoop + laneLoop]) / ((long double) (derivatives.smallNumberOfTrialsDivisor * derivatives.smallNumberOfTrialsDivisor))) + currentTime) / 2);
