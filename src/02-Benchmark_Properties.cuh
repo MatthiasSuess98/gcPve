@@ -53,7 +53,7 @@ BenchmarkProperties getBenchmarkProperties() {
 void createPropFile(BenchmarkProperties prop) {
 
     // Creation and opening of the csv file.
-    char output[] = "BenchProp.csv";
+    char output[] = "raw/BenchProp.csv";
     FILE *csv = fopen(output, "w");
 
     // Writing all the information into the csv file.
@@ -69,7 +69,7 @@ void createPropFile(BenchmarkProperties prop) {
 
     // Close the csv file.
     fclose(csv);
-    printf("[INFO] The benchmark properties file was created.");
+    printf("[INFO] The benchmark properties file was created.\n");
 }
 
 #endif //GCPVE_C_C_2_BENCHMARK_PROPERTIES_CUH

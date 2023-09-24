@@ -135,7 +135,7 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
     }
 
     // Create file with all benchmark data.
-    char output[] = "Benchmark_L1.csv";
+    char output[] = "raw/Benchmark_L1.csv";
     FILE *csv = fopen(output, "w");
     for (int i = 0; i < info.multiProcessorCount; i++) {
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {

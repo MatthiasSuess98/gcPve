@@ -22,9 +22,9 @@ namespace fs = std::filesystem;
  */
 void createBenchmarks(int gpuId) {
 
-
+    // Create the necessary directories.
     fs::create_directory("raw");
-
+    fs::create_directory("out");
 
     // Determine all information, properties and derivatives for the selected GPU.
     GpuInformation info = getGpuInformation(gpuId);
@@ -58,7 +58,7 @@ int main(int argCount, char *argVariables[]) {
                 if (*ptr || (gpuId >= deviceCount)) {
                     printf("[ERROR] There is no GPU \"%s\".\n", argVariables[i]);
                 } else {
-                    printf("[INFO] The Benchmark started.");
+                    printf("[INFO] The Benchmark started.\n");
                     createBenchmarks(gpuId);
                 }
             }

@@ -114,7 +114,7 @@ GpuInformation getGpuInformation(int gpuId) {
 void createInfoFile(GpuInformation info) {
 
     // Creation and opening of the csv file.
-    char output[] = "GPU_Info.csv";
+    char output[] = "raw/GPU_Info.csv";
     FILE *csv = fopen(output, "w");
 
     // Writing all the information into the csv file.
@@ -160,7 +160,7 @@ void createInfoFile(GpuInformation info) {
 
     // Close the csv file.
     fclose(csv);
-    printf("[INFO] The GPU information file was created.");
+    printf("[INFO] The GPU information file was created.\n");
 }
 
 #endif //GCPVE_C_C_1_GPU_INFORMATION_CUH
