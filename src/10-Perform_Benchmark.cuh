@@ -65,7 +65,7 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
                 }
                 if (hardwareWarpScore == 0) {
                     for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
-                        gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + laneLoop].setTypicalL1Time((long double) data.time[blockLoop + laneLoop]);
+                        gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + laneLoop].setTypicalL1Time(((long double) data.time[blockLoop + laneLoop]) / ((long double) (derivatives.smallNumberOfTrialsDivisor * derivatives.smallNumberOfTrialsDivisor)));
                     }
                 } else if (hardwareWarpScore == derivatives.hardwareWarpsPerSm) {
                     for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
@@ -93,7 +93,7 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
                     }
                     for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
                         currentTime = gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].getTypicalL1Time();
-                        gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].setTypicalL1Time((((long double) data.time[blockLoop + laneLoop]) + currentTime) / 2);
+                        gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].setTypicalL1Time(((((long double) data.time[blockLoop + laneLoop]) / ((long double) (derivatives.smallNumberOfTrialsDivisor * derivatives.smallNumberOfTrialsDivisor))) + currentTime) / 2);
                     }
                 } else {
                     for (int hardwareWarpLoop = 0; hardwareWarpLoop < hardwareWarpScore; hardwareWarpLoop++) {
@@ -121,12 +121,12 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
                     }
                     if (dontFits[bestHardwareWarp] > prop.maxDontFit) {
                         for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
-                            gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpScore * info.warpSize) + laneLoop].setTypicalL1Time((long double) data.time[blockLoop + laneLoop]);
+                            gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpScore * info.warpSize) + laneLoop].setTypicalL1Time(((long double) data.time[blockLoop + laneLoop]) / ((long double) (derivatives.smallNumberOfTrialsDivisor * derivatives.smallNumberOfTrialsDivisor)));
                         }
                     } else {
                         for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
                             currentTime = gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].getTypicalL1Time();
-                            gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].setTypicalL1Time((((long double) data.time[blockLoop + laneLoop]) + currentTime) / 2);
+                            gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + laneLoop].setTypicalL1Time(((((long double) data.time[blockLoop + laneLoop]) / ((long double) (derivatives.smallNumberOfTrialsDivisor * derivatives.smallNumberOfTrialsDivisor))) + currentTime) / 2);
                         }
                     }
                 }
@@ -160,4 +160,3 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
 
 //FINISHED
 
-//(derivatives.smallNumberOfTrialsDivisor * derivatives.smallNumberOfTrialsDivisor)
