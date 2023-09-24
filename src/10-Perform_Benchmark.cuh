@@ -70,7 +70,7 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
                 } else if (hardwareWarpScore == derivatives.hardwareWarpsPerSm) {
                     for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
                         for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
-                            if (std::abs(gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * info.warpSize) + laneLoop].getTypicalL1Time() - ((long double) data.time[blockLoop])) >= prop.maxDelta) {
+                            if (std::abs(gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * info.warpSize) + laneLoop].getTypicalL1Time() - (((long double) data.time[blockLoop]) / ((long double) (derivatives.smallNumberOfTrialsDivisor * derivatives.smallNumberOfTrialsDivisor)))) >= prop.maxDelta) {
                                 dontFits[hardwareWarpLoop]++;
                             }
                         }
@@ -98,7 +98,7 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
                 } else {
                     for (int hardwareWarpLoop = 0; hardwareWarpLoop < hardwareWarpScore; hardwareWarpLoop++) {
                         for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
-                            if (std::abs(gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * info.warpSize) + laneLoop].getTypicalL1Time() - ((long double) data.time[blockLoop])) >= prop.maxDelta) {
+                            if (std::abs(gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpLoop * info.warpSize) + laneLoop].getTypicalL1Time() - (((long double) data.time[blockLoop]) / ((long double) (derivatives.smallNumberOfTrialsDivisor * derivatives.smallNumberOfTrialsDivisor)))) >= prop.maxDelta) {
                                 dontFits[hardwareWarpLoop]++;
                             }
                         }
