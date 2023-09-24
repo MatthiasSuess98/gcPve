@@ -32,7 +32,7 @@ BenchmarkProperties getBenchmarkProperties() {
     prop.numberOfTrialsPerform = 1;
     prop.numberOfTrialsLaunch = 10;
     prop.memoryOverlap = 2;
-    prop.maxDelta = 0.0;
+    prop.maxDelta = 5.0;
     prop.maxDontFit = 3;
     // Size of the data collections.
     // Warning: If these three variables get updated, update the variables in 04-Core_Characteristics and in the kernels also!
