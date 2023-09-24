@@ -40,7 +40,7 @@ BenchmarkProperties getBenchmarkProperties() {
     prop.medium = 16777216;
     prop.large = 4294967296;
     // Warning: If this variable gets updated, update the variables in the kernels also!
-    prop.numberOfTrialsDivisor = 64;
+    prop.numberOfTrialsDivisor = 1024;
 
     // Return the final data structure.
     return prop;

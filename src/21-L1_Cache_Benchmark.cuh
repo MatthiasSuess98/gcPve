@@ -41,9 +41,9 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, 
         (*ptr).lane[pos] = lane;
 
         // Warning: If these magical numbers get updated, update the variables in 02-Benchmark_Properties and in 04-Core_Characteristics also!
-        long long int startTime[65536 / 64];
-        long long int endTime[65536 / 64];
-        long long int finalTime[65536 / 64];
+        long long int startTime[65536 / 1024];
+        long long int endTime[65536 / 1024];
+        long long int finalTime[65536 / 1024];
 
         long long int returnTime;
 
@@ -77,6 +77,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, 
             returnTime = returnTime + finalTime[addLoop];
         }
 
+        postValue++;
         (*ptr).time[pos] = returnTime;
     }
 }
