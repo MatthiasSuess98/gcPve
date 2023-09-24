@@ -45,7 +45,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, 
         long long int endTime[65536 / 1024];
         long long int finalTime[65536 / 1024];
 
-        long long int returnTime;
+        long long int returnTime = 0;
 
         unsigned int preValue = 0;
         unsigned int postValue = 0;
@@ -56,8 +56,8 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, 
             asm volatile ("add.u32 %0, %1, %2;" : "=r"(postValue) : "r"(preValue), "r"(summand));
         }
 
-        for (int addLoop = 0; addLoop < derivatives.smallNumberOfTrialsDivisor; addLoop++) {
-            finalTime[addLoop] = 0;
+        for (int resetLoop = 0; resetLoop < derivatives.smallNumberOfTrialsDivisor; resetLoop++) {
+            finalTime[resetLoop] = 0;
         }
 
         for (int mainLoop = 0; mainLoop < derivatives.smallNumberOfTrialsDivisor; mainLoop++) {
@@ -65,9 +65,9 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, 
             preValue = 0;
             postValue = 0;
 
-            for (int addLoop = 0; addLoop < derivatives.smallNumberOfTrialsDivisor; addLoop++) {
-                endTime[addLoop] = 0;
-                startTime[addLoop] = 0;
+            for (int resetLoop = 0; resetLoop < derivatives.smallNumberOfTrialsDivisor; resetLoop++) {
+                endTime[resetLoop] = 0;
+                startTime[resetLoop] = 0;
             }
 
             for (int measureLoop = 0; measureLoop < derivatives.smallNumberOfTrialsDivisor; measureLoop++) {
