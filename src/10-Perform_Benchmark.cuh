@@ -148,6 +148,7 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
         fprintf(csv, "\n");
     }
     fclose(csv);
+    printf("[INFO] The L1 cache benchmark file was created.\n");
 }
 
 #endif //GCPVE_10_PERFORM_BENCHMARK_CUH
