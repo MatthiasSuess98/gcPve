@@ -51,7 +51,7 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, 
                 (*ptr).ctrl[blockIdx.x] = false;
             }
 
-            if (((*ptr).ctrl[blockIdx.x] == false) && (couter == lane)) {
+            if (((*ptr).ctrl[blockIdx.x] == false) && (counter == lane)) {
 
                 int pos = (blockIdx.x * info.warpSize) + lane;
 
