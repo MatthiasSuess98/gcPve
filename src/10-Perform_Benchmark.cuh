@@ -157,4 +157,3 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
 
 //FINISHED
 
-
