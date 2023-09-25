@@ -150,7 +150,7 @@ void launchSmallL1Benchmarks(SmallDataCollection *ptr, GpuInformation info, Benc
 
     cudaFree(deviceLoad);
     free(hostLoad);
-    cudaFree(switchValuePtr);
+    //cudaFree(switchValuePtr);
 }
 
 #endif //GCPVE_21_L1_CACHE_BENCHMARK_CUH
