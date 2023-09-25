@@ -141,7 +141,9 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
             for (int k = 0; k < info.warpSize; k++) {
                 fprintf(csv, "%Lf", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time());
-                fprintf(csv, ";");
+                if (k < (info.warpSize - 1)) {
+                    fprintf(csv, ";");
+                }
             }
             fprintf(csv, "\n");
         }
