@@ -19,7 +19,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3f010c8b-9be5-42a3-9535-544f1713a60f" name="Changes" comment="next">
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM0.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM1.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM10.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM11.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM12.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM13.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM14.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM15.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM16.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM17.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM18.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM19.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM2.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM20.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM21.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM22.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM23.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM24.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM25.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM26.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM27.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM28.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM29.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM3.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM4.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM5.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM6.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM7.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM8.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/Benchmark_L1_SM9.jpeg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/00-Main.cu" beforeDir="false" afterPath="$PROJECT_DIR$/src/00-Main.cu" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/11-Benchmark_Extensions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/11-Benchmark_Extensions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,15 +171,7 @@
       <workItem from="1693297083534" duration="34459000" />
       <workItem from="1693889568860" duration="7331000" />
       <workItem from="1694950014344" duration="194368000" />
-      <workItem from="1695620047332" duration="12968000" />
-    </task>
-    <task id="LOCAL-00280" summary="next">
-      <option name="closed" value="true" />
-      <created>1695571748465</created>
-      <option name="number" value="00280" />
-      <option name="presentableId" value="LOCAL-00280" />
-      <option name="project" value="LOCAL" />
-      <updated>1695571748465</updated>
+      <workItem from="1695620047332" duration="16912000" />
     </task>
     <task id="LOCAL-00281" summary="next">
       <option name="closed" value="true" />
@@ -533,7 +557,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695655706786</updated>
     </task>
-    <option name="localTasksCounter" value="329" />
+    <task id="LOCAL-00329" summary="next">
+      <option name="closed" value="true" />
+      <created>1695656354032</created>
+      <option name="number" value="00329" />
+      <option name="presentableId" value="LOCAL-00329" />
+      <option name="project" value="LOCAL" />
+      <updated>1695656354032</updated>
+    </task>
+    <option name="localTasksCounter" value="330" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

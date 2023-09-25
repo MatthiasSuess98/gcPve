@@ -7,6 +7,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <Python.h>
 namespace fs = std::filesystem;
 
 #include "01-Gpu_Information.cuh"
@@ -36,6 +37,10 @@ void createBenchmarks(int gpuId) {
 
     // Perform the benchmarks.
     performSmallBenchmark(info, prop, derivatives);
+
+    // Call the python file.
+    Py_Initialize();
+
 }
 
 
