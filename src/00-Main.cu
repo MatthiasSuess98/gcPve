@@ -38,10 +38,11 @@ void createBenchmarks(int gpuId) {
     performSmallBenchmark(info, prop, derivatives);
 
     // Call the python file.
-    //cmd
-    //FILE *p;
-    //p = popen("python3 11-Benchmark_Extensions.py", "r");
-    //pclose(p);
+    //char cmd[34] = "python3 11-Benchmark_Extensions.py";
+    //char *cmdPtr = &cmd;
+    FILE *p;
+    p = popen("python3 11-Benchmark_Extensions.py", "r");
+    pclose(p);
 }
 
 
