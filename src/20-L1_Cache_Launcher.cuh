@@ -36,6 +36,7 @@ SmallDataCollection performSmallL1Benchmark(GpuInformation info, BenchmarkProper
     SmallDataCollection *ptr;
     ptr = &benchCollection;
     cudaMallocManaged(&ptr, sizeof(benchCollection));
+    cudaDeviceSynchronize();
 
     // Getting and sorting the data.
     bool moveOn;
@@ -47,6 +48,7 @@ SmallDataCollection performSmallL1Benchmark(GpuInformation info, BenchmarkProper
                 (*ptr).warp[resetLoop] = 0;
                 (*ptr).lane[resetLoop] = 0;
                 (*ptr).time[resetLoop] = 0;
+                (*ptr).ctrl[resetLoop] = false;
             }
             launchSmallL1Benchmarks(ptr, info, prop, derivatives);
             for (int blockLoop = 0; moveOn && (blockLoop < derivatives.smallNumberOfBlocks); blockLoop++) {

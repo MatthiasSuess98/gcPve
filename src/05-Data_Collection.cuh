@@ -12,6 +12,7 @@ typedef struct SmallDataCollection {
     int warp[65536];
     int lane[65536];
     long long int time[65536];
+    bool ctrl[65536];
 } SmallDataCollection;
 
 
@@ -24,6 +25,7 @@ typedef struct MediumDataCollection {
     int warp[16777216];
     int lane[16777216];
     long long int time[16777216];
+    bool ctrl[65536];
 } MediumDataCollection;
 
 
@@ -36,6 +38,7 @@ typedef struct LargeDataCollection {
     int warp[4294967296];
     int lane[4294967296];
     long long int time[4294967296];
+    bool ctrl[65536];
 } LargeDataCollection;
 
 #endif //GCPVE_04_DATA_COLLECTION_CUH
