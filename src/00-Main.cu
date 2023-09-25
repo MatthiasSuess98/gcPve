@@ -39,7 +39,7 @@ void createBenchmarks(int gpuId) {
 
     // Call the python file.
     FILE *p;
-    p = popen("evaluation.py", "r");
+    p = popen("python3 evaluation.py", "r");
     pclose(p);
 }
 
