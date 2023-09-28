@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
-    data = np.loadtxt("Benchmark_L1.csv", delimiter=";", dtype="double")
+    data = np.loadtxt("raw/Benchmark_L1.csv", delimiter=";", dtype="double")
     lane = range(32)
     for x in range(30):
         fig = plt.figure()
