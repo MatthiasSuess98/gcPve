@@ -12,7 +12,7 @@ __shared__ unsigned int saveValue[4];
 /**
  *
  */
-__global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, int i) {
+__global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, int i, int j) {
 
     int mulp;
     int warp;
@@ -20,7 +20,7 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, in
     asm volatile ("mov.u32 %0, %%smid;" : "=r"(mulp));
     asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
     asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
-    if ((mulp == i) && (warp == 0)) {
+    if ((mulp == i) && (warp == j)) {
 
         unsigned long long endTime;
         unsigned long long startTime;
@@ -58,7 +58,7 @@ void launchL1Benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     char output[] = "raw/Benchmark_L1.csv";
     FILE *csv = fopen(output, "w");
     for (int i = 0; i < 30; i++) {
-        for (int j = 0; j < 16; j++) {
+        for (int j = 0; j < 4; j++) {
 
             float *hostTime = nullptr;
             cudaMallocHost((void **) &hostTime, (sizeof(float) * 32));
@@ -76,7 +76,7 @@ void launchL1Benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDe
             cudaMemcpy((void *) deviceLoad, (void *) hostLoad, (sizeof(unsigned int) * 1024), cudaMemcpyHostToDevice);
             cudaDeviceSynchronize();
 
-            smallL1Benchmark<<<(4 * 30), (4 * 32)>>>(deviceLoad, deviceTime, i);
+            smallL1Benchmark<<<(4 * 30), (4 * 32)>>>(deviceLoad, deviceTime, i, j);
             cudaDeviceSynchronize();
 
             cudaMemcpy((void *) hostTime, (void *) deviceTime, (sizeof(float) * 32), cudaMemcpyDeviceToHost);
