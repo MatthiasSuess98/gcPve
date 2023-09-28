@@ -18,7 +18,7 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, unsigned int *deviceT
     asm volatile ("mov.u32 %0, %%smid;" : "=r"(mulp));
     asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
     asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
-    if ((mulp = i) && (warp = 0)) {
+    if ((mulp == i) && (warp == 0)) {
 
         unsigned int endTime;
         unsigned int startTime;
@@ -27,15 +27,15 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, unsigned int *deviceT
         unsigned int *ptr;
 
         for (int j = 0; j < 1024; j++) {
-            ptr = load + value;
-            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
+            ptr = deviceLoad + value;
+            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(deviceLoad) : "memory");
         }
 
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
 
         for (int j = 0; j < 1024; j++) {
-            ptr = load + value;
-            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
+            ptr = deviceLoad + value;
+            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(deviceLoad) : "memory");
         }
 
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
@@ -43,7 +43,7 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, unsigned int *deviceT
         unsigned int saveValue = value;
         saveValue++;
 
-        deviceTime[lane] = (endTime - startTime) / iter;
+        deviceTime[lane] = (endTime - startTime) / 1024;
     }
 }
 
@@ -56,7 +56,7 @@ void launchL1Benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     char output[] = "raw/Benchmark_L1.csv";
     FILE *csv = fopen(output, "w");
     for (int i = 0; i < 30; i++) {
-        for (int j = 0; j < 4, j++) {
+        for (int j = 0; j < 4; j++) {
 
             unsigned int *hostTime = nullptr;
             cudaMallocHost((void **) &hostTime, (sizeof(unsigned int) * 32));

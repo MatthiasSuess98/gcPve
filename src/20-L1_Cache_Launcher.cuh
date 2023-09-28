@@ -51,7 +51,7 @@ SmallDataCollection performSmallL1Benchmark(GpuInformation info, BenchmarkProper
                 (*ptr).time[resetLoop] = 0;
                 (*ptr).ctrl[resetLoop] = false;
             }
-            launchSmallL1Benchmarks(ptr, info, prop, derivatives);
+            //launchSmallL1Benchmarks(ptr, info, prop, derivatives);
             for (int blockLoop = 0; moveOn && (blockLoop < derivatives.smallNumberOfBlocks); blockLoop++) {
                 if (moveOn && ((*ptr).mulp[blockLoop * info.warpSize] == mulpLoop) && ((*ptr).time[blockLoop * info.warpSize] != 0)) {
                     for (int freeLoop = 0; moveOn && (freeLoop < derivatives.smallNumberOfBlocksPerMulp); freeLoop++) {
