@@ -42,11 +42,10 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, in
 
 
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
+
         saveValue[0] = value;
 
         deviceTime[lane] = ((float) (endTime - startTime)) / 1024;
-        printf("%lld ", (endTime - startTime));
-
     }
 }
 
