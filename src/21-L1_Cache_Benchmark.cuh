@@ -7,6 +7,8 @@
 #include "04-Core_Characteristics.cuh"
 #include "05-Data_Collection.cuh"
 
+__shared__ unsigned int saveValue[4];
+
 /**
  *
  */
@@ -37,12 +39,9 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, in
             ptr = deviceLoad + value;
             asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(ptr) : "memory");
         }
-        //s_index[0] = value;
-        unsigned int saveValue = value;
-        saveValue++;
+        saveValue[0] = value;
 
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
-
 
         deviceTime[lane] = ((float) (endTime - startTime)) / 1024;
         printf("%lld ", (endTime - startTime));
