@@ -15,6 +15,7 @@ namespace fs = std::filesystem;
 #include "04-Core_Characteristics.cuh"
 #include "05-Data_Collection.cuh"
 #include "10-Perform_Benchmark.cuh"
+#include "21-L1_Cache_Benchmark.cuh"
 
 /**
  * Create all Benchmarks for the selected GPU.
@@ -35,7 +36,7 @@ void createBenchmarks(int gpuId) {
     createInfoPropDerivatives(derivatives);
 
     // Perform the benchmarks.
-    performSmallBenchmark(info, prop, derivatives);
+    launchL1Benchmark(info, prop, derivatives);
 
     // Call the python file.
     FILE *p;

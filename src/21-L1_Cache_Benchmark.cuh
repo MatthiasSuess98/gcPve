@@ -8,14 +8,9 @@
 #include "05-Data_Collection.cuh"
 
 /**
- * The L1 benchmark which uses the small data collection.
- * @param ptr The small data collection where the data of the benchmark is stored.
- * @param load The load which will be used in the benchmark calculation.
- * @param info All available information of the current GPU.
- * @param prop All properties of the benchmarks.
- * @param derivatives All derivatives of info and prop.
+ *
  */
-__global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
+__global__ void smallL1Benchmark(unsigned int *deviceLoad, unsigned int *deviceTime, int i) {
 
     int mulp;
     int warp;
@@ -23,101 +18,85 @@ __global__ void smallL1Benchmark(SmallDataCollection *ptr, unsigned int * load, 
     asm volatile ("mov.u32 %0, %%smid;" : "=r"(mulp));
     asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
     asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
-    bool validWarp = false;
-    for (int hardwareWarpLoop = 0; hardwareWarpLoop < derivatives.hardwareWarpsPerSm; hardwareWarpLoop++) {
-        if (warp == hardwareWarpLoop) {
-            validWarp = true;
+    if ((mulp = i) && (warp = 0)) {
+
+        unsigned int endTime;
+        unsigned int startTime;
+
+        unsigned int value = 0;
+        unsigned int *ptr;
+
+        for (int j = 0; j < 1024; j++) {
+            ptr = load + value;
+            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
         }
-    }
-    if (!validWarp) {
-        (*ptr).ctrl[blockIdx.x] = true;
-    } else {
-        bool allTrue = true;
-        unsigned int counter = 0;
-        while (counter < info.warpSize) {
-            allTrue = true;
-            for (int blockLoop = 0; blockLoop < derivatives.smallTotalNumberOfBlocks; blockLoop++) {
-                if ((*ptr).ctrl[blockLoop] == false) {
-                    allTrue = false;
-                }
-            }
-            if (allTrue) {
-                counter++;
-                (*ptr).ctrl[blockIdx.x] = false;
-            }
-            if (((*ptr).ctrl[blockIdx.x] == false) && (counter == lane)) {
-                int pos = (blockIdx.x * info.warpSize) + lane;
-                (*ptr).mulp[pos] = mulp;
-                (*ptr).warp[pos] = warp;
-                (*ptr).lane[pos] = lane;
-                // Warning: If these magical numbers get updated, update the variables in 02-Benchmark_Properties and in 04-Core_Characteristics also!
-                long long int startTime[65536 / 1024];
-                long long int endTime[65536 / 1024];
-                long long int finalTime[65536 / 1024];
-                long long int returnTime = 0;
-                unsigned int preValue = 0;
-                unsigned int postValue = 0;
-                unsigned int summand = 1;
-                for (int preparationLoop = 0; preparationLoop < derivatives.smallNumberOfTrialsDivisor; preparationLoop++) {
-                    asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(preValue) : "l"(load) : "memory");
-                    asm volatile ("add.u32 %0, %1, %2;" : "=r"(postValue) : "r"(preValue), "r"(summand));
-                }
-                for (int resetLoop = 0; resetLoop < derivatives.smallNumberOfTrialsDivisor; resetLoop++) {
-                    finalTime[resetLoop] = 0;
-                }
-                for (int mainLoop = 0; mainLoop < derivatives.smallNumberOfTrialsDivisor; mainLoop++) {
-                    preValue = 0;
-                    postValue = 0;
-                    for (int resetLoop = 0; resetLoop < derivatives.smallNumberOfTrialsDivisor; resetLoop++) {
-                        endTime[resetLoop] = 0;
-                        startTime[resetLoop] = 0;
-                    }
-                    for (int measureLoop = 0; measureLoop < derivatives.smallNumberOfTrialsDivisor; measureLoop++) {
-                        asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime[measureLoop]));
-                        asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(preValue) : "l"(load) : "memory");
-                        asm volatile ("add.u32 %0, %1, %2;" : "=r"(postValue) : "r"(preValue), "r"(summand));
-                        asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime[measureLoop]));
-                    }
-                    for (int addLoop = 0; addLoop < derivatives.smallNumberOfTrialsDivisor; addLoop++) {
-                        finalTime[mainLoop] = finalTime[mainLoop] + (endTime[addLoop] - startTime[addLoop]);
-                    }
-                }
-                for (int addLoop = 0; addLoop < derivatives.smallNumberOfTrialsDivisor; addLoop++) {
-                    returnTime = returnTime + finalTime[addLoop];
-                }
-                postValue++;
-                (*ptr).time[pos] = returnTime;
-                (*ptr).ctrl[blockIdx.x] = true;
-            } else {
-                (*ptr).ctrl[blockIdx.x] = true;
-            }
+
+        asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
+
+        for (int j = 0; j < 1024; j++) {
+            ptr = load + value;
+            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(load) : "memory");
         }
+
+        asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
+
+        unsigned int saveValue = value;
+        saveValue++;
+
+        deviceTime[lane] = (endTime - startTime) / iter;
     }
 }
 
 
 /**
- * Launches the L1 benchmarks with small data collection.
- * @param ptr The small data collection where the data of the benchmarks is stored.
- * @param info All available information of the current GPU.
- * @param prop All properties of the benchmarks.
- * @param derivatives All derivatives of info and prop.
+ *
  */
-void launchSmallL1Benchmarks(SmallDataCollection *ptr, GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
+void launchL1Benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
-    unsigned int *hostLoad;
-    hostLoad = (unsigned int *) malloc(sizeof(unsigned int) * derivatives.smallNumberOfTrialsDivisor);
-    unsigned int *deviceLoad;
-    cudaMalloc(&deviceLoad, (sizeof(unsigned int) * derivatives.smallNumberOfTrialsDivisor));
-    for (int initializeLoop = 0; initializeLoop < derivatives.smallNumberOfTrialsDivisor; initializeLoop++) {
-        hostLoad[initializeLoop] = initializeLoop;
+    char output[] = "raw/Benchmark_L1.csv";
+    FILE *csv = fopen(output, "w");
+    for (int i = 0; i < 30; i++) {
+        for (int j = 0; j < 4, j++) {
+
+            unsigned int *hostTime = nullptr;
+            cudaMallocHost((void **) &hostTime, (sizeof(unsigned int) * 32));
+            unsigned int *hostLoad = nullptr;
+            cudaMallocHost((void **) &hostLoad, (sizeof(unsigned int) * 1024));
+            unsigned int *deviceTime = nullptr;
+            cudaMalloc((void **) &deviceTime, (sizeof(unsigned int) * 32));
+            unsigned int *deviceLoad = nullptr;
+            cudaMalloc((void **) &deviceLoad, (sizeof(unsigned int) * 1024));
+
+            for (int k = 0; k < 1024; k++) {
+                hostLoad[k] = (k * 512) % 1024;
+            }
+
+            cudaMemcpy((void *) deviceLoad, (void *) hostLoad, (sizeof(unsigned int) * 1024), cudaMemcpyHostToDevice);
+            cudaDeviceSynchronize();
+
+            smallL1Benchmark<<<(4 * 30), (4 * 32)>>>(deviceLoad, deviceTime, i);
+            cudaDeviceSynchronize();
+
+            cudaMemcpy((void *) hostTime, (void *) deviceTime, (sizeof(unsigned int) * 32), cudaMemcpyDeviceToHost);
+            cudaDeviceSynchronize();
+
+            for (int k = 0; k < 32; k++) {
+                fprintf(csv, "%u", hostTime[k]);
+                if (k < (32 - 1)) {
+                    fprintf(csv, ";");
+                }
+            }
+
+            cudaFreeHost(hostTime);
+            cudaFreeHost(hostLoad);
+            cudaFree(deviceTime);
+            cudaFree(deviceLoad);
+
+            fprintf(csv, "\n");
+        }
+        fprintf(csv, "\n");
     }
-    cudaMemcpy(deviceLoad, hostLoad, (sizeof(unsigned int) * derivatives.smallNumberOfTrialsDivisor), cudaMemcpyHostToDevice);
-    cudaDeviceSynchronize();
-    smallL1Benchmark<<<derivatives.smallTotalNumberOfBlocks, info.warpSize>>>(ptr, deviceLoad, info, prop, derivatives);
-    cudaDeviceSynchronize();
-    cudaFree(deviceLoad);
-    free(hostLoad);
+    fclose(csv);
 }
 
 #endif //GCPVE_21_L1_CACHE_BENCHMARK_CUH
