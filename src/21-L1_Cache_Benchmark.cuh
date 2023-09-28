@@ -45,6 +45,7 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, in
 
         deviceTime[lane] = ((float) (endTime - startTime)) / 1024;
         printf("%f", ((float) (endTime - startTime)) / 1024);
+
     }
 }
 
