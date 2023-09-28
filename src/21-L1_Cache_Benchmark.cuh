@@ -10,7 +10,7 @@
 /**
  *
  */
-__global__ void smallL1Benchmark(unsigned int *deviceLoad, unsigned int *deviceTime, int i) {
+__global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, int i) {
 
     int mulp;
     int warp;
@@ -20,8 +20,8 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, unsigned int *deviceT
     asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
     if ((mulp == i) && (warp == 0)) {
 
-        unsigned int endTime;
-        unsigned int startTime;
+        unsigned long long endTime;
+        unsigned long long startTime;
 
         unsigned int value = 0;
         unsigned int *ptr;
@@ -43,7 +43,7 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, unsigned int *deviceT
         unsigned int saveValue = value;
         saveValue++;
 
-        deviceTime[lane] = (endTime - startTime) / 1024;
+        deviceTime[lane] = ((float) (endTime - startTime)) / 1024;
     }
 }
 
@@ -58,10 +58,10 @@ void launchL1Benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     for (int i = 0; i < 30; i++) {
         for (int j = 0; j < 4; j++) {
 
-            unsigned int *hostTime = nullptr;
-            cudaMallocHost((void **) &hostTime, (sizeof(unsigned int) * 32));
-            unsigned int *hostLoad = nullptr;
-            cudaMallocHost((void **) &hostLoad, (sizeof(unsigned int) * 1024));
+            float *hostTime = nullptr;
+            cudaMallocHost((void **) &hostTime, (sizeof(float) * 32));
+            float *hostLoad = nullptr;
+            cudaMallocHost((void **) &hostLoad, (sizeof(float) * 1024));
             unsigned int *deviceTime = nullptr;
             cudaMalloc((void **) &deviceTime, (sizeof(unsigned int) * 32));
             unsigned int *deviceLoad = nullptr;
@@ -77,11 +77,11 @@ void launchL1Benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDe
             smallL1Benchmark<<<(4 * 30), (4 * 32)>>>(deviceLoad, deviceTime, i);
             cudaDeviceSynchronize();
 
-            cudaMemcpy((void *) hostTime, (void *) deviceTime, (sizeof(unsigned int) * 32), cudaMemcpyDeviceToHost);
+            cudaMemcpy((void *) hostTime, (void *) deviceTime, (sizeof(float) * 32), cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();
 
             for (int k = 0; k < 32; k++) {
-                fprintf(csv, "%u", hostTime[k]);
+                fprintf(csv, "%f", hostTime[k]);
                 if (k < (32 - 1)) {
                     fprintf(csv, ";");
                 }
