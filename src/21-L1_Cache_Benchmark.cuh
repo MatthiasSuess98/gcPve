@@ -58,7 +58,7 @@ void launchL1Benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     char output[] = "raw/Benchmark_L1.csv";
     FILE *csv = fopen(output, "w");
     for (int i = 0; i < 30; i++) {
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < 16; j++) {
 
             float *hostTime = nullptr;
             cudaMallocHost((void **) &hostTime, (sizeof(float) * 32));
