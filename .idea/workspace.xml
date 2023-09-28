@@ -97,7 +97,7 @@
       <recent name="$PROJECT_DIR$/out" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.evaluation">
     <configuration name="11-Benchmark_Extensions" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="gcPve" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -120,6 +120,32 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="evaluation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="gcPve" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/evaluation.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.evaluation" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -133,30 +159,6 @@
       <workItem from="1693889568860" duration="7331000" />
       <workItem from="1694950014344" duration="194368000" />
       <workItem from="1695620047332" duration="17563000" />
-    </task>
-    <task id="LOCAL-00286" summary="next">
-      <option name="closed" value="true" />
-      <created>1695572327020</created>
-      <option name="number" value="00286" />
-      <option name="presentableId" value="LOCAL-00286" />
-      <option name="project" value="LOCAL" />
-      <updated>1695572327020</updated>
-    </task>
-    <task id="LOCAL-00287" summary="next">
-      <option name="closed" value="true" />
-      <created>1695572462050</created>
-      <option name="number" value="00287" />
-      <option name="presentableId" value="LOCAL-00287" />
-      <option name="project" value="LOCAL" />
-      <updated>1695572462050</updated>
-    </task>
-    <task id="LOCAL-00288" summary="next">
-      <option name="closed" value="true" />
-      <created>1695572596165</created>
-      <option name="number" value="00288" />
-      <option name="presentableId" value="LOCAL-00288" />
-      <option name="project" value="LOCAL" />
-      <updated>1695572596165</updated>
     </task>
     <task id="LOCAL-00289" summary="next">
       <option name="closed" value="true" />
@@ -526,7 +528,31 @@
       <option name="project" value="LOCAL" />
       <updated>1695910406999</updated>
     </task>
-    <option name="localTasksCounter" value="335" />
+    <task id="LOCAL-00335" summary="next">
+      <option name="closed" value="true" />
+      <created>1695910517785</created>
+      <option name="number" value="00335" />
+      <option name="presentableId" value="LOCAL-00335" />
+      <option name="project" value="LOCAL" />
+      <updated>1695910517785</updated>
+    </task>
+    <task id="LOCAL-00336" summary="next">
+      <option name="closed" value="true" />
+      <created>1695910758454</created>
+      <option name="number" value="00336" />
+      <option name="presentableId" value="LOCAL-00336" />
+      <option name="project" value="LOCAL" />
+      <updated>1695910758454</updated>
+    </task>
+    <task id="LOCAL-00337" summary="next">
+      <option name="closed" value="true" />
+      <created>1695910773449</created>
+      <option name="number" value="00337" />
+      <option name="presentableId" value="LOCAL-00337" />
+      <option name="project" value="LOCAL" />
+      <updated>1695910773449</updated>
+    </task>
+    <option name="localTasksCounter" value="338" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
