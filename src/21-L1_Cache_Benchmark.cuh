@@ -21,7 +21,7 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, in
     asm volatile ("mov.u32 %0, %%smid;" : "=r"(mulp));
     asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
     asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
-    if ((mulp == i) && (warp == (k % 5) && (lane ))) {
+    if (mulp == i) {
 
         for (int l = 0; l < 32; l++) {
             if (l == lane) {
