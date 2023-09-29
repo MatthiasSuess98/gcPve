@@ -25,19 +25,24 @@ __global__ void smallGMBenchmark(unsigned int *deviceLoad, float *deviceTime, in
         unsigned long long endTime;
         unsigned long long startTime;
 
-        unsigned int value[1024] = 0;
+        unsigned int value[1024];
+        for (int j = 0; j < 1024; j++) {
+            value[j] = 0;
+        }
         //unsigned int *ptr;
 
         //Perform Benchmark.
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
 
         for (int j = 0; j < 1024; j++) {
-            value = deviceLoad + value;
+            for (int j = 0; j < 1024; j++) {
+                value[j] = deviceLoad[j] + value[j];
+            }
         }
 
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
 
-        saveValue[3] = value;
+        saveValue[3] = value[0];
 
         deviceTime[lane] = ((float) (endTime - startTime)) / 1024;
     }

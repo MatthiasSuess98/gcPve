@@ -24,7 +24,10 @@ __global__ void smallSMBenchmark(unsigned int *deviceLoad, float *deviceTime, in
         unsigned long long endTime;
         unsigned long long startTime;
 
-        unsigned int value[1024] = 0;
+        unsigned int value[1024];
+        for (int j = 0; j < 1024; j++) {
+            value[j] = 0;
+        }
         //unsigned int *ptr;
 
         __shared__ unsigned int load[1024];
@@ -38,12 +41,14 @@ __global__ void smallSMBenchmark(unsigned int *deviceLoad, float *deviceTime, in
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
 
         for (int j = 0; j < 1024; j++) {
-            value = load + value;
+            for (int j = 0; j < 1024; j++) {
+                value[j] = load[j] + value[j];
+            }
         }
 
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
 
-        saveValue[1] = value;
+        saveValue[1] = value[0];
 
         deviceTime[lane] = ((float) (endTime - startTime)) / 1024;
     }
