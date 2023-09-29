@@ -42,13 +42,14 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, in
                 unsigned long long delta =0;
 
                 for (int j = 0; j < 16; j++) {
-                    asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
                     ptr = deviceLoad + value;
+                    asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
                     asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(ptr) : "memory");
                     asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
+                    saveValue[0] = value;
                     delta = delta + (endTime - startTime);
                 }
-                saveValue[0] = value;
+
 
                 deviceTime[lane] = ((float) delta) / 16;
             }
