@@ -32,12 +32,12 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, in
                 unsigned int *ptr;
 
 
-                unsigned int *load = deviceLoad;
+                unsigned int *load;
 
                 //Load Data in L2 cache.
-                //for (int j = 0; j < 1024; j++) {
-                //    load[j] = deviceLoad;
-                //}
+                for (int j = 0; j < 1024; j++) {
+                    load[j] = deviceLoad[j];
+                }
 
 
                 //Load data in l1 cache.
