@@ -83,7 +83,7 @@ void launchL1Benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDe
             cudaMemcpy((void *) deviceLoad, (void *) hostLoad, (sizeof(unsigned int) * 1024), cudaMemcpyHostToDevice);
             cudaDeviceSynchronize();
 
-            smallL1Benchmark<<<(4 * 30), (4 * 32)>>>(deviceLoad, deviceTime, i, j);
+            smallL1Benchmark<<<(4 * 30), 32>>>(deviceLoad, deviceTime, i, j);
             cudaDeviceSynchronize();
 
             cudaMemcpy((void *) hostTime, (void *) deviceTime, (sizeof(float) * 32), cudaMemcpyDeviceToHost);
