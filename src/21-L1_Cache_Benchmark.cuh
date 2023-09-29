@@ -31,18 +31,9 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, in
                 unsigned int value = 0;
                 unsigned int *ptr;
 
-
-                unsigned int *load;
-
-                //Load Data in L2 cache.
-                for (int j = 0; j < 1024; j++) {
-                    load[j] = deviceLoad[j];
-                }
-
-
                 //Load data in l1 cache.
-                for (int j = 0; j < 1024; j++) {
-                    ptr = load + value;
+                for (int j = 0; j < 16; j++) {
+                    ptr = deviceLoad + value;
                     asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(ptr) : "memory");
                 }
 
@@ -50,8 +41,8 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, in
                 //Perform benchmark.
                 asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
 
-                for (int j = 0; j < 1024; j++) {
-                    ptr = load + value;
+                for (int j = 0; j < 16; j++) {
+                    ptr = deviceLoad + value;
                     asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(ptr) : "memory");
                 }
 
@@ -59,7 +50,7 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, in
 
                 saveValue[0] = value;
 
-                deviceTime[lane] = ((float) (endTime - startTime)) / 1024;
+                deviceTime[lane] = ((float) (endTime - startTime)) / 16;
             }
         }
     }
@@ -79,17 +70,17 @@ void launchL1Benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDe
             float *hostTime = nullptr;
             cudaMallocHost((void **) &hostTime, (sizeof(float) * 32));
             unsigned int *hostLoad = nullptr;
-            cudaMallocHost((void **) &hostLoad, (sizeof(unsigned int) * 1024));
+            cudaMallocHost((void **) &hostLoad, (sizeof(unsigned int) * 16));
             float *deviceTime = nullptr;
             cudaMalloc((void **) &deviceTime, (sizeof(float) * 32));
             unsigned int *deviceLoad = nullptr;
-            cudaMalloc((void **) &deviceLoad, (sizeof(unsigned int) * 1024));
+            cudaMalloc((void **) &deviceLoad, (sizeof(unsigned int) * 16));
 
-            for (int k = 0; k < 1024; k++) {
-                hostLoad[k] = (k + 1) % 1024;
+            for (int k = 0; k < 16; k++) {
+                hostLoad[k] = (k + 1) % 16;
             }
 
-            cudaMemcpy((void *) deviceLoad, (void *) hostLoad, (sizeof(unsigned int) * 1024), cudaMemcpyHostToDevice);
+            cudaMemcpy((void *) deviceLoad, (void *) hostLoad, (sizeof(unsigned int) * 16), cudaMemcpyHostToDevice);
             cudaDeviceSynchronize();
 
             smallL1Benchmark<<<(4 * 30), 32>>>(deviceLoad, deviceTime, i, j);
