@@ -20,7 +20,7 @@ __global__ void smallGMBenchmark(unsigned int *deviceLoad, float *deviceTime, in
     asm volatile ("mov.u32 %0, %%smid;" : "=r"(mulp));
     asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
     asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
-    if ((mulp == i) && (warp == 0)) {
+    if ((mulp == i) && (warp == (k % 5))) {
 
         unsigned long long endTime;
         unsigned long long startTime;
@@ -28,18 +28,13 @@ __global__ void smallGMBenchmark(unsigned int *deviceLoad, float *deviceTime, in
         unsigned int value = 0;
         unsigned int *ptr;
 
-        for (int j = 0; j < 1024; j++) {
-            ptr = deviceLoad + value;
-            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(ptr) : "memory");
-        }
-
+        //Perform Benchmark.
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
 
         for (int j = 0; j < 1024; j++) {
             ptr = deviceLoad + value;
-            asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(ptr) : "memory");
+            value = ptr;
         }
-
 
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
 
