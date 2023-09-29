@@ -29,7 +29,7 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, in
                 unsigned long long startTime;
 
                 unsigned int value = 0;
-                unsigned int *ptr = nullptr;
+                unsigned int *ptr;
 
                 //Load data in l1 cache.
                 for (int j = 0; j < 1024; j++) {
@@ -38,7 +38,6 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, in
                 }
 
                 value = 0;
-                *ptr = nullptr;
 
                 //Perform benchmark.
                 asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
