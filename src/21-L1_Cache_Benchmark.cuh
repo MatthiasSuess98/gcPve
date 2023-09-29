@@ -29,22 +29,29 @@ __global__ void smallL1Benchmark(unsigned int *deviceLoad, float *deviceTime, in
                 unsigned long long startTime;
 
                 unsigned int value = 0;
-                unsigned int
                 unsigned int *ptr;
 
 
-                //Load data in l1 cache.
+                unsigned int *load;
+
+                //Load Data in L2 cache.
                 for (int j = 0; j < 1024; j++) {
-                    ptr = deviceLoad + value;
-                    asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(ptr) : "memory");
+                    load[j] = deviceLoad[j];
                 }
+
+
+                //Load data in l1 cache.
+                //for (int j = 0; j < 1024; j++) {
+                //    ptr = load + value;
+                //    asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(ptr) : "memory");
+                //}
 
 
                 //Perform benchmark.
                 asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
 
                 for (int j = 0; j < 1024; j++) {
-                    ptr = deviceLoad + value;
+                    ptr = load + value;
                     asm volatile ("ld.global.ca.u32 %0, [%1];" : "=r"(value) : "l"(ptr) : "memory");
                 }
 
