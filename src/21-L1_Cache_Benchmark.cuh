@@ -79,7 +79,7 @@ void launchL1Benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDe
             cudaMalloc((void **) &deviceLoad, (sizeof(unsigned int) * 1024));
 
             for (int k = 0; k < 1024; k++) {
-                hostLoad[k] = (k * 512) % 1024;
+                hostLoad[k] = (k + 512) % 1023;
             }
 
             cudaMemcpy((void *) deviceLoad, (void *) hostLoad, (sizeof(unsigned int) * 1024), cudaMemcpyHostToDevice);
