@@ -16,8 +16,9 @@ namespace fs = std::filesystem;
 #include "05-Data_Collection.cuh"
 #include "10-Perform_Benchmark.cuh"
 #include "21-L1_Cache_Benchmark.cuh"
-
-__shared__ unsigned int saveValue[4];
+#include "31-SM_Cache_Benchmark.cuh"
+#include "41-L2_Cache_Benchmark.cuh"
+#include "51-GM_Cache_Benchmark.cuh"
 
 /**
  * Create all Benchmarks for the selected GPU.

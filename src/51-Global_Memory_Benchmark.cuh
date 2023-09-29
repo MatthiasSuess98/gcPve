@@ -8,6 +8,8 @@
 #include "04-Core_Characteristics.cuh"
 #include "05-Data_Collection.cuh"
 
+__shared__ unsigned int saveValue;
+
 /**
  *
  */
@@ -42,7 +44,7 @@ __global__ void smallGMBenchmark(unsigned int *deviceLoad, float *deviceTime, in
 
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
 
-        saveValue[3] = value;
+        saveValue = value;
 
         deviceTime[lane] = ((float) (endTime - startTime)) / 1024;
     }
