@@ -1,13 +1,12 @@
 #ifndef GCPVE_21_L1_CACHE_BENCHMARK_CUH
 #define GCPVE_21_L1_CACHE_BENCHMARK_CUH
 
+#include "00-Main.cu"
 #include "01-Gpu_Information.cuh"
 #include "02-Benchmark_Properties.cuh"
 #include "03-Info_Prop_Derivatives.cuh"
 #include "04-Core_Characteristics.cuh"
 #include "05-Data_Collection.cuh"
-
-__shared__ unsigned int saveValue[4];
 
 /**
  *
@@ -58,7 +57,7 @@ void launchL1Benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDe
     char output[] = "raw/Benchmark_L1.csv";
     FILE *csv = fopen(output, "w");
     for (int i = 0; i < 30; i++) {
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < 20; j++) {
 
             float *hostTime = nullptr;
             cudaMallocHost((void **) &hostTime, (sizeof(float) * 32));

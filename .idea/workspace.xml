@@ -18,7 +18,14 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f010c8b-9be5-42a3-9535-544f1713a60f" name="Changes" comment="next" />
+    <list default="true" id="3f010c8b-9be5-42a3-9535-544f1713a60f" name="Changes" comment="next">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/00-Main.cu" beforeDir="false" afterPath="$PROJECT_DIR$/src/00-Main.cu" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/21-L1_Cache_Benchmark.cuh" beforeDir="false" afterPath="$PROJECT_DIR$/src/21-L1_Cache_Benchmark.cuh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/31-Shared_Memory_Benchmark.cuh" beforeDir="false" afterPath="$PROJECT_DIR$/src/31-Shared_Memory_Benchmark.cuh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/41-L2_Cache_Benchmark.cuh" beforeDir="false" afterPath="$PROJECT_DIR$/src/41-L2_Cache_Benchmark.cuh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/51-Global_Memory_Benchmark.cuh" beforeDir="false" afterPath="$PROJECT_DIR$/src/51-Global_Memory_Benchmark.cuh" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
