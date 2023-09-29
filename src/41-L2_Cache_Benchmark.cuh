@@ -30,6 +30,7 @@ __global__ void smallL2Benchmark(unsigned int *deviceLoad, float *deviceTime, in
 
         //Load Data in L2 cache.
         for (int j = 0; j < 1024; j++) {
+            ptr = deviceLoad + value;
             asm volatile ("ld.global.cg.u32 %0, [%1];" : "=r"(value) : "l"(ptr) : "memory");
         }
 
