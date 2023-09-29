@@ -24,7 +24,7 @@ __global__ void smallSMBenchmark(unsigned int *deviceLoad, float *deviceTime, in
         unsigned long long endTime;
         unsigned long long startTime;
 
-        unsigned int value = 0;
+        unsigned int value[1024] = 0;
         //unsigned int *ptr;
 
         __shared__ unsigned int load[1024];
