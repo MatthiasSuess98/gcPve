@@ -16,9 +16,9 @@ namespace fs = std::filesystem;
 #include "05-Data_Collection.cuh"
 #include "10-Perform_Benchmark.cuh"
 #include "21-L1_Cache_Benchmark.cuh"
-#include "31-SM_Cache_Benchmark.cuh"
+#include "31-31-Shared_Memory_Benchmark.cuh"
 #include "41-L2_Cache_Benchmark.cuh"
-#include "51-GM_Cache_Benchmark.cuh"
+#include "51-51-Global_Memory_Benchmark.cuh"
 
 /**
  * Create all Benchmarks for the selected GPU.
