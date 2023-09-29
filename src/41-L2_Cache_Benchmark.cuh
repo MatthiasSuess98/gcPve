@@ -8,7 +8,6 @@
 #include "04-Core_Characteristics.cuh"
 #include "05-Data_Collection.cuh"
 
-__shared__ unsigned int saveValue;
 
 /**
  *
@@ -44,7 +43,7 @@ __global__ void smallL2Benchmark(unsigned int *deviceLoad, float *deviceTime, in
 
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
 
-        saveValue = value;
+        saveValue[2] = value;
 
         deviceTime[lane] = ((float) (endTime - startTime)) / 1024;
     }
