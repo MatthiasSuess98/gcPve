@@ -11,7 +11,7 @@
 /**
  *
  */
-__global__ void smallSMBenchmark(unsigned int *deviceLoad, float *deviceTime, int i, int j) {
+__global__ void smallSMBenchmark(unsigned int *deviceLoad, float *deviceTime, int i, int k) {
 
     int mulp;
     int warp;
@@ -19,7 +19,7 @@ __global__ void smallSMBenchmark(unsigned int *deviceLoad, float *deviceTime, in
     asm volatile ("mov.u32 %0, %%smid;" : "=r"(mulp));
     asm volatile ("mov.u32 %0, %%warpid;" : "=r"(warp));
     asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
-    if ((mulp == i) && (warp == j)) {
+    if ((mulp == i) && (warp == 0)) {
 
         unsigned long long endTime;
         unsigned long long startTime;
