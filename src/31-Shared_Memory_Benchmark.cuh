@@ -38,7 +38,7 @@ __global__ void smallSMBenchmark(unsigned int *deviceLoad, float *deviceTime, in
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
 
         for (int j = 0; j < 1024; j++) {
-            value = load[j] + value;
+            value = load + value;
         }
 
         asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
