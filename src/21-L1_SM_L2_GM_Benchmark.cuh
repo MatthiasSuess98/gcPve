@@ -68,9 +68,7 @@ __global__ void benchmark(GpuInformation info, BenchmarkProperties prop, InfoPro
                 }
                 asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
                 for (int l = 0; l < prop.numberOfTrialsBenchmark; l++) {
-                    for (int m = 0; m < prop.numberOfTrialsBenchmark; m++) {
-                        valueArray[m] = load[m] + valueArray[m];
-                    }
+                    valueArray[l] = load[l] + valueArray[l];
                 }
                 asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
                 saveValue[1] = valueArray[1023];
@@ -99,9 +97,7 @@ __global__ void benchmark(GpuInformation info, BenchmarkProperties prop, InfoPro
                 }
                 asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
                 for (int l = 0; l < prop.numberOfTrialsBenchmark; l++) {
-                    for (int m = 0; m < prop.numberOfTrialsBenchmark; m++) {
-                        valueArray[m] = deviceLoad[m] + valueArray[m];
-                    }
+                    valueArray[l] = deviceLoad[l] + valueArray[l];
                 }
                 asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
                 saveValue[3] = valueArray[1023];
