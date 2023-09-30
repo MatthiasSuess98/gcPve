@@ -3,7 +3,7 @@ This project provides an application to explore if there are any performance var
 specific GPU and analyze them. Please take into account, that this project only supports Nvidia GPUs.
 
 ## Pre-requisites
-- cmake 3.0 or higher
+- cmake 3.22 or higher
 - nvcc 11.0 or higher
 
 ## Compatibility
