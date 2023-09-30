@@ -42,7 +42,7 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
         // Check whether the data it relevant.
         if ((data.timeL1[i] != 0) && (data.timeSM[i] != 0) && (data.timeL2[i] != 0) && (data.timeGM[i] != 0)) {
 
-            if (data.mulp[i] == 29) {
+            if (data.mulp[i] == 5) {
                 printf("%f ", data.timeL1[i]);
             }
 
