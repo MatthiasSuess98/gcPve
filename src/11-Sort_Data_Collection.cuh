@@ -43,7 +43,7 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
         if ((data.timeL1[i] != 0) || (data.timeSM[i] != 0) || (data.timeL2[i] != 0) || (data.timeGM[i] != 0)) {
 
             // Reset all variables and the dontFits counter.
-            rewrite = false;
+            rewrite = true;
             currentTime = 0.0;
             hardwareWarpScore = 0;
             smallestNumber = 0;
@@ -141,3 +141,5 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
 
 //FINISHED
 
+292929292929292929292929292929292929292929292929292929292929292929292929292929
+29292929292929292929292929292929292929292929292929292929292929292929292929292929
