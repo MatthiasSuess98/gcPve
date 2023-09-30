@@ -75,6 +75,8 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
                         dontFits[j]++;
                     }
                     printf("%f ", std::fabs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time() - data.timeL1[i + k]));
+                    printf("%f ", gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time());
+                    printf("%f\n", data.timeL1[i + k]);
                 }
             }
 
