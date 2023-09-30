@@ -51,12 +51,12 @@ dataCollection launchBenchmarks(GpuInformation info, BenchmarkProperties prop, I
 
             // Copy the time data into the data collection.
             for (int k = 0; k < info.warpSize; k++) {
-                data.mulp[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor) + (j * info.warpSize) + k] = i;
-                data.lane[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor) + (j * info.warpSize) + k] = k;
-                data.timeL1[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor) + (j * info.warpSize) + k] = hostTime[k + (0 * info.warpSize)];
-                data.timeSM[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor) + (j * info.warpSize) + k] = hostTime[k + (1 * info.warpSize)];
-                data.timeL2[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor) + (j * info.warpSize) + k] = hostTime[k + (2 * info.warpSize)];
-                data.timeGM[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor) + (j * info.warpSize) + k] = hostTime[k + (3 * info.warpSize)];
+                data.mulp[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize) + (j * info.warpSize) + k] = i;
+                data.lane[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize) + (j * info.warpSize) + k] = k;
+                data.timeL1[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize) + (j * info.warpSize) + k] = hostTime[k + (0 * info.warpSize)];
+                data.timeSM[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize) + (j * info.warpSize) + k] = hostTime[k + (1 * info.warpSize)];
+                data.timeL2[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize) + (j * info.warpSize) + k] = hostTime[k + (2 * info.warpSize)];
+                data.timeGM[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize) + (j * info.warpSize) + k] = hostTime[k + (3 * info.warpSize)];
             }
 
             // Free the allocated memory.
