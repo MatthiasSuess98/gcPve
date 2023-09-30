@@ -39,7 +39,6 @@ __global__ void benchmark(GpuInformation info, BenchmarkProperties prop, InfoPro
 
                 unsigned int value;
                 unsigned int *ptr;
-                unsigned int valueArray[1024];
                 __shared__ unsigned int load[1024];
 
                 // L1 benchmark.
@@ -60,18 +59,16 @@ __global__ void benchmark(GpuInformation info, BenchmarkProperties prop, InfoPro
                 deviceTime[k + (0 * info.warpSize)] = ((float) (endTime - startTime)) / ((float) prop.numberOfTrialsBenchmark);
 
                 // SM benchmark.
-                for (int l = 0; l < prop.numberOfTrialsBenchmark; l++) {
-                    valueArray[l] = 0;
-                }
+                value = 0;
                 for (int l = 0; l < prop.numberOfTrialsBenchmark; l++) {
                     load[l] = deviceLoad[l];
                 }
                 asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
                 for (int l = 0; l < prop.numberOfTrialsBenchmark; l++) {
-                    valueArray[l] = load[l] + valueArray[l];
+                    value = load[value];
                 }
                 asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
-                saveValue[1] = valueArray[1023];
+                saveValue[1] = value;
                 deviceTime[k + (1 * info.warpSize)] = ((float) (endTime - startTime)) / ((float) prop.numberOfTrialsBenchmark);
 
                 // L2 benchmark.
@@ -92,15 +89,13 @@ __global__ void benchmark(GpuInformation info, BenchmarkProperties prop, InfoPro
                 deviceTime[k + (2 * info.warpSize)] = ((float) (endTime - startTime)) / ((float) prop.numberOfTrialsBenchmark);
 
                 // GM benchmark.
-                for (int l = 0; l < prop.numberOfTrialsBenchmark; l++) {
-                    valueArray[l] = 0;
-                }
+                value = 0;
                 asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(startTime));
                 for (int l = 0; l < prop.numberOfTrialsBenchmark; l++) {
-                    valueArray[l] = deviceLoad[l] + valueArray[l];
+                    value = deviceLoad[value];
                 }
                 asm volatile("mov.u64 %0, %%globaltimer;" : "=l"(endTime));
-                saveValue[3] = valueArray[1023];
+                saveValue[3] = value;
                 deviceTime[k + (3 * info.warpSize)] = ((float) (endTime - startTime)) / ((float) prop.numberOfTrialsBenchmark);
             }
         }
