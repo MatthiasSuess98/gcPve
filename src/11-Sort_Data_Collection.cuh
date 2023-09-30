@@ -36,10 +36,6 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
         dontFits.push_back(dontFit);
     }
 
-    for (int i = 0; i < (info.multiProcessorCount * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize); i = i + info.warpSize) {
-        printf("%d ", data.mulp[i]);
-    }
-
     // Sorting loop.
     for (int i = 0; i < (info.multiProcessorCount * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize); i = i + info.warpSize) {
 
