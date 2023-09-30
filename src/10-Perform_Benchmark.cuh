@@ -52,7 +52,6 @@ std::vector<CoreCharacteristics> performBenchmarks(GpuInformation info, Benchmar
         }
     }
 
-    printf("test\n");
     // Perform the benchmark loop.
     for (int i = 0; i < prop.numberOfTrialsPerform; i++) {
 
@@ -65,6 +64,7 @@ std::vector<CoreCharacteristics> performBenchmarks(GpuInformation info, Benchmar
             data.timeL2[j] = 0.0;
             data.timeGM[j] = 0.0;
         }
+        printf("test\n");
 
         // Launches all four benchmarks.
         data = launchBenchmarks(info, prop, derivatives, data);
