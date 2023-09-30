@@ -74,10 +74,9 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
                     if (std::abs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalGmTime() - data.timeGM[i + k]) >= prop.maxDelta) {
                         dontFits[j]++;
                     }
+                    printf("%f", std::abs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time() - data.timeL1[i + k]));
                 }
             }
-
-            printf("%f", std::abs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time() - data.timeL1[i + k]));
 
             // Find the smallest number of all dontFits.
             for (int j = 0; j < hardwareWarpScore; j++) {
