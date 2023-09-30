@@ -7,7 +7,7 @@ specific GPU and analyze them. Please take into account, that this project only 
 - nvcc 11.0 or higher
 
 ## Compatibility
-- The app was tested on the following GPUs: NVIDIA Quadro P6000 and NVIDIA Tesla A100.
+- The app was tested on the following GPU: NVIDIA Quadro P6000.
 - The app was developed and tested only for Linux machines.
 
 ## Installation
