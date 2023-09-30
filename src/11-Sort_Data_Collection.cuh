@@ -40,7 +40,7 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
     for (int i = 0; i < (info.multiProcessorCount * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize); i = i + info.warpSize) {
 
         // Check whether the data it relevant.
-        if (data.timeL1[i] != 0) {
+        if ((data.timeL1[i] != 0) || (data.timeSM[i] != 0) || (data.timeL2[i] != 0) || (data.timeGM[i] != 0)) {
 
             // Reset all variables and the dontFits counter.
             rewrite = false;
@@ -98,7 +98,7 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
             // Decide how the data should be sorted in.
             if (hardwareWarpScore == 0) {
                 rewrite = true;
-            } else if (hardwareWarpScore == (derivatives.hardwareWarpsPerSm - 1)) {
+            } else if (hardwareWarpScore == derivatives.hardwareWarpsPerSm) {
                 rewrite = false;
             } else {
                 if (dontFits[bestHardwareWarp] > prop.maxDontFit) {
