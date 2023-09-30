@@ -30,8 +30,8 @@ BenchmarkProperties getBenchmarkProperties() {
     prop.numberOfTrialsPerform = 8;
     // Warning: The next variable has a limit! Choose only a value between 1 and 1024!
     prop.numberOfTrialsBenchmark = 64;
-    prop.maxDelta = -1.0;
-    prop.maxDontFit = -1;
+    prop.maxDelta = 0.0;
+    prop.maxDontFit = 0;
 
     // Return the final data structure.
     return prop;
