@@ -44,7 +44,7 @@ dataCollection launchBenchmarks(GpuInformation info, BenchmarkProperties prop, I
             // Copy the load, launch the benchmark and copy the time.
             cudaMemcpy((void *) deviceLoad, (void *) hostLoad, (sizeof(unsigned int) * prop.numberOfTrialsBenchmark), cudaMemcpyHostToDevice);
             cudaDeviceSynchronize();
-            benchmark<<<(info.multiProcessorCount * derivatives.hardwareWarpsPerSm), info.warpSize>>>(deviceLoad, deviceTime, i, j);
+            benchmark<<<(info.multiProcessorCount * derivatives.hardwareWarpsPerSm), info.warpSize>>>(info, prop, derivatives, deviceLoad, deviceTime, i, j);
             cudaDeviceSynchronize();
             cudaMemcpy((void *) hostTime, (void *) deviceTime, (sizeof(float) * info.warpSize * 4), cudaMemcpyDeviceToHost);
             cudaDeviceSynchronize();

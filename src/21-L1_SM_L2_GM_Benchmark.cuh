@@ -14,12 +14,15 @@ __shared__ unsigned int saveValue[4];
 
 /**
  * Kernel benchmark which analyzes the load time of different memory types.
+ * @param info All available information of the current GPU.
+ * @param prop All properties of the benchmarks.
+ * @param derivatives All derivatives of info and prop.
  * @param deviceLoad The load which will be loaded.
  * @param deviceTime The time differences of the loading process.
  * @param i The current multiprocessor.
  * @param j The current experimental warp.
  */
-__global__ void benchmark(unsigned int *deviceLoad, float *deviceTime, int i, int j) {
+__global__ void benchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives, unsigned int *deviceLoad, float *deviceTime, int i, int j) {
 
     int mulp;
     int lane;
