@@ -81,9 +81,9 @@ std::vector<CoreCharacteristics> performBenchmarks(GpuInformation info, Benchmar
  * @param info All available information of the current GPU.
  * @param prop All properties of the benchmarks.
  * @param derivatives All derivatives of info and prop.
- * @param benchmark The core characteristics from the benchmarks.
+ * @param gpuCores The core characteristics from the benchmarks.
  */
-void createBenchmarkFile(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives, std::vector<CoreCharacteristics> benchmark) {
+void createBenchmarkFile(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives, std::vector<CoreCharacteristics> gpuCores) {
 
     // Create files with all benchmark data.
     char outputL1[] = "raw/Benchmark_L1.csv";
