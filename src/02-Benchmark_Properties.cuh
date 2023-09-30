@@ -10,7 +10,6 @@ typedef struct BenchmarkProperties {
     // Variables.
     int collectionFactor;
     int numberOfTrialsPerform;
-    //int numberOfTrialsLaunch;
     int numberOfTrialsBenchmark;
     float maxDelta;
     int maxDontFit;
@@ -29,10 +28,9 @@ BenchmarkProperties getBenchmarkProperties() {
     // Initialize the properties and writes them into the final data structure.
     prop.collectionFactor = 16;
     prop.numberOfTrialsPerform = 10;
-    //prop.numberOfTrialsLaunch = 10;
     prop.numberOfTrialsBenchmark = 1024;
     prop.maxDelta = 3.0;
-    prop.maxDontFit = 3;
+    prop.maxDontFit = 10;
 
     // Return the final data structure.
     return prop;
@@ -52,7 +50,6 @@ void createPropFile(BenchmarkProperties prop) {
     // Writing all the information into the csv file.
     fprintf(csv, "collectionFactor;\"%d\"\n", prop.collectionFactor);
     fprintf(csv, "numberOfTrialsPerform;\"%d\"\n", prop.numberOfTrialsPerform);
-    //fprintf(csv, "numberOfTrialsLaunch;\"%d\"\n", prop.numberOfTrialsLaunch);
     fprintf(csv, "numberOfTrialsBenchmark;\"%d\"\n", prop.numberOfTrialsBenchmark);
     fprintf(csv, "maxDelta;\"%f\"\n", prop.maxDelta);
     fprintf(csv, "maxDontFit;\"%d\"\n", prop.maxDontFit);

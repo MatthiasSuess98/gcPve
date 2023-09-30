@@ -64,7 +64,7 @@ std::vector<CoreCharacteristics> performBenchmarks(GpuInformation info, Benchmar
             data.timeL2[j] = 0.0;
             data.timeGM[j] = 0.0;
         }
-
+        printf("test");
         // Launches all four benchmarks.
         data = launchBenchmarks(info, prop, derivatives, data);
 
