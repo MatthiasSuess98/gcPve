@@ -8,24 +8,26 @@
 #include "03-Info_Prop_Derivatives.cuh"
 #include "04-Core_Characteristics.cuh"
 #include "05-Data_Collection.cuh"
-#include "20-L1_Cache_Launcher.cuh"
+
+#include "11-Sort_Data_Collection.cuh"
+
+#include "20-Launch_Benchmark.cuh"
+
 
 /**
- * Performs the small benchmark.
+ * Performs the benchmark.
  * @param info All available information of the current GPU.
  * @param prop All properties of the benchmarks.
  * @param derivatives All derivatives of info and prop.
+ * @return The final core characteristics from the benchmark.
  */
 std::vector<CoreCharacteristics> performBenchmarks(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
     // Initialize data collection.
     dataCollection data;
-    data.collectionSize = info.multiProcessorCount * derivatives.hardwareWarpsPerSm * info.warpSize * prop.collectionFactor;
-    for (int initialLoop = 0; initialLoop < data.collectionSize; initialLoop++) {
+    for (int i = 0; i < (info.multiProcessorCount * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize); i++) {
         int mulpIni = 0;
         data.mulp.push_back(mulpIni);
-        int warpIni = 0;
-        data.warp.push_back(warpIni);
         int laneIni = 0;
         data.lane.push_back(laneIni);
         float timeL1Ini = 0.0;
@@ -38,37 +40,35 @@ std::vector<CoreCharacteristics> performBenchmarks(GpuInformation info, Benchmar
         data.timeGM.push_back(timeGmIni);
     }
 
-
     // Declare and initialize all core characteristics.
     std::vector<CoreCharacteristics> gpuCores;
     CoreCharacteristics gpuCore;
     for (int i = 0; i < info.multiProcessorCount; i++) {
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
             for (int k = 0; k < info.warpSize; k++) {
-                gpuCore = CoreCharacteristics(info.multiProcessorCount, derivatives.hardwareWarpsPerSm, info.warpSize, i, j, k);
+                gpuCore = CoreCharacteristics(i, j, k);
                 gpuCores.push_back(gpuCore);
             }
         }
     }
 
     // Perform the benchmark loop.
-    for (int trailLoop = 0; trailLoop < prop.numberOfTrialsPerform; trailLoop++) {
+    for (int i = 0; i < prop.numberOfTrialsPerform; i++) {
 
-        for (int resetLoop = 0; resetLoop < data.collectionSize; resetLoop++) {
-            data.mulp[resetLoop] = 0;
-            data.warp[resetLoop] = 0;
-            data.lane[resetLoop] = 0;
-            data.timeL1[resetLoop] = 0.0;
-            data.timeSM[resetLoop] = 0.0;
-            data.timeL2[resetLoop] = 0.0;
-            data.timeGM[resetLoop] = 0.0;
+        // Reset the data collection.
+        for (int j = 0; j < (info.multiProcessorCount * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize); j++) {
+            data.mulp[j] = 0;
+            data.lane[j] = 0;
+            data.timeL1[j] = 0.0;
+            data.timeSM[j] = 0.0;
+            data.timeL2[j] = 0.0;
+            data.timeGM[j] = 0.0;
         }
 
-        data = launchL1Benchmark(info, prop, derivatives, data);
-        data = launchSMBenchmark(info, prop, derivatives, data);
-        data = launchL2Benchmark(info, prop, derivatives, data);
-        data = launchGMBenchmark(info, prop, derivatives, data);
+        // Launches all four benchmarks.
+        data = launchBenchmarks(info, prop, derivatives, data);
 
+        // Sort the resulted data into the core characteristics.
         gpuCores = sortDataCollection(info, prop, derivatives, data, gpuCores);
     }
 
@@ -76,6 +76,13 @@ std::vector<CoreCharacteristics> performBenchmarks(GpuInformation info, Benchmar
 }
 
 
+/**
+ * Print the results of the benchmarks into separate csv files.
+ * @param info All available information of the current GPU.
+ * @param prop All properties of the benchmarks.
+ * @param derivatives All derivatives of info and prop.
+ * @param benchmark The core characteristics from the benchmarks.
+ */
 void createBenchmarkFile(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives, std::vector<CoreCharacteristics> benchmark) {
 
     // Create files with all benchmark data.
@@ -117,6 +124,7 @@ void createBenchmarkFile(GpuInformation info, BenchmarkProperties prop, InfoProp
     fclose(csvGm);
     printf("[INFO] The benchmark files were created.\n");
 }
+
 
 #endif //GCPVE_10_PERFORM_BENCHMARK_CUH
 

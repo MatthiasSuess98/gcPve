@@ -4,6 +4,7 @@
 #include "01-Gpu_Information.cuh"
 #include "02-Benchmark_Properties.cuh"
 
+
 /**
  * Data structure for all derivatives.
  */
@@ -13,16 +14,18 @@ typedef struct InfoPropDerivatives {
     float cudaVersion;
 
     // Basic derivatives.
-    int maxNumberOfWarpsPerSm;
     int numberOfCoresPerSm;
     int totalNumberOfCores;
     int hardwareWarpsPerSm;
+    int maxNumberOfWarpsPerSm;
 
 } InfoPropDerivatives;
 
 
 /**
  * Creates a data structure with all derivatives.
+ * @param info Information of the current GPU.
+ * @param prop Properties of the current benchmarks.
  * @return Data structure with all derivatives.
  */
 InfoPropDerivatives getInfoPropDerivatives(GpuInformation info, BenchmarkProperties prop) {
@@ -30,11 +33,10 @@ InfoPropDerivatives getInfoPropDerivatives(GpuInformation info, BenchmarkPropert
     // Create the final data structure.
     InfoPropDerivatives derivatives;
 
-    //Create full cuda version.
+    // Create full cuda version.
     derivatives.cudaVersion = (((float) info.major) + (((float) info.minor) / 10.));
 
     // Create basic derivatives.
-    derivatives.maxNumberOfWarpsPerSm = info.maxThreadsPerMultiProcessor / info.warpSize;
     // Data from "helper_cuda.h".
     if ((info.major == 3) && (info.minor == 0)) {
         derivatives.numberOfCoresPerSm = 192;
@@ -77,6 +79,7 @@ InfoPropDerivatives getInfoPropDerivatives(GpuInformation info, BenchmarkPropert
     }
     derivatives.totalNumberOfCores = derivatives.numberOfCoresPerSm * info.multiProcessorCount;
     derivatives.hardwareWarpsPerSm = derivatives.numberOfCoresPerSm / info.warpSize;
+    derivatives.maxNumberOfWarpsPerSm = info.maxThreadsPerMultiProcessor / info.warpSize;
 
     // Return the final data structure.
     return derivatives;
@@ -97,15 +100,16 @@ void createInfoPropDerivatives(InfoPropDerivatives derivatives) {
     fprintf(csv, "cudaVersion; \"%f\"\n", derivatives.cudaVersion);
 
     // Writing the basic derivatives into the csv file.
-    fprintf(csv, "maxNumberOfWarpsPerSm;\"%d\"\n", derivatives.maxNumberOfWarpsPerSm);
     fprintf(csv, "numberOfCoresPerSm;\"%d\"\n", derivatives.numberOfCoresPerSm);
     fprintf(csv, "totalNumberOfCores;\"%d\"\n", derivatives.totalNumberOfCores);
     fprintf(csv, "hardwareWarpsPerSm;\"%d\"\n", derivatives.hardwareWarpsPerSm);
+    fprintf(csv, "maxNumberOfWarpsPerSm;\"%d\"\n", derivatives.maxNumberOfWarpsPerSm);
 
     // Close the csv file.
     fclose(csv);
     printf("[INFO] The info-prop-derivatives file was created.\n");
 }
+
 
 #endif //GCPVE_03_INFO_PROP_DERIVATIVES_CUH
 

@@ -1,6 +1,7 @@
 #ifndef GCPVE_C_C_1_GPU_INFORMATION_CUH
 #define GCPVE_C_C_1_GPU_INFORMATION_CUH
 
+
 /**
  * Data structure for all available information of the current gpu.
  */
@@ -162,6 +163,7 @@ void createInfoFile(GpuInformation info) {
     fclose(csv);
     printf("[INFO] The GPU information file was created.\n");
 }
+
 
 #endif //GCPVE_C_C_1_GPU_INFORMATION_CUH
 

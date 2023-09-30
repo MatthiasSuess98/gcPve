@@ -1,6 +1,7 @@
 #ifndef GCPVE_04_CORE_CHARACTERISTICS_CUH
 #define GCPVE_04_CORE_CHARACTERISTICS_CUH
 
+
 /**
  * Object class of the core characteristics.
  */
@@ -25,19 +26,19 @@ public:
         typicalGmTime = 0.0;
     }
 
-    void setTypicalL1Time(long double newTypicalL1Time) {
+    void setTypicalL1Time(float newTypicalL1Time) {
         typicalL1Time = newTypicalL1Time;
     }
 
-    void setTypicalSmTime(long double newTypicalSmTime) {
+    void setTypicalSmTime(float newTypicalSmTime) {
         typicalSmTime = newTypicalSmTime;
     }
 
-    void setTypicalL2Time(long double newTypicalL2Time) {
+    void setTypicalL2Time(float newTypicalL2Time) {
         typicalL2Time = newTypicalL2Time;
     }
 
-    void setTypicalGmTime(long double newTypicalGmTime) {
+    void setTypicalGmTime(float newTypicalGmTime) {
         typicalGmTime = newTypicalGmTime;
     }
 
@@ -53,22 +54,23 @@ public:
         return warpCoreId;
     }
 
-    long double getTypicalL1Time() {
+    float getTypicalL1Time() {
         return typicalL1Time;
     }
 
-    long double getTypicalSmTime() {
+    float getTypicalSmTime() {
         return typicalSmTime;
     }
 
-    long double getTypicalL2Time() {
+    float getTypicalL2Time() {
         return typicalL2Time;
     }
 
-    long double getTypicalGmTime() {
+    float getTypicalGmTime() {
         return typicalGmTime;
     }
 };
+
 
 #endif //GCPVE_04_CORE_CHARACTERISTICS_CUH
 

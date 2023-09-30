@@ -7,6 +7,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+
 namespace fs = std::filesystem;
 
 #include "01-Gpu_Information.cuh"
@@ -14,11 +15,9 @@ namespace fs = std::filesystem;
 #include "03-Info_Prop_Derivatives.cuh"
 #include "04-Core_Characteristics.cuh"
 #include "05-Data_Collection.cuh"
+
 #include "10-Perform_Benchmark.cuh"
-#include "21-L1_Cache_Benchmark.cuh"
-#include "31-Shared_Memory_Benchmark.cuh"
-#include "41-L2_Cache_Benchmark.cuh"
-#include "51-Global_Memory_Benchmark.cuh"
+
 
 /**
  * Create all Benchmarks for the selected GPU.
@@ -79,6 +78,7 @@ int main(int argCount, char *argVariables[]) {
     // Stopping the program.
     return 0;
 }
+
 
 #endif //GCPVE_00_MAIN_CU
 

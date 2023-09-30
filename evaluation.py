@@ -24,5 +24,5 @@ if __name__ == "__main__":
         fig.savefig('out/Benchmark_L1_SM' + str(x) + '.jpeg', bbox_inches='tight')
     quit()
 
-#FINISHED
+#NOT_FINISHED
 

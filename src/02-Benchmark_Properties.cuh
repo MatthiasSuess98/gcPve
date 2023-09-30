@@ -1,17 +1,18 @@
 #ifndef GCPVE_C_C_2_BENCHMARK_PROPERTIES_CUH
 #define GCPVE_C_C_2_BENCHMARK_PROPERTIES_CUH
 
+
 /**
  * Data structure for all properties of the benchmark.
  */
 typedef struct BenchmarkProperties {
 
     // Variables.
-    int numberOfTrialsPerform;
-    int numberOfTrialsLaunch;
-    int numberOfTrialsBenchmark;
     int collectionFactor;
-    long double maxDelta;
+    int numberOfTrialsPerform;
+    //int numberOfTrialsLaunch;
+    int numberOfTrialsBenchmark;
+    float maxDelta;
     int maxDontFit;
 } BenchmarkProperties;
 
@@ -26,10 +27,10 @@ BenchmarkProperties getBenchmarkProperties() {
     BenchmarkProperties prop;
 
     // Initialize the properties and writes them into the final data structure.
-    prop.numberOfTrialsPerform = 10;
-    prop.numberOfTrialsLaunch = 10;
-    prop.numberOfTrialsBenchmark = 1024;
     prop.collectionFactor = 16;
+    prop.numberOfTrialsPerform = 10;
+    //prop.numberOfTrialsLaunch = 10;
+    prop.numberOfTrialsBenchmark = 1024;
     prop.maxDelta = 3.0;
     prop.maxDontFit = 3;
 
@@ -49,17 +50,18 @@ void createPropFile(BenchmarkProperties prop) {
     FILE *csv = fopen(output, "w");
 
     // Writing all the information into the csv file.
-    fprintf(csv, "numberOfTrialsPerform;\"%d\"\n", prop.numberOfTrialsPerform);
-    fprintf(csv, "numberOfTrialsLaunch;\"%d\"\n", prop.numberOfTrialsLaunch);
-    fprintf(csv, "numberOfTrialsBenchmark;\"%d\"\n", prop.numberOfTrialsBenchmark);
     fprintf(csv, "collectionFactor;\"%d\"\n", prop.collectionFactor);
-    fprintf(csv, "maxDelta;\"%Lf\"\n", prop.maxDelta);
+    fprintf(csv, "numberOfTrialsPerform;\"%d\"\n", prop.numberOfTrialsPerform);
+    //fprintf(csv, "numberOfTrialsLaunch;\"%d\"\n", prop.numberOfTrialsLaunch);
+    fprintf(csv, "numberOfTrialsBenchmark;\"%d\"\n", prop.numberOfTrialsBenchmark);
+    fprintf(csv, "maxDelta;\"%f\"\n", prop.maxDelta);
     fprintf(csv, "maxDontFit;\"%d\"\n", prop.maxDontFit);
 
     // Close the csv file.
     fclose(csv);
     printf("[INFO] The benchmark properties file was created.\n");
 }
+
 
 #endif //GCPVE_C_C_2_BENCHMARK_PROPERTIES_CUH
 
