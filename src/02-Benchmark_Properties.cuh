@@ -9,13 +9,10 @@ typedef struct BenchmarkProperties {
     // Variables.
     int numberOfTrialsPerform;
     int numberOfTrialsLaunch;
-    int memoryOverlap;
+    int numberOfTrialsBenchmark;
+    int collectionFactor;
     long double maxDelta;
     int maxDontFit;
-    int small;
-    int medium;
-    long large;
-    int numberOfTrialsDivisor;
 } BenchmarkProperties;
 
 
@@ -31,16 +28,10 @@ BenchmarkProperties getBenchmarkProperties() {
     // Initialize the properties and writes them into the final data structure.
     prop.numberOfTrialsPerform = 10;
     prop.numberOfTrialsLaunch = 10;
-    prop.memoryOverlap = 2;
+    prop.numberOfTrialsBenchmark = 1024;
+    prop.collectionFactor = 16;
     prop.maxDelta = 3.0;
     prop.maxDontFit = 3;
-    // Size of the data collections.
-    // Warning: If these three variables get updated, update the variables in 04-Core_Characteristics and in the kernels also!
-    prop.small = 65536;
-    prop.medium = 16777216;
-    prop.large = 4294967296;
-    // Warning: If this variable gets updated, update the variables in the kernels also!
-    prop.numberOfTrialsDivisor = 1024;
 
     // Return the final data structure.
     return prop;
@@ -58,15 +49,12 @@ void createPropFile(BenchmarkProperties prop) {
     FILE *csv = fopen(output, "w");
 
     // Writing all the information into the csv file.
-    fprintf(csv, "numberOfTrialsPerform; \"%d\"\n", prop.numberOfTrialsPerform);
-    fprintf(csv, "numberOfTrialsLaunch; \"%d\"\n", prop.numberOfTrialsLaunch);
-    fprintf(csv, "memoryOverlap; \"%d\"\n", prop.memoryOverlap);
-    fprintf(csv, "maxDelta; \"%Lf\"\n", prop.maxDelta);
-    fprintf(csv, "maxDontFit; \"%d\"\n", prop.maxDontFit);
-    fprintf(csv, "small; \"%d\"\n", prop.small);
-    fprintf(csv, "medium; \"%d\"\n", prop.medium);
-    fprintf(csv, "large; \"%ld\"\n", prop.large);
-    fprintf(csv, "numberOfTrialsDivisor; \"%d\"\n", prop.numberOfTrialsDivisor);
+    fprintf(csv, "numberOfTrialsPerform;\"%d\"\n", prop.numberOfTrialsPerform);
+    fprintf(csv, "numberOfTrialsLaunch;\"%d\"\n", prop.numberOfTrialsLaunch);
+    fprintf(csv, "numberOfTrialsBenchmark;\"%d\"\n", prop.numberOfTrialsBenchmark);
+    fprintf(csv, "collectionFactor;\"%d\"\n", prop.collectionFactor);
+    fprintf(csv, "maxDelta;\"%Lf\"\n", prop.maxDelta);
+    fprintf(csv, "maxDontFit;\"%d\"\n", prop.maxDontFit);
 
     // Close the csv file.
     fclose(csv);

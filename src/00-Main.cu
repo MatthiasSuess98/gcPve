@@ -39,8 +39,8 @@ void createBenchmarks(int gpuId) {
     createInfoPropDerivativesFile(derivatives);
 
     // Perform the benchmarks.
-    std::vector<CoreCharacteristics> benchmark = PerformBenchmarks(info, prop, derivatives);
-    createBenchmarkFile(benchmark);
+    std::vector<CoreCharacteristics> benchmark = performBenchmarks(info, prop, derivatives);
+    createBenchmarkFile(info, prop, derivatives, benchmark);
 
     // Call the python file.
     FILE *p;

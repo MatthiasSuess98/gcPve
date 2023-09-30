@@ -6,7 +6,6 @@
  */
 class CoreCharacteristics {
 private:
-    int numberOfCores;
     int smId;
     int hardwareWarpId;
     int warpCoreId;
@@ -16,8 +15,7 @@ private:
     float typicalGmTime;
 
 public:
-    CoreCharacteristics(int newNumberOfCores, int newSmId, int newHardwareWarpId, int newWarpCoreId) {
-        numberOfCores = newNumberOfCores;
+    CoreCharacteristics(int newSmId, int newHardwareWarpId, int newWarpCoreId) {
         smId = newSmId;
         hardwareWarpId = newHardwareWarpId;
         warpCoreId = newWarpCoreId;
@@ -41,10 +39,6 @@ public:
 
     void setTypicalGmTime(long double newTypicalGmTime) {
         typicalGmTime = newTypicalGmTime;
-    }
-
-    int getNumberOfCores() {
-        return numberOfCores;
     }
 
     int getSmId() {

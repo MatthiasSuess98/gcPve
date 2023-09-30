@@ -19,68 +19,103 @@
 std::vector<CoreCharacteristics> performBenchmarks(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
     // Initialize data collection.
-    SmallDataCollection data;
+    dataCollection data;
+    data.collectionSize = info.multiProcessorCount * derivatives.hardwareWarpsPerSm * info.warpSize * prop.collectionFactor;
+    for (int initialLoop = 0; initialLoop < data.collectionSize; initialLoop++) {
+        int mulpIni = 0;
+        data.mulp.push_back(mulpIni);
+        int warpIni = 0;
+        data.warp.push_back(warpIni);
+        int laneIni = 0;
+        data.lane.push_back(laneIni);
+        float timeL1Ini = 0.0;
+        data.timeL1.push_back(timeL1Ini);
+        float timeSmIni = 0.0;
+        data.timeSM.push_back(timeSmIni);
+        float timeL2Ini = 0.0;
+        data.timeL2.push_back(timeL2Ini);
+        float timeGmIni = 0.0;
+        data.timeGM.push_back(timeGmIni);
+    }
+
 
     // Declare and initialize all core characteristics.
     std::vector<CoreCharacteristics> gpuCores;
-    CoreCharacteristics gpuCore = CoreCharacteristics(0, 0, 0);
+    CoreCharacteristics gpuCore;
     for (int i = 0; i < info.multiProcessorCount; i++) {
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
             for (int k = 0; k < info.warpSize; k++) {
-                gpuCore = CoreCharacteristics(i, j, k);
+                gpuCore = CoreCharacteristics(info.multiProcessorCount, derivatives.hardwareWarpsPerSm, info.warpSize, i, j, k);
                 gpuCores.push_back(gpuCore);
             }
         }
     }
 
     // Perform the benchmark loop.
-    int hardwareWarpScore;
-    int smallestNumber;
-    int bestHardwareWarp;
-    long double currentTime;
-    std::vector<int> dontFits;
-    int dontFit;
-    for (int warpLoop = 0; warpLoop < info.warpSize; warpLoop++) {
-        dontFit = 0;
-        dontFits.push_back(dontFit);
-    }
     for (int trailLoop = 0; trailLoop < prop.numberOfTrialsPerform; trailLoop++) {
-        for (int resetLoop = 0; resetLoop < prop.small; resetLoop++) {
+
+        for (int resetLoop = 0; resetLoop < data.collectionSize; resetLoop++) {
             data.mulp[resetLoop] = 0;
             data.warp[resetLoop] = 0;
             data.lane[resetLoop] = 0;
-            data.time[resetLoop] = 0;
+            data.timeL1[resetLoop] = 0.0;
+            data.timeSM[resetLoop] = 0.0;
+            data.timeL2[resetLoop] = 0.0;
+            data.timeGM[resetLoop] = 0.0;
         }
-        data = performSmallL1Benchmark(info, prop, derivatives);
-        for (int blockLoop = 0; blockLoop < prop.small; blockLoop = blockLoop + info.warpSize) {
-            if (data.time[blockLoop] != 0) {
-                for (int laneLoop = 0; laneLoop < info.warpSize; laneLoop++) {
-                    currentTime = gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (data.warp[blockLoop] * info.warpSize) + laneLoop].getTypicalL1Time();
-                    gpuCores[(data.mulp[blockLoop] * derivatives.hardwareWarpsPerSm * info.warpSize) + (data.warp[blockLoop] * info.warpSize) + laneLoop].setTypicalL1Time(((((long double) data.time[blockLoop + laneLoop]) / ((long double) (derivatives.smallNumberOfTrialsDivisor * derivatives.smallNumberOfTrialsDivisor))) + currentTime) / 2);
-                }
-            }
-        }
+
+        data = launchL1Benchmark(info, prop, derivatives, data);
+        data = launchSMBenchmark(info, prop, derivatives, data);
+        data = launchL2Benchmark(info, prop, derivatives, data);
+        data = launchGMBenchmark(info, prop, derivatives, data);
+
+        gpuCores = sortDataCollection(info, prop, derivatives, data, gpuCores);
     }
 
-    // Create file with all benchmark data.
-    char output[] = "raw/Benchmark_L1.csv";
-    FILE *csv = fopen(output, "w");
+    return gpuCores;
+}
+
+
+void createBenchmarkFile(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives, std::vector<CoreCharacteristics> benchmark) {
+
+    // Create files with all benchmark data.
+    char outputL1[] = "raw/Benchmark_L1.csv";
+    char outputSm[] = "raw/Benchmark_SM.csv";
+    char outputL2[] = "raw/Benchmark_L2.csv";
+    char outputGm[] = "raw/Benchmark_GM.csv";
+    FILE *csvL1 = fopen(outputL1, "w");
+    FILE *csvSm = fopen(outputSm, "w");
+    FILE *csvL2 = fopen(outputL2, "w");
+    FILE *csvGm = fopen(outputGm, "w");
     for (int i = 0; i < info.multiProcessorCount; i++) {
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
             for (int k = 0; k < info.warpSize; k++) {
-                fprintf(csv, "%Lf", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time());
+                fprintf(csvL1, "%f", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time());
+                fprintf(csvSm, "%f", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalSmTime());
+                fprintf(csvL2, "%f", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL2Time());
+                fprintf(csvGm, "%f", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalGmTime());
                 if (k < (info.warpSize - 1)) {
-                    fprintf(csv, ";");
+                    fprintf(csvL1, ";");
+                    fprintf(csvSm, ";");
+                    fprintf(csvL2, ";");
+                    fprintf(csvGm, ";");
                 }
             }
-            fprintf(csv, "\n");
+            fprintf(csvL1, "\n");
+            fprintf(csvSm, "\n");
+            fprintf(csvL2, "\n");
+            fprintf(csvGm, "\n");
         }
-        fprintf(csv, "\n");
+        fprintf(csvL1, "\n");
+        fprintf(csvSm, "\n");
+        fprintf(csvL2, "\n");
+        fprintf(csvGm, "\n");
     }
-    fclose(csv);
-    printf("[INFO] The L1 cache benchmark file was created.\n");
-
-    return gpuCores;
+    fclose(csvL1);
+    fclose(csvSm);
+    fclose(csvL2);
+    fclose(csvGm);
+    printf("[INFO] The benchmark files were created.\n");
 }
 
 #endif //GCPVE_10_PERFORM_BENCHMARK_CUH

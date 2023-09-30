@@ -11,10 +11,10 @@ typedef struct dataCollection {
     std::vector<int> mulp;
     std::vector<int> warp;
     std::vector<int> lane;
-    std::vector<long long int> timeL1;
-    std::vector<long long int> timeSM;
-    std::vector<long long int> timeL2;
-    std::vector<long long int> timeGM;
+    std::vector<float> timeL1;
+    std::vector<float> timeSM;
+    std::vector<float> timeL2;
+    std::vector<float> timeGM;
 } dataCollection;
 
 #endif //GCPVE_04_DATA_COLLECTION_CUH
