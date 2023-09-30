@@ -52,6 +52,7 @@ dataCollection launchBenchmarks(GpuInformation info, BenchmarkProperties prop, I
             // Copy the time data into the data collection.
             for (int k = 0; k < info.warpSize; k++) {
                 data.mulp[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor) + (j * info.warpSize) + k] = i;
+                printf("%d ", data.mulp[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor) + (j * info.warpSize) + k]);
                 data.lane[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor) + (j * info.warpSize) + k] = k;
                 data.timeL1[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor) + (j * info.warpSize) + k] = hostTime[k + (0 * info.warpSize)];
                 data.timeSM[(i * derivatives.hardwareWarpsPerSm * prop.collectionFactor) + (j * info.warpSize) + k] = hostTime[k + (1 * info.warpSize)];
@@ -66,7 +67,7 @@ dataCollection launchBenchmarks(GpuInformation info, BenchmarkProperties prop, I
             cudaFree(deviceLoad);
 
             // Signal that the benchmark is still running.
-            printf(".");
+            //printf(".");
         }
 
         // Signal that the benchmark is still running.
