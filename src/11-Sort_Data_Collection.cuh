@@ -37,7 +37,7 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
     }
 
     // Sorting loop.
-    for (int i = 0; i < data.collectionSize; i = i + info.warpSize) {
+    for (int i = 0; i < (info.multiProcessorCount * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize); i = i + info.warpSize) {
 
         // Check whether the data it relevant.
         if (data.timeL1[i] != 0) {
@@ -121,11 +121,11 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
                     currentTime = gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].getTypicalL1Time();
                     gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalL1Time((data.timeL1[i + j] + currentTime) / 2);
                     currentTime = gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].getTypicalSmTime();
-                    gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalSmTime((data.timeSM[i + j]) + currentTime) / 2);
+                    gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalSmTime((data.timeSM[i + j] + currentTime) / 2);
                     currentTime = gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].getTypicalL2Time();
-                    gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalL2Time((data.timeL2[i + j]) + currentTime) / 2);
+                    gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalL2Time((data.timeL2[i + j] + currentTime) / 2);
                     currentTime = gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].getTypicalGmTime();
-                    gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalGmTime((data.timeGM[i + j]) + currentTime) / 2);
+                    gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalGmTime((data.timeGM[i + j] + currentTime) / 2);
                 }
             }
         }
