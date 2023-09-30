@@ -43,7 +43,7 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
         if ((data.timeL1[i] != 0) || (data.timeSM[i] != 0) || (data.timeL2[i] != 0) || (data.timeGM[i] != 0)) {
 
             // Reset all variables and the dontFits counter.
-            rewrite = true;
+            rewrite = false;
             currentTime = 0.0;
             hardwareWarpScore = 0;
             smallestNumber = 0;
@@ -76,6 +76,8 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
                     }
                 }
             }
+
+            printf("%f", std::abs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time() - data.timeL1[i + k]));
 
             // Find the smallest number of all dontFits.
             for (int j = 0; j < hardwareWarpScore; j++) {
@@ -117,7 +119,6 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
                     gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpScore * info.warpSize) + j].setTypicalGmTime(data.timeGM[i + j]);
                 }
             } else {
-                printf("%d", data.mulp[i]);
                 for (int j = 0; j < info.warpSize; j++) {
                     currentTime = gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].getTypicalL1Time();
                     gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalL1Time((data.timeL1[i + j] + currentTime) / 2);
@@ -141,5 +142,3 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
 
 //FINISHED
 
-//292929292929292929292929292929292929292929292929292929292929292929292929292929
-//29292929292929292929292929292929292929292929292929292929292929292929292929292929
