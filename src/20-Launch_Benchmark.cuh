@@ -73,6 +73,10 @@ dataCollection launchBenchmarks(GpuInformation info, BenchmarkProperties prop, I
         printf("\n");
     }
 
+    for (int i = 0; i < (info.multiProcessorCount * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize); i = i + info.warpSize) {
+        printf("%d ", data.mulp[i]);
+    }
+
     // Return the final data collection.
     return data;
 }
