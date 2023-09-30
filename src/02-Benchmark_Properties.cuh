@@ -29,7 +29,7 @@ BenchmarkProperties getBenchmarkProperties() {
     prop.collectionFactor = 4;
     prop.numberOfTrialsPerform = 4;
     // Choose a value between 1 and 1024.
-    prop.numberOfTrialsBenchmark = 64;
+    prop.numberOfTrialsBenchmark = 16;
     prop.maxDelta = 3.0;
     prop.maxDontFit = 10;
 
