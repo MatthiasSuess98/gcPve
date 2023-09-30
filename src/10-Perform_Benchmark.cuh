@@ -24,7 +24,6 @@
 std::vector<CoreCharacteristics> performBenchmarks(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
     // Initialize data collection.
-    printf("test\n");
     dataCollection data;
     for (int i = 0; i < (info.multiProcessorCount * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize); i++) {
         int mulpIni = 0;
@@ -53,6 +52,7 @@ std::vector<CoreCharacteristics> performBenchmarks(GpuInformation info, Benchmar
         }
     }
 
+    printf("test\n");
     // Perform the benchmark loop.
     for (int i = 0; i < prop.numberOfTrialsPerform; i++) {
 
