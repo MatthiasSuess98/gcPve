@@ -95,10 +95,6 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
                 }
             }
 
-            if (data.mulp[i] == 29) {
-                printf("%d", hardwareWarpScore);
-            }
-
             // Decide how the data should be sorted in.
             if (hardwareWarpScore == 0) {
                 rewrite = true;
