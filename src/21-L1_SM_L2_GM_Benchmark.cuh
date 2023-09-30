@@ -31,7 +31,7 @@ __global__ void benchmark(GpuInformation info, BenchmarkProperties prop, InfoPro
     asm volatile ("mov.u32 %0, %%laneid;" : "=r"(lane));
 
     if (mulp == i) {
-        for (int k = 0; k < 32; k++) {
+        for (int k = 0; k < info.warpSize; k++) {
             if (lane == k) {
 
                 unsigned long long endTime;
