@@ -118,7 +118,7 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
                 }
             } else {
                 if (data.mulp[i] == 29) {
-                    printf("%d", data.timeL1[i]);
+                    printf("%f", data.timeL1[i]);
                 }
                 for (int j = 0; j < info.warpSize; j++) {
                     currentTime = gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].getTypicalL1Time();
