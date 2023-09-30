@@ -62,19 +62,19 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
             // Calculate the dontFits of all hardware warps of all memory types.
             for (int j = 0; j < hardwareWarpScore; j++) {
                 for (int k = 0; k < info.warpSize; k++) {
-                    if (std::abs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time() - data.timeL1[i + k]) >= prop.maxDelta) {
+                    if (std::fabs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time() - data.timeL1[i + k]) >= prop.maxDelta) {
                         dontFits[j]++;
                     }
-                    if (std::abs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalSmTime() - data.timeSM[i + k]) >= prop.maxDelta) {
+                    if (std::fabs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalSmTime() - data.timeSM[i + k]) >= prop.maxDelta) {
                         dontFits[j]++;
                     }
-                    if (std::abs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL2Time() - data.timeL2[i + k]) >= prop.maxDelta) {
+                    if (std::fabs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL2Time() - data.timeL2[i + k]) >= prop.maxDelta) {
                         dontFits[j]++;
                     }
-                    if (std::abs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalGmTime() - data.timeGM[i + k]) >= prop.maxDelta) {
+                    if (std::fabs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalGmTime() - data.timeGM[i + k]) >= prop.maxDelta) {
                         dontFits[j]++;
                     }
-                    printf("%f ", std::abs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time() - data.timeL1[i + k]));
+                    printf("%f ", std::fabs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time() - data.timeL1[i + k]));
                 }
             }
 
