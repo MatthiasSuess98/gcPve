@@ -36,13 +36,11 @@ void createBenchmarks(int gpuId) {
     BenchmarkProperties prop = getBenchmarkProperties();
     createPropFile(prop);
     InfoPropDerivatives derivatives = getInfoPropDerivatives(info, prop);
-    createInfoPropDerivatives(derivatives);
+    createInfoPropDerivativesFile(derivatives);
 
     // Perform the benchmarks.
-    launchL1Benchmark(info, prop, derivatives);
-    launchSMBenchmark(info, prop, derivatives);
-    launchL2Benchmark(info, prop, derivatives);
-    launchGMBenchmark(info, prop, derivatives);
+    std::vector<CoreCharacteristics> benchmark = PerformBenchmarks(info, prop, derivatives);
+    createBenchmarkFile(benchmark);
 
     // Call the python file.
     FILE *p;

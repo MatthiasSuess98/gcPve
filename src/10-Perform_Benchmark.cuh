@@ -16,7 +16,7 @@
  * @param prop All properties of the benchmarks.
  * @param derivatives All derivatives of info and prop.
  */
-void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
+std::vector<CoreCharacteristics> performBenchmarks(GpuInformation info, BenchmarkProperties prop, InfoPropDerivatives derivatives) {
 
     // Initialize data collection.
     SmallDataCollection data;
@@ -79,6 +79,8 @@ void performSmallBenchmark(GpuInformation info, BenchmarkProperties prop, InfoPr
     }
     fclose(csv);
     printf("[INFO] The L1 cache benchmark file was created.\n");
+
+    return gpuCores;
 }
 
 #endif //GCPVE_10_PERFORM_BENCHMARK_CUH
