@@ -42,7 +42,7 @@ std::vector<CoreCharacteristics> performBenchmarks(GpuInformation info, Benchmar
 
     // Declare and initialize all core characteristics.
     std::vector<CoreCharacteristics> gpuCores;
-    CoreCharacteristics gpuCore;
+    CoreCharacteristics gpuCore = CoreCharacteristics(0, 0, 0);
     for (int i = 0; i < info.multiProcessorCount; i++) {
         for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
             for (int k = 0; k < info.warpSize; k++) {

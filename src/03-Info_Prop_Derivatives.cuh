@@ -90,7 +90,7 @@ InfoPropDerivatives getInfoPropDerivatives(GpuInformation info, BenchmarkPropert
  * Creates a csv file with all information of the given data structure.
  * @param prop The given data structure.
  */
-void createInfoPropDerivatives(InfoPropDerivatives derivatives) {
+void createInfoPropDerivativesFile(InfoPropDerivatives derivatives) {
 
     // Creation and opening of the csv file.
     char output[] = "raw/InfoProp_Derivatives.csv";
