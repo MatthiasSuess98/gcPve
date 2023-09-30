@@ -64,10 +64,10 @@ std::vector<CoreCharacteristics> performBenchmarks(GpuInformation info, Benchmar
             data.timeL2[j] = 0.0;
             data.timeGM[j] = 0.0;
         }
-        printf("test\n");
 
         // Launches all four benchmarks.
         data = launchBenchmarks(info, prop, derivatives, data);
+        printf("test\n");
 
         // Sort the resulted data into the core characteristics.
         gpuCores = sortDataCollection(info, prop, derivatives, data, gpuCores);
