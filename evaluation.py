@@ -25,7 +25,7 @@ if __name__ == "__main__":
             else:
                 graphColor = 'orange'
             time = data[((x * hardwareWarpsPerSm) + y), :]
-            plt.stem(lane, time, markerfmt=graphColor, label=('Hardware warp ' + str(y)))
+            plt.plot(lane, time, color=graphColor, label=('Hardware warp ' + str(y)))
         plt.title('Benchmark: Average load time of data in the L1 cache of SM ' + str(x) + '.')
         plt.xlabel("Lane id")
         plt.ylabel("Load time in ns")
@@ -46,7 +46,7 @@ if __name__ == "__main__":
             else:
                 graphColor = 'orange'
             time = data[((x * hardwareWarpsPerSm) + y), :]
-            plt.stem(lane, time, markerfmt=graphColor, label=('Hardware warp ' + str(y)))
+            plt.plot(lane, time, color=graphColor, label=('Hardware warp ' + str(y)))
         plt.title('Benchmark: Average load time of data in the shared memory of SM ' + str(x) + '.')
         plt.xlabel("Lane id")
         plt.ylabel("Load time in ns")
@@ -67,7 +67,7 @@ if __name__ == "__main__":
             else:
                 graphColor = 'orange'
             time = data[((x * hardwareWarpsPerSm) + y), :]
-            plt.stem(lane, time, markerfmt=graphColor, label=('Hardware warp ' + str(y)))
+            plt.plot(lane, time, color=graphColor, label=('Hardware warp ' + str(y)))
         plt.title('Benchmark: Average load time of data in the L2 cache of SM ' + str(x) + '.')
         plt.xlabel("Lane id")
         plt.ylabel("Load time in ns")
@@ -88,7 +88,7 @@ if __name__ == "__main__":
             else:
                 graphColor = 'orange'
             time = data[((x * hardwareWarpsPerSm) + y), :]
-            plt.stem(lane, time, markerfmt=graphColor, label=('Hardware warp ' + str(y)))
+            plt.plot(lane, time, color=graphColor, label=('Hardware warp ' + str(y)))
         plt.title('Benchmark: Average load time of data in the global memory of SM ' + str(x) + '.')
         plt.xlabel("Lane id")
         plt.ylabel("Load time in ns")
