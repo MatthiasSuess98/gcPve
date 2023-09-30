@@ -68,6 +68,7 @@ dataCollection launchBenchmarks(GpuInformation info, BenchmarkProperties prop, I
             // Signal that the benchmark is still running.
             printf(".");
         }
+        printf("\n");
     }
 
     // Return the final data collection.
