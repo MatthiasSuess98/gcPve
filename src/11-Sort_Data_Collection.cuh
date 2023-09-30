@@ -42,6 +42,10 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
         // Check whether the data it relevant.
         if ((data.timeL1[i] != 0) || (data.timeSM[i] != 0) || (data.timeL2[i] != 0) || (data.timeGM[i] != 0)) {
 
+            if (data.mulp[i] == 29) {
+                printf("%f ", data.timeL1[i]);
+            }
+
             // Reset all variables and the dontFits counter.
             rewrite = false;
             currentTime = 0.0;
@@ -74,7 +78,6 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
                     if (std::fabs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalGmTime() - data.timeGM[i + k]) >= prop.maxDelta) {
                         dontFits[j]++;
                     }
-                    printf("%f ", std::fabs(gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time() - data.timeL1[i + k]));
                 }
             }
 
