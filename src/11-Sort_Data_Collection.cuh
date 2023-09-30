@@ -117,8 +117,8 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
                     gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (hardwareWarpScore * info.warpSize) + j].setTypicalGmTime(data.timeGM[i + j]);
                 }
             } else {
+                printf("%d", data.mulp[i]);
                 for (int j = 0; j < info.warpSize; j++) {
-                    printf("%d", data.mulp[i]);
                     currentTime = gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].getTypicalL1Time();
                     gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalL1Time((data.timeL1[i + j] + currentTime) / 2);
                     currentTime = gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].getTypicalSmTime();
