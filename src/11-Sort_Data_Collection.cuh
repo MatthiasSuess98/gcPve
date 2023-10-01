@@ -39,6 +39,8 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
     // Sorting loop.
     for (int i = 0; i < (info.multiProcessorCount * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize); i = i + info.warpSize) {
 
+        printf("%f ", data.timeL1[i]);
+
         // Check whether the data it relevant.
         if ((data.timeL1[i] != 0) && (data.timeSM[i] != 0) && (data.timeL2[i] != 0) && (data.timeGM[i] != 0)) {
 
@@ -119,13 +121,13 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
             } else {
                 for (int j = 0; j < info.warpSize; j++) {
                     currentTime = gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].getTypicalL1Time();
-                    gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalL1Time((data.timeL1[i + j] + currentTime) / 2);
+                    gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalL1Time((data.timeL1[i + j] + currentTime) / 2.0);
                     currentTime = gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].getTypicalSmTime();
-                    gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalSmTime((data.timeSM[i + j] + currentTime) / 2);
+                    gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalSmTime((data.timeSM[i + j] + currentTime) / 2.0);
                     currentTime = gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].getTypicalL2Time();
-                    gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalL2Time((data.timeL2[i + j] + currentTime) / 2);
+                    gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalL2Time((data.timeL2[i + j] + currentTime) / 2.0);
                     currentTime = gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].getTypicalGmTime();
-                    gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalGmTime((data.timeGM[i + j] + currentTime) / 2);
+                    gpuCores[(data.mulp[i] * derivatives.hardwareWarpsPerSm * info.warpSize) + (bestHardwareWarp * info.warpSize) + j].setTypicalGmTime((data.timeGM[i + j] + currentTime) / 2.0);
                 }
             }
         }
