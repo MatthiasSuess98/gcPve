@@ -68,7 +68,7 @@ std::vector<CoreCharacteristics> performBenchmarks(GpuInformation info, Benchmar
         for (int i = 0; i < info.multiProcessorCount; i++) {
             for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
                 for (int k = 0; k < info.warpSize; k++) {
-                    printf("%f ", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k]);
+                    printf("%f ", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k].getTypicalL1Time());
                 }
                 printf("\n");
             }
