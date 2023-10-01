@@ -29,7 +29,7 @@ BenchmarkProperties getBenchmarkProperties() {
     prop.collectionFactor = 16;
     prop.numberOfTrialsPerform = 16;
     // Warning: The next variable has a limit! Choose only a value between 1 and 1024!
-    prop.numberOfTrialsBenchmark = 256;
+    prop.numberOfTrialsBenchmark = 1024;
     prop.maxDelta = 1.5;
     prop.maxDontFit = 15;
 
