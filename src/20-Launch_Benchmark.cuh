@@ -66,7 +66,7 @@ dataCollection launchBenchmarks(GpuInformation info, BenchmarkProperties prop, I
             cudaFree(deviceLoad);
 
             // Signal that the benchmark is still running.
-            printf(".");
+            //printf(".");
         }
 
         // Signal that the benchmark is still running.
@@ -74,7 +74,7 @@ dataCollection launchBenchmarks(GpuInformation info, BenchmarkProperties prop, I
     }
 
     // Return the final data collection.
-    //return data;
+    return data;
 }
 
 
