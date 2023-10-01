@@ -65,6 +65,17 @@ std::vector<CoreCharacteristics> performBenchmarks(GpuInformation info, Benchmar
             data.timeGM[j] = 0.0;
         }
 
+        for (int i = 0; i < info.multiProcessorCount; i++) {
+            for (int j = 0; j < derivatives.hardwareWarpsPerSm; j++) {
+                for (int k = 0; k < info.warpSize; k++) {
+                    printf("%f ", gpuCores[(i * derivatives.hardwareWarpsPerSm * info.warpSize) + (j * info.warpSize) + k]);
+                }
+                printf("\n");
+            }
+            printf("\n");
+        }
+        printf("\n");
+
         // Launches all four benchmarks.
         data = launchBenchmarks(info, prop, derivatives, data);
 

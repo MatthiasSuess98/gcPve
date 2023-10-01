@@ -39,8 +39,6 @@ std::vector<CoreCharacteristics> sortDataCollection(GpuInformation info, Benchma
     // Sorting loop.
     for (int i = 0; i < (info.multiProcessorCount * derivatives.hardwareWarpsPerSm * prop.collectionFactor * info.warpSize); i = i + info.warpSize) {
 
-        printf("%f ", data.timeL1[i]);
-
         // Check whether the data it relevant.
         if ((data.timeL1[i] != 0) && (data.timeSM[i] != 0) && (data.timeL2[i] != 0) && (data.timeGM[i] != 0)) {
 
