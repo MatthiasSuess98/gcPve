@@ -26,10 +26,10 @@ BenchmarkProperties getBenchmarkProperties() {
     BenchmarkProperties prop;
 
     // Initialize the properties and writes them into the final data structure.
-    prop.collectionFactor = 12;
-    prop.numberOfTrialsPerform = 12;
+    prop.collectionFactor = 16;
+    prop.numberOfTrialsPerform = 16;
     // Warning: The next variable has a limit! Choose only a value between 1 and 1024!
-    prop.numberOfTrialsBenchmark = 144;
+    prop.numberOfTrialsBenchmark = 256;
     prop.maxDelta = 1.5;
     prop.maxDontFit = 15;
 
