@@ -33,7 +33,6 @@ BenchmarkProperties getBenchmarkProperties() {
     prop.maxDelta = 1.5;
     prop.maxDontFit = 15;
 
-
     // Return the final data structure.
     return prop;
 }
