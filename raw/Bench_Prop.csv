@@ -1,5 +1,5 @@
 collectionFactor;"16"
 numberOfTrialsPerform;"16"
-numberOfTrialsBenchmark;"256"
+numberOfTrialsBenchmark;"1024"
 maxDelta;"1.500000"
 maxDontFit;"15"
