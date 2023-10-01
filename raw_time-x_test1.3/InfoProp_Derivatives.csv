@@ -1,5 +1,0 @@
-cudaVersion; "6.100000"
-numberOfCoresPerSm;"128"
-totalNumberOfCores;"3840"
-hardwareWarpsPerSm;"4"
-maxNumberOfWarpsPerSm;"64"

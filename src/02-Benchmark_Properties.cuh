@@ -28,7 +28,7 @@ BenchmarkProperties getBenchmarkProperties() {
     // Initialize the properties and writes them into the final data structure.
     prop.collectionFactor = 32;
     prop.numberOfTrialsPerform = 32;
-    // Warning: The next variable has a limit! Choose only a value between 1 and 1024!
+    // Warning: When you change the next variable you also have to change the numbers in 21-L1_SM_L2_GM_Benchmark.cuh!
     prop.numberOfTrialsBenchmark = 1024;
     prop.maxDelta = 0.5;
     prop.maxDontFit = 5;
